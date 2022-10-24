@@ -67,7 +67,7 @@ function partner_show_site_data_shortcode()
                 position: relative;
                 width: 100%;
                 overflow: hidden;
-                padding-top: 75%; /* 4:3 Aspect Ratio */
+                padding-top: 78%;
             }
 
             .responsive-iframe {
