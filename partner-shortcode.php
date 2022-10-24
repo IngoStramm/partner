@@ -1,6 +1,10 @@
 <?php
 
-// criar um shortcode do WordPress que exibe um texto
+/**
+ * partner_show_cliente_data_shortcode
+ *
+ * @return string
+ */
 function partner_show_cliente_data_shortcode()
 {
     // pegar o ID do usuário
@@ -36,3 +40,29 @@ function partner_show_cliente_data_shortcode()
 }
 
 add_shortcode('planilha_cliente', 'partner_show_cliente_data_shortcode');
+
+
+/**
+ * partner_show_site_data_shortcode
+ *
+ * @return stringg
+ */
+function partner_show_site_data_shortcode()
+{
+    $user_id = get_current_user_id();
+    if (!$user_id)
+        return;
+
+    $dados_site = get_user_meta($user_id, 'partner_user_dados_site', true);
+    if (!$dados_site || !filter_var($dados_site, FILTER_VALIDATE_URL))
+        return;
+
+    $output = '';
+    $output .=
+        '<div class="container">
+            <iframe id="iframe-dados-site" class="responsive-iframe" src="' . $dados_site . '" frameborder="0" allowfullscreen style="width: 100%; height: 850px;"></iframe>
+        </div>';
+    return $output;
+}
+
+add_shortcode('dados_site', 'partner_show_site_data_shortcode');
