@@ -26,6 +26,20 @@ function partner_register_user_profile_metabox()
         'id'      => $prefix . 'shortcode_gdrive',
         'type'    => 'text'
     ));
+
+    $cmb_user->add_field(array(
+        'name'    => esc_html__('Url do relatório do Dados do Site', 'partner'),
+        'desc'    => __('No Looker Studio, antigo Data Studio, usar a opção de <code>Compartilhar > Incorporar relatório > Incorporar URL</code> para obter a URL do relatório.', 'partner'),
+        'id'      => $prefix . 'dados_site',
+        'type'    => 'text'
+    ));
+
+    $cmb_user->add_field(array(
+        'name'    => esc_html__('Url do relatório do Dados de Mídia', 'partner'),
+        'desc'    => __('No Looker Studio, antigo Data Studio, usar a opção de <code>Compartilhar > Incorporar relatório > Incorporar URL</code> para obter a URL do relatório.', 'partner'),
+        'id'      => $prefix . 'dados_midia',
+        'type'    => 'text'
+    ));
 }
 
 add_action('cmb2_admin_init', 'partner_register_user_profile_metabox');

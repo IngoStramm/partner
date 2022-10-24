@@ -19,7 +19,7 @@ function partner_settings_metabox()
     ));
 
     $cmb_options->add_field(array(
-        'name'    => esc_html__('Configurações do Cronograma', 'partner'),
+        'name'    => esc_html__('Configurações', 'partner'),
         'id'      => 'title_1',
         'type'    => 'title',
     ));
@@ -28,14 +28,14 @@ function partner_settings_metabox()
         'name'    => esc_html__('URL da Planilha do Google', 'partner'),
         'id'      => 'googlesheet_url',
         'type'    => 'text',
-        'desc'    => esc_html__('A URL da planilha do Google compartilhada coma opção Publicar na Web, apenas a página de Clientes, no formato CSV,', 'partner'),
+        'desc'    => esc_html__('A URL da planilha do Google compartilhada com a opção Publicar na Web, apenas a página de Clientes, no formato CSV.', 'partner'),
     ));
 
     $cmb_options->add_field(array(
         'name'    => esc_html__('Página de login', 'partner'),
         'id'      => 'login_page_id',
         'type'    => 'select',
-        'desc'    => esc_html__('A URL da planilha do Google compartilhada coma opção Publicar na Web, apenas a página de Clientes, no formato CSV,', 'partner'),
+        'desc'    => esc_html__('Selecione qual é a página de login para onde o usuário não logado será redirecionado.', 'partner'),
         'options' => 'partner_list_published_pages'
     ));
 }
