@@ -86,3 +86,48 @@ function partner_show_site_data_shortcode()
 }
 
 add_shortcode('dados_site', 'partner_show_site_data_shortcode');
+
+/**
+ * partner_show_media_data_shortcode
+ *
+ * @return stringg
+ */
+function partner_show_media_data_shortcode()
+{
+    $user_id = get_current_user_id();
+    if (!$user_id)
+        return;
+
+    $dados_site = get_user_meta($user_id, 'partner_user_dados_midia', true);
+    if (!$dados_site || !filter_var($dados_site, FILTER_VALIDATE_URL))
+        return;
+
+    $output = '';
+    $output .=
+        '<div class="container">
+            <iframe id="iframe-dados-midia" class="responsive-iframe" src="' . $dados_site . '" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <style>
+            .container {
+                position: relative;
+                width: 100%;
+                overflow: hidden;
+                padding-top: 78%;
+            }
+
+            .responsive-iframe {
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                width: 100%;
+                height: 100%;
+                border: none;
+            }
+        </style>
+        ';
+    return $output;
+}
+
+add_shortcode('dados_midia', 'partner_show_media_data_shortcode');
