@@ -1,0 +1,9 @@
+{
+	"version": 3,
+	"file": "partner.css",
+	"sources": [
+		"../sass/partner.scss"
+	],
+	"names": [],
+	"mappings": ""
+}
