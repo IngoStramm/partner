@@ -37,6 +37,8 @@ module.exports = function (grunt) {
                 files: {
                     '<%= dirs.js %>/partner.min.js': [
                         '<%= dirs.js %>/partner.js',    // Custom JavaScript
+                    ],
+                    '<%= dirs.js %>/partner-admin.min.js': [
                         '<%= dirs.js %>/partner-admin.js'    // Custom JavaScript
                     ]
                 }
