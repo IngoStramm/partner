@@ -60,8 +60,28 @@ function partner_show_site_data_shortcode()
     $output = '';
     $output .=
         '<div class="container">
-            <iframe id="iframe-dados-site" class="responsive-iframe" src="' . $dados_site . '" frameborder="0" allowfullscreen style="width: 100%; height: 850px;"></iframe>
-        </div>';
+            <iframe id="iframe-dados-site" class="responsive-iframe" src="' . $dados_site . '" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <style>
+            .container {
+                position: relative;
+                width: 100%;
+                overflow: hidden;
+                padding-top: 75%; /* 4:3 Aspect Ratio */
+            }
+
+            .responsive-iframe {
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                width: 100%;
+                height: 100%;
+                border: none;
+            }
+        </style>
+        ';
     return $output;
 }
 
