@@ -30,9 +30,33 @@ function partner_settings_metabox()
         'type'    => 'text',
         'desc'    => esc_html__('A URL da planilha do Google compartilhada coma opção Publicar na Web, apenas a página de Clientes, no formato CSV,', 'partner'),
     ));
+
+    $cmb_options->add_field(array(
+        'name'    => esc_html__('Página de login', 'partner'),
+        'id'      => 'login_page_id',
+        'type'    => 'select',
+        'desc'    => esc_html__('A URL da planilha do Google compartilhada coma opção Publicar na Web, apenas a página de Clientes, no formato CSV,', 'partner'),
+        'options' => 'partner_list_published_pages'
+    ));
 }
 
 add_action('cmb2_admin_init', 'partner_settings_metabox');
+
+function partner_list_published_pages()
+{
+    $pages = get_pages(array(
+        'post_status' => 'publish',
+        'post_type' => 'page',
+        'sort_order' => 'ASC',
+        'sort_column' => 'post_title',
+    ));
+    $pages_array = [];
+    $pages_array[] = __('Selecione uma página', 'partner');
+    foreach ($pages as $page) {
+        $pages_array[$page->ID] = $page->post_title;
+    }
+    return $pages_array;
+}
 
 /**
  * partner_get_option
