@@ -31,7 +31,12 @@ function partner_redirect_if_user_not_logged_in()
     $login_page_id = partner_get_option('login_page_id', true);
     if (!$login_page_id)
         return;
-    if (!is_user_logged_in() && !is_page($login_page_id)) {
+
+    $reset_password_page_id = partner_get_option('reset_password_page_id');
+    if (!$reset_password_page_id)
+        return;
+
+    if (!is_user_logged_in() && !is_page($login_page_id) && !is_page($reset_password_page_id)) {
         // echo '<pre>Não logado</pre>';
         wp_redirect(get_page_link($login_page_id));
         exit;
