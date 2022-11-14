@@ -35,7 +35,7 @@ $borda-style: 4px solid $white;
             padding: 0px 0px;
             width: 4ch;
             &:first-child {
-                padding: 15px 30px;
+                padding: 20px 30px;
                 font-size: 13px;
                 text-transform: uppercase;
             }
@@ -191,4 +191,7 @@ $borda-style: 4px solid $white;
     display: flex;
     justify-content: center;
     align-items: center;
+    color: $white;
+    font-size: 1.2em;
+    letter-spacing: 1px;
 }
