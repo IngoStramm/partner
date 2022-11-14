@@ -25,6 +25,18 @@ function partner_settings_metabox()
     ));
 
     $cmb_options->add_field(array(
+        'name'    => esc_html__('Cache da Planílha do Google', 'partner'),
+        'id'      => 'transient_active',
+        'type'    => 'radio',
+        'desc'    => esc_html__('A memória em cache ajuda com a performance do site, ao salvar no cache os dados da planílha. Porém, as vezes o cache pode atrapalhar, ao impedir a atualização da planilha. Desabilite o cache se estiver com problemas em ver a planilha atualizada.', 'partner'),
+        'default' => '1',
+        'options' => array(
+            '1' => esc_html__('Habilitar Cache', 'partner'),
+            '0' => esc_html__('Desabilitar Cache', 'partner'),
+        ),
+    ));
+
+    $cmb_options->add_field(array(
         'name'    => esc_html__('URL da Planilha do Google', 'partner'),
         'id'      => 'googlesheet_url',
         'type'    => 'text',

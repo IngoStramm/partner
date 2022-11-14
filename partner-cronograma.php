@@ -22,9 +22,11 @@ function partner_return_googlesheet_data($googlesheet_url)
         return;
 
     $rows = [];
-
+    $transient_active = partner_get_option('transient_active');
     $googlesheet_data = get_transient('googlesheet_data');
-    if (!$googlesheet_data) {
+    if (!$transient_active || !$googlesheet_data) {
+
+        // partner_debug($transient_active);
 
         if (($handle = fopen($googlesheet_url, 'r')) !== FALSE
         ) {
@@ -49,7 +51,7 @@ function partner_return_googlesheet_data($googlesheet_url)
  * @param  array $rows
  * @return string
  */
-function partner_cronograma_output_all($rows, $single = false)
+function partner_cronograma_output_all($rows)
 {
     if (is_null($rows) || empty($rows))
         return;
@@ -62,9 +64,6 @@ function partner_cronograma_output_all($rows, $single = false)
     $output .= '<thead>';
     $theaders = array_shift($rows);
 
-    if ($single)
-        $theaders = array_slice($theaders, 1);
-
     foreach ($theaders as $value) {
         $output .= '<th>' . $value . '</th>';
     }
@@ -73,8 +72,6 @@ function partner_cronograma_output_all($rows, $single = false)
     asort($rows);
     foreach ($rows as $row) {
         $output .= '<tr>';
-        if ($single)
-            $row = array_slice($row, 1);
         foreach ($row as $value) {
             $output .= '<td>' . $value . '</td>';
         }
@@ -90,147 +87,206 @@ function partner_cronograma_output_single($clientes_data)
     $theaders = $clientes_data[0];
     $rows = array_slice($clientes_data, 1);
     $datas = [];
-    $meses = [];
-    $anos = [];
     $servicos = [];
-    $contratados = [];
-    $entregues = [];
+    $valores = [];
     $status = [];
     $index = 0;
+    // partner_debug($theaders);
     foreach ($rows as $row) {
-        $servicos[] = array('id' => $index, 'mes' => $row[2], $theaders[4] => $row[4]);
+        $data = $row[1];
+        $ref = $row[2];
+        $servico = $row[4];
+        $contratado = $row[5];
+        $entregue = $row[6];
+        $status = $row[7];
 
-        $meses[] = array('id' => $index, 'ref' => $row[2], 'nome' => $row[1]);
-        $anos[] = array('id' => $index, $theaders[3] => $row[3]);
+        // $row['servico']['ref'] = [$contratado, $entregue];
 
-        $contratados[] = array('id' => $index, 'servico' => $row[4], 'mes' => $row[2], 'valor' => $row[5]);
+        $servicos[] = $servico;
+        $datas[$ref] = $data;
+        // $anos[] = array('id' => $index, $theaders[3] => $row[3]);
 
-        $entregues[] = array('id' => $index, 'mes' => $row[2], $theaders[6] => $row[6]);
+        $valores[] = array('servico' => $servico, 'ref' => $ref, 'contratado' => $contratado, 'entregue' => $entregue, 'status' => $status);
 
-        $status[] = array('id' => $index, 'mes' => $row[2], $theaders[7] => $row[7]);
+        // $entregues[] = array('id' => $index, 'mes' => $ref, $theaders[6] => $row[6]);
+
+        // $status[] = array('id' => $index, 'mes' => $ref, $theaders[7] => $row[7]);
         $index++;
     }
 
-    $meses_unicos = [];
-    $prev_data = '';
-    foreach ($meses as $k => $mes) {
-        if ($prev_data != $mes['ref']) {
-            $meses_unicos[$mes['ref']] = [
-                'nome' => $mes['nome']
-            ];
-            $prev_data = $mes['ref'];
-        }
-    }
-
-    $contratados_por_servico = [];
-    foreach ($contratados as $contratado) {
-        $contratados_por_servico[$contratado['servico']][] = [
-            'id' => $contratado['id'],
-            'mes' => $contratado['mes'],
-            'valor' => $contratado['valor']
-        ];
-    }
-
-    $contratados_por_servico_mes = [];
+    $servicos_unicos = [];
     $prev_serv = '';
-    // parei aqui
-    // precisa agrupar os contratados por serviços e por mês, armazendo o valor total no array contratados_por_servico_mes
-    
-    foreach ($contratados_por_servico as $k => $contratado) {
-        if ($k !== $prev_serv) {
-            $total = 0;
-            $prev_mes = '';
-            // partner_debug($k);
-            foreach ($contratado as $c) {
-                if ($c['mes'] !== $prev_mes) {
-                    $total = $total + (int)$c['valor'];
-                    $prev_mes = $c['mes'];
-                }
-                foreach ($c as $v) {
-                }
-                $contratados_por_servico_mes[$k][$c['mes']] = $total;
-            }
-            $prev_serv = $k;
+    asort($servicos);
+    foreach ($servicos as $servico) {
+        if ($prev_serv != $servico) {
+            $servicos_unicos[] = $servico;
+            $prev_serv = $servico;
         }
     }
-    partner_debug($contratados_por_servico_mes);
+
+    // $datas possui a Ref e o nome do mês: $data['ref'] => val
+    // $servicos_unicos possui os nomes não repetidos dos servicos
+
+    // parei aqui
+    // precisa agrupar os contratados por serviços e por mês, armazendo o valor total no array resultados_por_servico_mes
+
+    $resultados_por_servico = [];
+    foreach ($servicos_unicos as $servico) {
+        foreach ($valores as $por_servico) {
+            if ($servico == $por_servico['servico']) {
+                $resultados_por_servico[$por_servico['servico']][] = [
+                    'ref' => $por_servico['ref'],
+                    'contratado' => $por_servico['contratado'],
+                    'entregue' => $por_servico['entregue'],
+                    'status' => $por_servico['status']
+                ];
+            }
+        }
+    }
+
+
+    $resultados_por_servico_mes = [];
+    foreach ($datas as $ref => $data) {
+        foreach ($resultados_por_servico as $servico => $por_servico) {
+            $total_contratado_por_servico = 0;
+            $total_entregue_por_servico = 0;
+            foreach ($por_servico as $item) {
+                $qtd_contratada = isset($item['contratado']) ? (int)$item['contratado'] : 0;
+                $qtd_entregue = isset($item['entregue']) ? (int)$item['entregue'] : 0;
+                if ($ref == $item['ref']) {
+                    // partner_debug($item['entregue']);
+
+                    $resultados_por_servico_mes[$servico][$ref]['contratado'] += $qtd_contratada;
+                    $resultados_por_servico_mes[$servico][$ref]['entregue'] += $qtd_entregue;
+                }
+                $total_contratado_por_servico += $qtd_contratada;
+                $total_entregue_por_servico += $qtd_entregue;
+            }
+            $resultados_por_servico_mes[$servico]['total_contratado'] = $total_contratado_por_servico;
+            $resultados_por_servico_mes[$servico]['total_entregue'] = $total_entregue_por_servico;
+        }
+    }
+
+    # pegar o mês atual em português
+    $mes_atual = date('F');
+    $mes_atual = str_replace('January', 'Janeiro', $mes_atual);
+    $mes_atual = str_replace('February', 'Fevereiro', $mes_atual);
+    $mes_atual = str_replace('March', 'Março', $mes_atual);
+    $mes_atual = str_replace('April', 'Abril', $mes_atual);
+    $mes_atual = str_replace('May', 'Maio', $mes_atual);
+    $mes_atual = str_replace('June', 'Junho', $mes_atual);
+    $mes_atual = str_replace('July', 'Julho', $mes_atual);
+    $mes_atual = str_replace('August', 'Agosto', $mes_atual);
+    $mes_atual = str_replace('September', 'Setembro', $mes_atual);
+    $mes_atual = str_replace('October', 'Outubro', $mes_atual);
+    $mes_atual = str_replace('November', 'Novembro', $mes_atual);
+    $mes_atual = str_replace('December', 'Dezembro', $mes_atual);
+    $index_atual = 0;
+    foreach ($datas as $ref => $data) {
+        $index = (int)str_replace('M', '', $ref);
+        if ($mes_atual === $data) {
+            $index_atual = $index;
+        }
+    }
 
     $output = '';
-    $output .= '<table>';
+    $output .= '<div class="table-wrap">';
+    $output .= '<table class="table">';
     $output .= '<thead>';
+
     $output .= '<tr>';
 
-    $output .= '<th>';
-    $output .= '</th>';
+    $output .= '<th class="wide-th"><div>';
+    $output .= __('Projetos contratados vs realizados', 'partner');
+    $output .= '</div></th>';
 
-    $prev_data = '';
-    $total_meses = 0;
-    $col_meses = [];
-    foreach ($datas as $data) {
-        if ($prev_data !== $data['Data']) {
-            $output .= '<th colspan="2">';
-            $output .= $data['Data'] . ' (' . $data['mes'] . ')';
-            $output .= '</th>';
-            $prev_data = $data['Data'];
-            $col_meses[] = $data['mes'];
-            $total_meses++;
+    // Ref
+    foreach ($datas as $ref => $data) {
+        $index = (int)str_replace('M', '', $ref);
+        if ($mes_atual === $data) {
+            $index_atual = $index;
         }
+        $css_class = (int)$index <= (int)$index_atual ? 'mes-passado' : 'mes-futuro';
+        $output .= '<th class="vertical-text th-ref ' . $css_class . '" colspan="2"><div>';
+        $output .= $ref;
+        $output .= '</div></th>';
     }
 
+    $output .= '<th class="total-geral vertical-text" colspan="2" rowspan="2"><div>';
+    $output .= __('Geral', 'partner');
+    $output .= '</div></th>';
+
     $output .= '</tr>';
+
     $output .= '<tr>';
 
-    $output .= '<th>';
-    $output .= $theaders[4];
-    $output .= '</th>';
+    $output .= '<th class="th-block"><div>';
+    $output .= __('Escopo de Projetos', 'partner');
+    $output .= '</div></th>';
 
-    for ($i = 0; $i < $total_meses; $i++) {
-
-        $output .= '<th>';
-        $output .= $theaders[5];
-        $output .= '</th>';
-
-        $output .= '<th>';
-        $output .= $theaders[6];
-        $output .= '</th>';
+    // Mês
+    foreach ($datas as $ref => $data) {
+        $index = (int)str_replace('M', '', $ref);
+        if ($mes_atual === $data) {
+            $index_atual = $index;
+        }
+        $css_class = (int)$index <= (int)$index_atual ? 'mes-passado' : 'mes-futuro';
+        $output .= '<th class="vertical-text th-mes ' . $css_class . '" colspan="2"><div>';
+        $output .= $data;
+        $output .= '</div></th>';
     }
 
     $output .= '</tr>';
+
     $output .= '</thead>';
 
     $output .= '<tbody>';
 
-    $prev_servico = [];
-    foreach ($servicos as $servico) {
-        // partner_debug($prev_servico);
-        if (!in_array($servico[$theaders[4]], $prev_servico)) {
-            $output .= '<tr>';
+    foreach ($servicos_unicos as $servico) {
+        $output .= '<tr>';
 
-            $output .= '<td>';
-            $output .= $servico[$theaders[4]];
-            $output .= '</td>';
+        $output .= '<td><div>';
+        $output .= $servico;
+        $output .= '</div></td>';
 
-            for ($i = 0; $i < $total_meses; $i++) {
-                $output .= '<td>';
-                $total = 0;
-                foreach ($contratados_por_mes[$servico['mes']] as $contratado) {
-                    $total = $total + (int)$contratado['valor'];
-                }
-                $output .= $total . ' (' . $contratado[$theaders[4]] . ')';
-                $output .= '</td>';
+        foreach ($datas as $ref => $data) {
+            $resultado_contratado = $resultados_por_servico_mes[$servico][$ref]['contratado'] ?? '';
+            $resultado_entregue = $resultados_por_servico_mes[$servico][$ref]['entregue'] ?? '';
 
-                $output .= '<td>';
-                $output .= '</td>';
-            }
+            // partner_debug($resultado_entregue);
+            // partner_debug(empty($resultado_entregue));
+            // partner_debug(is_null($resultado_entregue));
 
+            $css_class_contratado = ($resultado_contratado !== 0 && (empty($resultado_contratado) || is_null($resultado_contratado))) ? 'empty-cell' : 'cell-contratado';
 
-            $output .= '<tr>';
-            $prev_servico[] = $servico[$theaders[4]];
+            $css_class_entregue = ($resultado_entregue !== 0 && (empty($resultado_entregue) || is_null($resultado_entregue))) ? 'empty-cell' : 'cell-entregue';
+
+            $output .= '<td class="resultado-contratado ' . $css_class_contratado . '"><div>';
+            $output .= $resultado_contratado;
+            $output .= '</div></td>';
+            // partner_debug($datas);
+            $output .= '<td class="resultado-entregue ' . $css_class_entregue . '"><div>';
+            $output .= $resultado_entregue;
+            $output .= '</div></td>';
         }
+        //Total de contratados por Serviço
+        $total_contratado = $resultados_por_servico_mes[$servico]['total_contratado'] ?? '';
+        $total_entregue = $resultados_por_servico_mes[$servico]['total_entregue'] ?? '';
+        $output .= '<td class="total-contratado"><div>';
+        $output .= $total_contratado;
+        $output .= '</div></td>';
+
+        //Total de entregues por Serviço
+        $output .= '<td class="total-entregue"><div>';
+        $output .= $total_entregue;
+        $output .= '</div></td>';
+
+        $output .= '<tr>';
     }
 
     $output .= '</tbody>';
 
     $output .= '</table>';
+    $output .= '</div>';
     return $output;
 }
