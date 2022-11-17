@@ -24,6 +24,7 @@ $wide-th-width: 200px;
     -moz-box-shadow: 0px 5px 12px -12px rgba(0, 0, 0, 0.29);
     box-shadow: 0px 5px 12px -12px rgba(0, 0, 0, 0.29);
     color: $roxo;
+    overflow: hidden;
     thead {
         border-bottom: 20px solid white;
         th {

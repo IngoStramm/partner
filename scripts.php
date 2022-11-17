@@ -16,7 +16,7 @@ function partner_frontend_scripts()
     wp_enqueue_script('partner-script');
 
     wp_localize_script('partner-script', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
-    wp_enqueue_style('partner-style', PARTNER_URL . 'assets/css/partner.css', array(), '1.0.3', 'all');
+    wp_enqueue_style('partner-style', PARTNER_URL . 'assets/css/partner.css', array(), '1.0.4', 'all');
 }
 
 add_action('wp_enqueue_scripts', 'partner_admin_scripts');
