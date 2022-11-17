@@ -245,8 +245,9 @@ function partner_cronograma_output_single($clientes_data)
     foreach ($servicos_unicos as $servico) {
         $output .= '<tr>';
 
-        $output .= '<td><div>';
-        $output .= $servico;
+        $output .= '<td><div class="tooltip">';
+        $output .= '<span class="tooltip-text">' . $servico . '</span>';
+        $output .= '<span class="crop-text">' . $servico . '</span>';
         $output .= '</div></td>';
 
         foreach ($datas as $ref => $data) {

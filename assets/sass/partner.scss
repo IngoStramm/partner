@@ -11,7 +11,7 @@ $chumbo: #434343;
 $prata: #d9d9d9;
 $borda: #808080;
 $borda-style: 4px solid $white;
-
+$wide-th-width: 200px;
 
 .table-wrap {
     overflow-x: auto;
@@ -40,7 +40,7 @@ $borda-style: 4px solid $white;
                 text-transform: uppercase;
             }
             &.wide-th {
-                min-width: 300px;
+                min-width: $wide-th-width;
                 text-align: left;
             }
             &.vertical-text {
@@ -194,4 +194,55 @@ $borda-style: 4px solid $white;
     color: $white;
     font-size: 1.2em;
     letter-spacing: 1px;
+}
+.crop-text {
+    display: block;
+    height: 1.4rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: $wide-th-width;
+    white-space: nowrap;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dashed;
+    cursor: pointer;
+    .tooltip-text {
+        visibility: hidden;
+        white-space: nowrap;
+        background-color: $black;
+        color: $white;
+        text-align: center;
+        border-radius: 0.375em;
+        padding: 0.32em 0.62em;
+        position: absolute;
+        z-index: 1;
+        opacity: 0;
+        top: 50%;
+        left: -0.32em;
+        &:after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 3ch;
+            border-width: 0.32em;
+            border-style: solid;			
+            border-color: $black transparent transparent transparent;
+            z-index: -1;
+        }
+    }
+    &:hover,
+    &:active,
+    &:focus,
+    &:hover:focus {
+        .tooltip-text {
+            visibility: visible;
+            top: -2.4em;
+            opacity: 1;
+            transition: all 0.3s;
+            transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+    }
 }
