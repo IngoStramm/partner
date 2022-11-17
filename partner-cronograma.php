@@ -87,6 +87,7 @@ function partner_cronograma_output_single($clientes_data)
     $theaders = $clientes_data[0];
     $rows = array_slice($clientes_data, 1);
     $datas = [];
+    $meses_anos = [];
     $servicos = [];
     $valores = [];
     $status = [];
@@ -95,6 +96,7 @@ function partner_cronograma_output_single($clientes_data)
     foreach ($rows as $row) {
         $data = $row[1];
         $ref = $row[2];
+        $ano = $row[3];
         $servico = $row[4];
         $contratado = $row[5];
         $entregue = $row[6];
@@ -104,6 +106,7 @@ function partner_cronograma_output_single($clientes_data)
 
         $servicos[] = $servico;
         $datas[$ref] = $data;
+        $meses_anos[$ref] = ['mes' => $data, 'ano' => $ano];
         // $anos[] = array('id' => $index, $theaders[3] => $row[3]);
 
         $valores[] = array('servico' => $servico, 'ref' => $ref, 'contratado' => $contratado, 'entregue' => $entregue, 'status' => $status);
@@ -169,6 +172,7 @@ function partner_cronograma_output_single($clientes_data)
 
     # pegar o mês atual em português
     $mes_atual = date('F');
+    $ano_atual = date('Y');
     $mes_atual = str_replace('January', 'Janeiro', $mes_atual);
     $mes_atual = str_replace('February', 'Fevereiro', $mes_atual);
     $mes_atual = str_replace('March', 'Março', $mes_atual);
@@ -182,9 +186,9 @@ function partner_cronograma_output_single($clientes_data)
     $mes_atual = str_replace('November', 'Novembro', $mes_atual);
     $mes_atual = str_replace('December', 'Dezembro', $mes_atual);
     $index_atual = 0;
-    foreach ($datas as $ref => $data) {
+    foreach ($meses_anos as $ref => $mes_ano) {
         $index = (int)str_replace('M', '', $ref);
-        if ($mes_atual === $data) {
+        if ($mes_atual === $mes_ano['mes'] && $ano_atual === $mes_ano['ano']) {
             $index_atual = $index;
         }
     }
@@ -201,11 +205,8 @@ function partner_cronograma_output_single($clientes_data)
     $output .= '</div></th>';
 
     // Ref
-    foreach ($datas as $ref => $data) {
+    foreach ($meses_anos as $ref => $mes_ano) {
         $index = (int)str_replace('M', '', $ref);
-        if ($mes_atual === $data) {
-            $index_atual = $index;
-        }
         $css_class = (int)$index <= (int)$index_atual ? 'mes-passado' : 'mes-futuro';
         $output .= '<th class="vertical-text th-ref ' . $css_class . '" colspan="2"><div>';
         $output .= $ref;
@@ -225,14 +226,12 @@ function partner_cronograma_output_single($clientes_data)
     $output .= '</div></th>';
 
     // Mês
-    foreach ($datas as $ref => $data) {
+    foreach ($meses_anos as $ref => $mes_ano) {
         $index = (int)str_replace('M', '', $ref);
-        if ($mes_atual === $data) {
-            $index_atual = $index;
-        }
         $css_class = (int)$index <= (int)$index_atual ? 'mes-passado' : 'mes-futuro';
+        // partner_debug($index);
         $output .= '<th class="vertical-text th-mes ' . $css_class . '" colspan="2"><div>';
-        $output .= $data;
+        $output .= $mes_ano['mes'] . '/' . $mes_ano['ano'];
         $output .= '</div></th>';
     }
 
