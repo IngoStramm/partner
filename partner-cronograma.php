@@ -101,6 +101,12 @@ function partner_cronograma_output_single($clientes_data)
         $contratado = $row[5];
         $entregue = $row[6];
         $status = $row[7];
+        $comentario = $row[8];
+
+        // se o texto do $comentario possuir URLs, adicionar tag <a> nas URLs
+        // incluir símbolos no preg_replace para que não sejam interpretados como regex
+        $comentario = preg_replace('/((http|https|ftp):\/\/[\w?=&.\/-;#~%-]+(?![\w\s?&.\/;#~%"=-]*>))/', '<a href="$1" target="_blank">$1</a>', $comentario);
+        // $comentario = preg_replace('@(https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?)@', '<a href="$1" target="_blank">$1</a>', $comentario);
 
         // $row['servico']['ref'] = [$contratado, $entregue];
 
@@ -109,7 +115,7 @@ function partner_cronograma_output_single($clientes_data)
         $meses_anos[$ref] = ['mes' => $data, 'ano' => $ano];
         // $anos[] = array('id' => $index, $theaders[3] => $row[3]);
 
-        $valores[] = array('servico' => $servico, 'ref' => $ref, 'contratado' => $contratado, 'entregue' => $entregue, 'status' => $status);
+        $valores[] = array('servico' => $servico, 'ref' => $ref, 'contratado' => $contratado, 'entregue' => $entregue, 'status' => $status, 'comentario' => $comentario);
 
         // $entregues[] = array('id' => $index, 'mes' => $ref, $theaders[6] => $row[6]);
 
@@ -141,7 +147,8 @@ function partner_cronograma_output_single($clientes_data)
                     'ref' => $por_servico['ref'],
                     'contratado' => $por_servico['contratado'],
                     'entregue' => $por_servico['entregue'],
-                    'status' => $por_servico['status']
+                    'status' => $por_servico['status'],
+                    'comentario' => $por_servico['comentario'],
                 ];
             }
         }
@@ -161,6 +168,7 @@ function partner_cronograma_output_single($clientes_data)
 
                     $resultados_por_servico_mes[$servico][$ref]['contratado'] += $qtd_contratada;
                     $resultados_por_servico_mes[$servico][$ref]['entregue'] += $qtd_entregue;
+                    $resultados_por_servico_mes[$servico][$ref]['comentario'] = $item['comentario'];
                 }
                 $total_contratado_por_servico += $qtd_contratada;
                 $total_entregue_por_servico += $qtd_entregue;
@@ -241,7 +249,10 @@ function partner_cronograma_output_single($clientes_data)
 
     $output .= '<tbody>';
 
+    $servico_slug = '';
     foreach ($servicos_unicos as $servico) {
+        // criar um slug a partir do texto em $servico e salvar em servico_slug
+        $servico_slug = sanitize_title($servico);
         $output .= '<tr>';
 
         $output .= '<td><div class="tooltip">';
@@ -252,6 +263,7 @@ function partner_cronograma_output_single($clientes_data)
         foreach ($datas as $ref => $data) {
             $resultado_contratado = $resultados_por_servico_mes[$servico][$ref]['contratado'] ?? '';
             $resultado_entregue = $resultados_por_servico_mes[$servico][$ref]['entregue'] ?? '';
+            $resultado_comentario = $resultados_por_servico_mes[$servico][$ref]['comentario'] ?? '';
 
             // partner_debug($resultado_entregue);
             // partner_debug(empty($resultado_entregue));
@@ -266,7 +278,14 @@ function partner_cronograma_output_single($clientes_data)
             $output .= '</div></td>';
             // partner_debug($datas);
             $output .= '<td class="resultado-entregue ' . $css_class_entregue . '"><div>';
+            if ($resultado_comentario) {
+                $output .= '<a href="#" class="partner-trigger-popup" data-partner-popup-id="partner-popup-' . $servico_slug . '-' . $ref . '">';
+            }
             $output .= $resultado_entregue;
+            if ($resultado_comentario) {
+                $output .= '</a>';
+                $output .= '<div id="partner-popup-' . $servico_slug . '-' . $ref . '" class="partner-content-popup">' . $resultado_comentario . '</div>';
+            }
             $output .= '</div></td>';
         }
         //Total de contratados por Serviço
