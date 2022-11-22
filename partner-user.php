@@ -17,7 +17,7 @@ function partner_register_user_profile_metabox()
         'desc'    => esc_html__('Selecione qual é o cliente deste usuário.', 'partner'),
         'id'      => $prefix . 'cliente',
         'type'    => 'select',
-        'options' => 'partner_list_clientes'
+        'options' => 'partner_list_post_clientes'
     ));
 
     $cmb_user->add_field(array(
@@ -44,37 +44,5 @@ function partner_register_user_profile_metabox()
 
 add_action('cmb2_admin_init', 'partner_register_user_profile_metabox');
 
-/**
- * partner_list_clientes
- *
- * @return array
- */
-function partner_list_clientes()
-{
-    $googlesheet_url = partner_get_option('googlesheet_url');
 
-    if (!$googlesheet_url || !is_string($googlesheet_url))
-        return;
-
-    $googlesheet_url = html_entity_decode($googlesheet_url);
-    $rows = partner_return_googlesheet_data($googlesheet_url);
-
-    if (is_null($rows) || empty($rows))
-        return;
-
-    if (!is_array($rows))
-        return $rows;
-
-    $rows = array_slice($rows, 1);
-    $clientes = [];
-
-    $clientes[] = __('Selecione um cliente', 'partner');
-
-    foreach ($rows as $row) {
-        if (!in_array($row[0], $clientes))
-            $clientes[$row[0]] = $row[0];
-    }
-    return $clientes;
-}
-
-// add_action('wp_head', 'partner_list_clientes');
+// add_action('wp_head', 'partner_list_planilha_clientes_name');
