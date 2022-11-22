@@ -83,33 +83,41 @@ function partner_register_atendimento_metabox()
     ));
 
     $cmb_cliente->add_field(array(
-        'name'    => esc_html__('Solicitação', 'partner'),
+        'name'    => esc_html__('Data da solicitação', 'partner'),
         // 'desc'    => esc_html__('', 'partner'),
         'id'      => 'atendimento_solicitacao',
-        'type' => 'text_date',
+        'type' => 'text_datetime_timestamp',
         'date_format' => 'd/m/Y',
-        'date_format' => 'd/m/Y', 'attributes' => array(
+        'attributes' => array(
             'required' => 'required',
         ),
     ));
 
     $cmb_cliente->add_field(array(
-        'name'    => esc_html__('Input', 'partner'),
-        // 'desc'    => esc_html__('', 'partner'),
-        'id'      => 'atendimento_input',
-        'type' => 'text_date',
-        'date_format' => 'd/m/Y',
-        'date_format' => 'd/m/Y', 'attributes' => array(
-            'required' => 'required',
-        ),
-    ));
-
-    $cmb_cliente->add_field(array(
-        'name'    => esc_html__('Entrega', 'partner'),
+        'name'    => esc_html__('Previsão de entrega', 'partner'),
         // 'desc'    => esc_html__('', 'partner'),
         'id'      => 'atendimento_entrega',
-        'type' => 'text_date',
-        'date_format' => 'd/m/Y', 'attributes' => array(
+        'type' => 'text_datetime_timestamp',
+        'date_format' => 'd/m/Y',
+        'attributes' => array(
+            'required' => 'required',
+        ),
+    ));
+
+    $cmb_cliente->add_field(array(
+        'name'    => esc_html__('Urgência', 'partner'),
+        // 'desc'    => esc_html__('', 'partner'),
+        'id'      => 'atendimento_urgencia',
+        'type' => 'select',
+        'options' => array(
+            '0' => esc_html__('Selecione uma opção', 'partner'),
+            '1' => esc_html__('Não Urgente', 'partner'),
+            '2' => esc_html__('Pouco Urgente', 'partner'),
+            '3' => esc_html__('Urgente ', 'partner'),
+            '4' => esc_html__('Muito Urgente', 'partner'),
+            '5' => esc_html__('Emergência', 'partner'),
+        ),
+        'attributes' => array(
             'required' => 'required',
         ),
     ));
@@ -126,17 +134,17 @@ function partner_register_atendimento_metabox()
     ));
 
     $cmb_cliente->add_field(array(
-        'name'    => esc_html__('Urgência', 'partner'),
+        'name'    => esc_html__('Status', 'partner'),
         // 'desc'    => esc_html__('', 'partner'),
-        'id'      => 'atendimento_urgencia',
+        'id'      => 'atendimento_status',
         'type' => 'select',
         'options' => array(
             '0' => esc_html__('Selecione uma opção', 'partner'),
-            '1' => esc_html__('01. Agendar Início (laf)', 'partner'),
-            '2' => esc_html__('02. Executando (laf)', 'partner'),
-            '3' => esc_html__('03. Parado c/ Cliente (cliente)', 'partner'),
-            '9' => esc_html__('09. Sempre em execução', 'partner'),
-            '10' => esc_html__('10. Entregue / Resolvido', 'partner'),
+            '1' => esc_html__('Agendar Início (laf)', 'partner'),
+            '2' => esc_html__('Executando (laf)', 'partner'),
+            '3' => esc_html__('Parado c/ Cliente (cliente)', 'partner'),
+            '9' => esc_html__('Sempre em execução', 'partner'),
+            '10' => esc_html__('Entregue / Resolvido', 'partner'),
         ),
         'attributes' => array(
             'required' => 'required',
