@@ -72,6 +72,53 @@ function partner_list_post_clientes($only_names = true)
     }
     return $clientes_array;
 }
+
+/**
+ * partner_list_post_clientes_with_id
+ *
+ * @return array
+ */
+function partner_list_post_clientes_with_id()
+{
+    $clientes = get_posts([
+        'post_type' => 'cliente',
+        'posts_per_page' => -1,
+        'orderby' => 'title',
+        'order' => 'ASC',
+        'post_status' => 'publish',
+        'suppress_filters' => true,
+        'fields' => 'ids',
+    ]);
+    $clientes_array = [];
+    foreach ($clientes as $cliente_id) {
+        $cliente_title = get_the_title($cliente_id);
+        $clientes_array[$cliente_id] = $cliente_title;
+    }
+    return $clientes_array;
+}
+
+/**
+ * partner_list_admin_users
+ *
+ * @return array
+ */
+function partner_list_admin_users()
+{
+    $users = get_users([
+        'role__in' => ['administrator', 'editor'],
+        'orderby' => 'display_name',
+        'order' => 'ASC',
+        'fields' => ['ID', 'display_name'],
+    ]);
+
+    $users_array = [];
+    $users_array[] = __('Selecione um usuário', 'partner');
+    foreach ($users as $user) {
+        $users_array[$user->ID] = $user->display_name;
+    }
+    return $users_array;
+}
+
 /**
  * partner_delete_transient
  *
@@ -116,3 +163,30 @@ function partner_redirect_if_user_not_logged_in()
 }
 
 add_action('template_redirect', 'partner_redirect_if_user_not_logged_in');
+
+/**
+ * partner_delete_transient
+ *
+ * @return void
+ */
+function partner_get_cliente_marcas()
+{
+    $response = '';
+    $cliente_id = $_GET['cliente_id'];
+    if (empty($cliente_id)) {
+        $msg = __('Não foi possível carregar as marcas do cliente.', 'partner');
+        $response = array('success' => false, 'msg' => $msg);
+    } else {
+        $marcas = get_post_meta($cliente_id, 'marcas', true);
+        $options = '<option value="">' . __('Selecione uma marca', 'partner') . '</option>';
+        if (is_array($marcas)) {
+            foreach ($marcas as $marca) {
+                $options .= '<option value="' . $marca['nome-da-marca'] . '">' . $marca['nome-da-marca'] . '</option>';
+            }
+        }
+        $response = array('success' => true, 'options' => $options);
+    }
+    wp_send_json($response);
+}
+
+add_action('wp_ajax_partner_get_cliente_marcas', 'partner_get_cliente_marcas');

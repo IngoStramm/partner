@@ -29,7 +29,7 @@ function partner_admin_scripts()
 
     $min = (in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1', '10.0.0.3'))) ? '' : '.min';
 
-    wp_register_script('partner-admin-script', PARTNER_URL . 'assets/js/partner-admin' . $min . '.js', array('jquery'), '1.0.0', true);
+    wp_register_script('partner-admin-script', PARTNER_URL . 'assets/js/partner-admin' . $min . '.js', array('jquery'), '1.0.1', true);
     wp_enqueue_script('partner-admin-script');
     wp_localize_script('partner-admin-script', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
 }
