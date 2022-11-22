@@ -4,7 +4,7 @@
  * Plugin Name: Partner
  * Plugin URI: https://agencialaf.com
  * Description: Descrição do Partner.
- * Version: 0.0.17
+ * Version: 0.0.18
  * Author: Ingo Stramm
  * Text Domain: partner
  * License: GPLv2
