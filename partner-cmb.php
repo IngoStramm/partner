@@ -57,7 +57,7 @@ function partner_register_chamado_metabox()
             }
             return $options_array;
         },
-        'date_format' => 'd/m/Y', 'attributes' => array(
+        'attributes' => array(
             'required' => 'required',
         ),
     ));
@@ -68,7 +68,7 @@ function partner_register_chamado_metabox()
         'id'      => 'chamado_marca_select',
         'type'    => 'select',
         'options' => array('' => __('Nenhum cliente selecionado', 'partner')),
-        'date_format' => 'd/m/Y', 'attributes' => array(
+        'attributes' => array(
             'required' => 'required',
         ),
     ));
@@ -85,7 +85,7 @@ function partner_register_chamado_metabox()
         'desc'    => esc_html__('Descreva o assunto do chamado.', 'partner'),
         'id'      => 'chamado_assunto',
         'type'    => 'text',
-        'date_format' => 'd/m/Y', 'attributes' => array(
+        'attributes' => array(
             'required' => 'required',
         ),
     ));
@@ -95,7 +95,7 @@ function partner_register_chamado_metabox()
         'desc'    => esc_html__('Detalhes sobre a solicitação.', 'partner'),
         'id'      => 'chamado_detalhes_solicitacao',
         'type'    => 'textarea',
-        'date_format' => 'd/m/Y', 'attributes' => array(
+        'attributes' => array(
             'required' => 'required',
         ),
     ));
@@ -105,7 +105,7 @@ function partner_register_chamado_metabox()
         // 'desc'    => esc_html__('', 'partner'),
         'id'      => 'chamado_solicitacao',
         'type' => 'text_datetime_timestamp',
-        // 'date_format' => 'd/m/Y',
+        'date_format' => 'd-m-Y',
         'attributes' => array(
             'required' => 'required',
         ),
@@ -116,7 +116,7 @@ function partner_register_chamado_metabox()
         // 'desc'    => esc_html__('', 'partner'),
         'id'      => 'chamado_entrega',
         'type' => 'text_datetime_timestamp',
-        // 'date_format' => 'd/m/Y',
+        'date_format' => 'd-m-Y',
         'attributes' => array(
             'required' => 'required',
         ),
