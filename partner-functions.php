@@ -57,7 +57,7 @@ function partner_list_post_clientes($only_names = true)
         $cliente_title = get_the_title($cliente_id);
         // partner_debug($cliente_planilha_marcas);
         if ($only_names) {
-            $clientes_array[$cliente_planilha_name] = $cliente_title;
+            $clientes_array[$cliente_id] = $cliente_title;
         } else {
             $marcas_name = [];
             foreach ($cliente_planilha_marcas as $marca) {
