@@ -48,9 +48,9 @@ function partner_show_cliente_data_shortcode()
         return;
 
     // pegar o meta dado 'partner_user_cliente' do usuário
-    $selected_cliente = get_user_meta($user_id, 'partner_user_cliente', true);
+    $selected_cliente_id = get_user_meta($user_id, 'partner_user_cliente', true);
 
-    if (!$selected_cliente)
+    if (!$selected_cliente_id)
         return;
 
     $googlesheet_url = partner_get_option('googlesheet_url');
@@ -62,6 +62,7 @@ function partner_show_cliente_data_shortcode()
     $cliente_data = [];
     $theaders = $rows[0];
     $rows = array_slice($rows, 1);
+    $selected_cliente = get_the_title($selected_cliente_id);
     foreach ($rows as $row) {
         if ($row[0] === $selected_cliente) {
             $cliente_data[] = $row;
@@ -230,7 +231,7 @@ function partner_list_all_chamados_shortcode()
 
     foreach ($chamados as $chamado) {
         $chamado_id = $chamado->ID;
-        
+
         $chamado_marca_select = get_post_meta($chamado_id, 'chamado_marca_select', true);
         $chamado_assunto = get_post_meta($chamado_id, 'chamado_assunto', true);
         $chamado_detalhes_solicitacao = get_post_meta($chamado_id, 'chamado_detalhes_solicitacao', true);
@@ -248,7 +249,7 @@ function partner_list_all_chamados_shortcode()
         $chamado_urgencia = get_term_by('term_taxonomy_id', $chamado_urgencia_id, 'urgencia');
         $chamado_status = get_term_by('term_taxonomy_id', $chamado_status_id, 'status-chamado');
         $chamado_ponto_focal = get_user_by('id', $chamado_ponto_focal_id);
-        
+
         // partner_debug($chamado_last_update_time);
 
         $output .= '<tr>';
