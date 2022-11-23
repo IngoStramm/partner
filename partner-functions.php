@@ -120,6 +120,65 @@ function partner_list_admin_users()
 }
 
 /**
+ * partner_get_status_list
+ *
+ * @return array
+ */
+function partner_get_urgencia_list()
+{
+    $terms = get_terms([
+        'taxonomy' => 'urgencia',
+        'hide_empty' => false,
+        'meta_key' => 'ordem',
+        'orderby' => 'meta_value_num',
+        'order' => 'ASC',
+    ]);
+    $status_array = [];
+    foreach ($terms as $term) {
+        // $ordem = get_term_meta($term->term_id, 'ordem', true);
+        $status_array[$term->term_id] = $term->name;
+    }
+    return $status_array;
+}
+
+function partner_get_status_list()
+{
+    $terms = get_terms([
+        'taxonomy' => 'status',
+        'hide_empty' => false,
+        'meta_key' => 'ordem',
+        'orderby' => 'meta_value_num',
+        'order' => 'ASC',
+    ]);
+    $status_array = [];
+    foreach ($terms as $term) {
+        // $ordem = get_term_meta($term->term_id, 'ordem', true);
+        $status_array[$term->term_id] = $term->name;
+    }
+    return $status_array;
+}
+
+/**
+ * partner_hide_tags_chamados
+ *
+ * @return string
+ */
+function partner_hide_tags_chamados()
+{
+    global $post;
+    if ($post->post_type == 'chamados') {
+        echo '<style>
+        #tagsdiv-status,
+        #tagsdiv-urgencia {
+            display: none;
+        }
+        </style>';
+    }
+}
+
+add_action('admin_head', 'partner_hide_tags_chamados');
+
+/**
  * partner_delete_transient
  *
  * @return void

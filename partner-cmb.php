@@ -17,25 +17,36 @@ function partner_register_cliente_metabox()
         'type'    => 'select',
         'options' => 'partner_list_planilha_clientes_name'
     ));
+
+    $cmb_cliente->add_field(array(
+        'name'    => esc_html__('Responsável pela conta', 'partner'),
+        // 'desc'    => esc_html__('', 'partner'),
+        'id'      => 'chamado_responsavel',
+        'type' => 'select',
+        'options' => 'partner_list_admin_users',
+        'attributes' => array(
+            'required' => 'required',
+        ),
+    ));
 }
 
-add_action('cmb2_admin_init', 'partner_register_atendimento_metabox');
+add_action('cmb2_admin_init', 'partner_register_chamado_metabox');
 
-function partner_register_atendimento_metabox()
+function partner_register_chamado_metabox()
 {
-    $cmb_cliente = new_cmb2_box(array(
-        'id'            => 'partner_atendimento_metabox',
+    $cmb_chamado = new_cmb2_box(array(
+        'id'            => 'partner_chamado_metabox',
         'title'         => esc_html__('Opções', 'cmb2'),
-        'object_types'  => array('atendimentos'), // Post type
+        'object_types'  => array('chamados'), // Post type
         'context'    => 'normal',
         'priority'   => 'high',
         'cmb_styles' => true,
     ));
 
-    $cmb_cliente->add_field(array(
+    $cmb_chamado->add_field(array(
         'name'    => esc_html__('Cliente', 'partner'),
         'desc'    => esc_html__('Selecione qual é o cliente.', 'partner'),
-        'id'      => 'atendimento_post',
+        'id'      => 'chamado_post',
         'type'    => 'select',
         'options' => function () {
             $options_array = [];
@@ -51,10 +62,10 @@ function partner_register_atendimento_metabox()
         ),
     ));
 
-    $cmb_cliente->add_field(array(
+    $cmb_chamado->add_field(array(
         'name'    => esc_html__('Marca', 'partner'),
         'desc'    => esc_html__('Selecione qual é a Marca.', 'partner'),
-        'id'      => 'atendimento_marca',
+        'id'      => 'chamado_marca_select',
         'type'    => 'select',
         'options' => array('' => __('Nenhum cliente selecionado', 'partner')),
         'date_format' => 'd/m/Y', 'attributes' => array(
@@ -62,52 +73,59 @@ function partner_register_atendimento_metabox()
         ),
     ));
 
-    $cmb_cliente->add_field(array(
+    $cmb_chamado->add_field(array(
+        'name'    => esc_html__('Marca Hidden Input', 'partner'),
+        // 'desc'    => esc_html__('Selecione qual é a Marca.', 'partner'),
+        'id'      => 'chamado_marca',
+        'type'    => 'hidden',
+    ));
+
+    $cmb_chamado->add_field(array(
         'name'    => esc_html__('Assunto', 'partner'),
-        'desc'    => esc_html__('Descreva o assunto do atendimento.', 'partner'),
-        'id'      => 'atendimento_assunto',
+        'desc'    => esc_html__('Descreva o assunto do chamado.', 'partner'),
+        'id'      => 'chamado_assunto',
         'type'    => 'text',
         'date_format' => 'd/m/Y', 'attributes' => array(
             'required' => 'required',
         ),
     ));
 
-    $cmb_cliente->add_field(array(
+    $cmb_chamado->add_field(array(
         'name'    => esc_html__('Detalhamento', 'partner'),
         'desc'    => esc_html__('Detalhes sobre a solicitação.', 'partner'),
-        'id'      => 'atendimento_detalhes_solicitacao',
+        'id'      => 'chamado_detalhes_solicitacao',
         'type'    => 'textarea',
         'date_format' => 'd/m/Y', 'attributes' => array(
             'required' => 'required',
         ),
     ));
 
-    $cmb_cliente->add_field(array(
+    $cmb_chamado->add_field(array(
         'name'    => esc_html__('Data da solicitação', 'partner'),
         // 'desc'    => esc_html__('', 'partner'),
-        'id'      => 'atendimento_solicitacao',
+        'id'      => 'chamado_solicitacao',
         'type' => 'text_datetime_timestamp',
-        'date_format' => 'd/m/Y',
+        // 'date_format' => 'd/m/Y',
         'attributes' => array(
             'required' => 'required',
         ),
     ));
 
-    $cmb_cliente->add_field(array(
+    $cmb_chamado->add_field(array(
         'name'    => esc_html__('Previsão de entrega', 'partner'),
         // 'desc'    => esc_html__('', 'partner'),
-        'id'      => 'atendimento_entrega',
+        'id'      => 'chamado_entrega',
         'type' => 'text_datetime_timestamp',
-        'date_format' => 'd/m/Y',
+        // 'date_format' => 'd/m/Y',
         'attributes' => array(
             'required' => 'required',
         ),
     ));
 
-    $cmb_cliente->add_field(array(
+    $cmb_chamado->add_field(array(
         'name'    => esc_html__('Urgência', 'partner'),
         // 'desc'    => esc_html__('', 'partner'),
-        'id'      => 'atendimento_urgencia',
+        'id'      => 'chamado_urgencia',
         'type' => 'select',
         'options' => array(
             '0' => esc_html__('Selecione uma opção', 'partner'),
@@ -122,10 +140,10 @@ function partner_register_atendimento_metabox()
         ),
     ));
 
-    $cmb_cliente->add_field(array(
+    $cmb_chamado->add_field(array(
         'name'    => esc_html__('Ponto Focal', 'partner'),
         // 'desc'    => esc_html__('', 'partner'),
-        'id'      => 'atendimento_ponto_focal',
+        'id'      => 'chamado_ponto_focal',
         'type' => 'select',
         'options' => 'partner_list_admin_users',
         'attributes' => array(
@@ -133,30 +151,31 @@ function partner_register_atendimento_metabox()
         ),
     ));
 
-    $cmb_cliente->add_field(array(
+    $cmb_chamado->add_field(array(
         'name'    => esc_html__('Status', 'partner'),
         // 'desc'    => esc_html__('', 'partner'),
-        'id'      => 'atendimento_status',
+        'id'      => 'chamado_status',
         'type' => 'select',
-        'options' => array(
-            '0' => esc_html__('Selecione uma opção', 'partner'),
-            '1' => esc_html__('Agendar Início (laf)', 'partner'),
-            '2' => esc_html__('Executando (laf)', 'partner'),
-            '3' => esc_html__('Parado c/ Cliente (cliente)', 'partner'),
-            '9' => esc_html__('Sempre em execução', 'partner'),
-            '10' => esc_html__('Entregue / Resolvido', 'partner'),
-        ),
+        'options' => function () {
+            $options = [];
+            $options[0] = esc_html__('Selecione uma opção', 'partner');
+            $statuses = partner_get_status_list();
+            foreach ($statuses as $id => $status) {
+                $options[$id] = $status;
+            }
+            return $options;
+        },
         'attributes' => array(
             'required' => 'required',
         ),
     ));
 
-    $cmb_cliente->add_field(array(
+    $cmb_chamado->add_field(array(
         'name'    => esc_html__('Detalhe a resolução', 'partner'),
         'desc'    => esc_html__('Detalhes sobre a resolução.', 'partner'),
-        'id'      => 'atendimento_detalhes_resolucao',
+        'id'      => 'chamado_detalhes_resolucao',
         'type'    => 'textarea',
-        'date_format' => 'd/m/Y', 'attributes' => array(
+        'attributes' => array(
             'required' => 'required',
         ),
     ));
