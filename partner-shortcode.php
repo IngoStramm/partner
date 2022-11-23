@@ -246,7 +246,7 @@ function partner_list_all_chamados_shortcode()
         $chamado_entrega = date('d/m/Y H:i', $chamado_entrega);
         $chamado_last_update_time = date('d/m/Y H:i', strtotime($chamado_last_update_time));
         $chamado_urgencia = get_term_by('term_taxonomy_id', $chamado_urgencia_id, 'urgencia');
-        $chamado_status = get_term_by('term_taxonomy_id', $chamado_status_id, 'urgencia');
+        $chamado_status = get_term_by('term_taxonomy_id', $chamado_status_id, 'status-chamado');
         $chamado_ponto_focal = get_user_by('id', $chamado_ponto_focal_id);
         
         // partner_debug($chamado_last_update_time);

@@ -127,14 +127,15 @@ function partner_register_chamado_metabox()
         // 'desc'    => esc_html__('', 'partner'),
         'id'      => 'chamado_urgencia',
         'type' => 'select',
-        'options' => array(
-            '0' => esc_html__('Selecione uma opção', 'partner'),
-            '1' => esc_html__('Não Urgente', 'partner'),
-            '2' => esc_html__('Pouco Urgente', 'partner'),
-            '3' => esc_html__('Urgente ', 'partner'),
-            '4' => esc_html__('Muito Urgente', 'partner'),
-            '5' => esc_html__('Emergência', 'partner'),
-        ),
+        'options' => function () {
+            $options = [];
+            $options[0] = esc_html__('Selecione uma opção', 'partner');
+            $statuses = partner_get_urgencia_list();
+            foreach ($statuses as $id => $status) {
+                $options[$id] = $status;
+            }
+            return $options;
+        },
         'attributes' => array(
             'required' => 'required',
         ),

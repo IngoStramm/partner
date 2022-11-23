@@ -135,6 +135,7 @@ function partner_get_urgencia_list()
     ]);
     $status_array = [];
     foreach ($terms as $term) {
+        // partner_debug($term);
         // $ordem = get_term_meta($term->term_id, 'ordem', true);
         $status_array[$term->term_id] = $term->name;
     }
@@ -144,7 +145,7 @@ function partner_get_urgencia_list()
 function partner_get_status_list()
 {
     $terms = get_terms([
-        'taxonomy' => 'status',
+        'taxonomy' => 'status-chamado',
         'hide_empty' => false,
         'meta_key' => 'ordem',
         'orderby' => 'meta_value_num',
