@@ -85,15 +85,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         cliente_select.addEventListener('change', function () {
             const cliente_selected = this.value;
+            chamado_marca.value = '';
 
             if (cliente_selected === '0') {
                 marca_select.innerHTML = marca_select_placeholder;
-                chamado_marca.value = '';
                 return;
             }
-
-            // console.log(cliente_selected);
-            // console.log(ajax_object.ajax_url);
 
             let is_disabled = cliente_select.dataset.disabled;
             if (is_disabled) {
