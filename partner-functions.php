@@ -179,6 +179,27 @@ function partner_hide_tags_chamados()
 
 add_action('admin_head', 'partner_hide_tags_chamados');
 
+
+/**
+ * partner_chamados_titulo
+ *
+ * @param  array $data
+ * @param  array $postarr
+ * @return array $data
+ */
+function partner_chamados_titulo($data, $postarr)
+{
+    if ('chamados' != $data['post_type'])
+        return $data;
+
+    $data_formatada = date('d/m/Y H:i', strtotime($postarr['post_date']));
+    $data['post_title'] = $data['post_title'] == '' ? 'Chamado #' . $postarr['ID'] . ' - ' . $data_formatada : $data['post_title'];
+
+    return $data;
+}
+
+add_action('wp_insert_post_data', 'partner_chamados_titulo', '99', 2);
+
 /**
  * partner_delete_transient
  *
