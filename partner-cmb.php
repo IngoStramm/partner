@@ -94,7 +94,7 @@ function partner_register_chamado_metabox()
         'name'    => esc_html__('Detalhamento', 'partner'),
         'desc'    => esc_html__('Detalhes sobre a solicitação.', 'partner'),
         'id'      => 'chamado_detalhes_solicitacao',
-        'type'    => 'textarea',
+        'type'    => 'wysiwyg',
         'attributes' => array(
             'required' => 'required',
         ),
@@ -175,7 +175,7 @@ function partner_register_chamado_metabox()
         'name'    => esc_html__('Detalhe a resolução', 'partner'),
         'desc'    => esc_html__('Detalhes sobre a resolução.', 'partner'),
         'id'      => 'chamado_detalhes_resolucao',
-        'type'    => 'textarea',
+        'type'    => 'wysiwyg',
         'attributes' => array(
             'required' => 'required',
         ),
