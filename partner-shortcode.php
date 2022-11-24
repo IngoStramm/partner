@@ -304,3 +304,20 @@ function partner_list_all_chamados_shortcode()
 }
 
 add_shortcode('partner_list_all_chamados', 'partner_list_all_chamados_shortcode');
+
+/**
+ * partner_display_name_shortcode
+ *
+ * @param  array $atts
+ * @return string
+ */
+function partner_display_name_shortcode($atts)
+{
+    extract(shortcode_atts(array(
+        'id' => '',
+    ), $atts));
+    $user = get_user_by('id', $id);
+    return $user->display_name;
+}
+
+add_shortcode('partner_display_name', 'partner_display_name_shortcode');
