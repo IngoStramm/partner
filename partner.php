@@ -15,6 +15,8 @@ defined('ABSPATH') or die('No script kiddies please!');
 define('PARTNER_DIR', plugin_dir_path(__FILE__));
 define('PARTNER_URL', plugin_dir_url(__FILE__));
 
+define('SCRIPT_VERSION', '1.0.8');
+
 function partner_debug($debug)
 {
     echo '<pre>';
