@@ -170,7 +170,9 @@ function partner_hide_tags_chamados()
     if ($post->post_type == 'chamados') {
         echo '<style>
         #tagsdiv-status-chamado,
-        #tagsdiv-urgencia {
+        #radio-tagsdiv-status-chamado,
+        #tagsdiv-urgencia,
+        #radio-tagsdiv-urgencia {
             display: none;
         }
         </style>';

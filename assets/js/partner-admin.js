@@ -108,6 +108,67 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     }
+
+    function partner_set_term_for_select(select, checklist) {
+        const select_value = select.value;
+        const radio_options = checklist.querySelectorAll('input[type="radio"]');
+        for (let i = 0; i < radio_options.length; i++) {
+            const radio_option = radio_options[i];
+            if (radio_option.value === select_value) {
+                radio_option.checked = true;
+            } else {
+                radio_option.checked = false;
+            }
+        }
+
+    }
+
+    function partner_set_term_for_urgencia_event() {
+        // #chamado_urgencia
+        // #urgenciachecklist
+        // #chamado_status
+        // #status-chamadochecklist
+        const chamado_urgencia_select = document.getElementById('chamado_urgencia');
+        if (typeof (chamado_urgencia_select) === 'undefined' || chamado_urgencia_select === null) {
+            return;
+        }
+
+        const urgenciachecklist_select = document.getElementById('urgenciachecklist');
+        if (typeof (urgenciachecklist_select) === 'undefined' || urgenciachecklist_select === null) {
+            return;
+        }
+
+        partner_set_term_for_select(chamado_urgencia_select, urgenciachecklist_select);
+
+        chamado_urgencia_select.addEventListener('change', () => {
+            partner_set_term_for_select(chamado_urgencia_select, urgenciachecklist_select);
+        });
+    }
+
+    function partner_set_term_for_status_event() {
+        // #chamado_urgencia
+        // #urgenciachecklist
+        // #chamado_status
+        // #status-chamadochecklist
+        const chamado_status_select = document.getElementById('chamado_status');
+        if (typeof (chamado_status_select) === 'undefined' || chamado_status_select === null) {
+            return;
+        }
+
+        const statuschecklist_select = document.getElementById('status-chamadochecklist');
+        if (typeof (statuschecklist_select) === 'undefined' || statuschecklist_select === null) {
+            return;
+        }
+
+        partner_set_term_for_select(chamado_status_select, statuschecklist_select);
+
+        chamado_status_select.addEventListener('change', () => {
+            partner_set_term_for_select(chamado_status_select, statuschecklist_select);
+        });
+    }
+
+    partner_set_term_for_urgencia_event();
+    partner_set_term_for_status_event();
     partner_delete_transient_evt();
     partner_cliente_selected();
 });
