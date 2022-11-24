@@ -108,6 +108,7 @@ function partner_register_chamado_metabox()
         'date_format' => 'd-m-Y',
         'attributes' => array(
             'required' => 'required',
+            'autocomplete' => 'off',
         ),
     ));
 
@@ -119,6 +120,7 @@ function partner_register_chamado_metabox()
         'date_format' => 'd-m-Y',
         'attributes' => array(
             'required' => 'required',
+            'autocomplete' => 'off',
         ),
     ));
 
