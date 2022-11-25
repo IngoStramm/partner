@@ -157,11 +157,11 @@ function partner_get_status_list()
 }
 
 /**
- * partner_hide_tags_chamados
+ * partner_admin_head_style
  *
  * @return string
  */
-function partner_hide_tags_chamados()
+function partner_admin_head_style()
 {
     global $post;
     if ($post->post_type == 'chamados') {
@@ -169,14 +169,15 @@ function partner_hide_tags_chamados()
         #tagsdiv-status-chamado,
         #radio-tagsdiv-status-chamado,
         #tagsdiv-urgencia,
-        #radio-tagsdiv-urgencia {
+        #radio-tagsdiv-urgencia,
+        #pageparentdiv {
             display: none;
         }
         </style>';
     }
 }
 
-add_action('admin_head', 'partner_hide_tags_chamados');
+add_action('admin_head', 'partner_admin_head_style');
 
 
 /**
@@ -231,8 +232,9 @@ function partner_chamados_save_term_order($post_id)
     $status_ordem = get_term_meta($status_id, 'ordem', true);
 
     // Previne loop ao atualizar o post
-    remove_action('save_post', 'partner_chamados_save_term_order');
+    remove_action('save_post', 'partner_chamados_save_term_order', 999);
 
+    wp_update_post(array('ID' => $post_id, 'menu_order' => $urgencia_ordem));
     update_post_meta($post_id, 'urgencia_ordem', $urgencia_ordem);
     update_post_meta($post_id, 'status_ordem', $status_ordem);
 
