@@ -135,8 +135,6 @@ function partner_get_urgencia_list()
     ]);
     $status_array = [];
     foreach ($terms as $term) {
-        // partner_debug($term);
-        // $ordem = get_term_meta($term->term_id, 'ordem', true);
         $status_array[$term->term_id] = $term->name;
     }
     return $status_array;
@@ -153,7 +151,6 @@ function partner_get_status_list()
     ]);
     $status_array = [];
     foreach ($terms as $term) {
-        // $ordem = get_term_meta($term->term_id, 'ordem', true);
         $status_array[$term->term_id] = $term->name;
     }
     return $status_array;
@@ -201,6 +198,49 @@ function partner_chamados_titulo($data, $postarr)
 }
 
 add_action('wp_insert_post_data', 'partner_chamados_titulo', '99', 2);
+
+/**
+ * partner_chamados_save_term_order
+ *
+ * @param  int $post_id
+ * @return void
+ */
+function partner_chamados_save_term_order($post_id)
+{
+    // Verifica se é uma revisão e atribui o ID caso for
+    if ($parent_id = wp_is_post_revision($post_id))
+        $post_id = $parent_id;
+
+    // Verifica se é um chamado
+    $post_type = get_post_type($post_id);
+    if ('chamados' !== $post_type) {
+        return;
+    }
+
+    $urgencia_id = get_post_meta($post_id, 'chamado_urgencia', true);
+
+    if (!$urgencia_id)
+        return;
+
+    $status_id = get_post_meta($post_id, 'chamado_status', true);
+
+    if (!$status_id)
+        return;
+
+    $urgencia_ordem = get_term_meta($urgencia_id, 'ordem', true);
+    $status_ordem = get_term_meta($status_id, 'ordem', true);
+
+    // Previne loop ao atualizar o post
+    remove_action('save_post', 'partner_chamados_save_term_order');
+
+    update_post_meta($post_id, 'urgencia_ordem', $urgencia_ordem);
+    update_post_meta($post_id, 'status_ordem', $status_ordem);
+
+    // readiciona a função após atualizar o post
+    add_action('save_post', 'partner_chamados_save_term_order', 999, 1);
+}
+
+add_action('save_post', 'partner_chamados_save_term_order', 999, 1);
 
 /**
  * partner_delete_transient
