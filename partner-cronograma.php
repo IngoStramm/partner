@@ -84,6 +84,7 @@ function partner_cronograma_output_all($rows)
 
 function partner_cronograma_output_single($clientes_data)
 {
+    $user_id = get_current_user_id();
     $theaders = $clientes_data[0];
     $rows = array_slice($clientes_data, 1);
     $datas = [];
@@ -201,7 +202,11 @@ function partner_cronograma_output_single($clientes_data)
         }
     }
 
+    $partner_user_cliente_id = get_user_meta($user_id, 'partner_user_cliente', true);
+    $partner_user_cliente = get_the_title($partner_user_cliente_id);
+
     $output = '';
+    $output .= '<h4>' . $partner_user_cliente . '</h4>';
     $output .= '<div class="table-wrap">';
     $output .= '<table class="table">';
     $output .= '<thead>';
