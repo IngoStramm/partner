@@ -4,11 +4,13 @@ $success: #1fa750;
 $warning: #cfa00c;
 $danger: #dc3545;
 $roxo: #7023ba;
-$verde: #34a853;
+$verde: #44bc8c;
+$verde-claro: #b3e0c9;
 $azul: #0070c0;
+$azul-escuro: #40318e;
 $amarelo: #fbbc04;
-$chumbo: #434343;
-$prata: #d9d9d9;
+$cinza: #e8e8e8;
+$prata: #f6f6f6;
 $borda: #808080;
 $borda-style: 4px solid $white;
 $wide-th-width: 200px;
@@ -23,61 +25,95 @@ $wide-th-width: 200px;
     -webkit-box-shadow: 0px 5px 12px -12px rgba(0, 0, 0, 0.29);
     -moz-box-shadow: 0px 5px 12px -12px rgba(0, 0, 0, 0.29);
     box-shadow: 0px 5px 12px -12px rgba(0, 0, 0, 0.29);
-    color: $roxo;
+    color: $azul-escuro;
     overflow: hidden;
+    background: $white;
     thead {
-        border-bottom: 20px solid white;
-        th {
-            border: none;
-            font-weight: 500;
-            color: $roxo;
-            vertical-align: middle;
-            font-size: 0.7em;
-            padding: 0px 0px;
-            width: 4ch;
-            &:first-child {
-                padding: 20px 30px;
-                font-size: 13px;
-                text-transform: uppercase;
-            }
-            &.wide-th {
-                min-width: $wide-th-width;
-                text-align: left;
-            }
-            &.vertical-text {
-                position: relative;
-            }
-            &.th-block {
-                background-color: $roxo;
-                color: $white;
-                text-align: left;
-                font-size: 1.4em;
-                line-height: 1.5em;
-                text-transform: none;
-                padding-block: 45px;
-            }
-            &.total-geral {
-                background-color: $chumbo;
-                color: $white;
-                text-transform: uppercase;
-                font-size: 1.1em;
-                width: 5ch;
-            }
-            &.mes-passado {
-                background-color: $verde;
-            }
-            &.mes-futuro {
-                background-color: $amarelo;
-            }
-            &.th-ref,
-            &.th-mes {
-                border-left: $borda-style;
-                border-right: $borda-style;
-            }
-        }
+        background: $white;
         tr {
             background: $white;
-            border-bottom: 4px solid darken(#f8f9fd, 3%);
+            th {
+                background: $prata;
+                border: solid 4px $white !important;
+                font-weight: 500;
+                color: inherit;
+                vertical-align: middle;
+                font-size: 0.7em;
+                padding-block: 5px;
+                width: 4ch;
+                &:first-child {
+                    text-align: left;
+                    border-radius: 10px 0 0 10px;
+                }
+                &:last-child {
+                    border-radius: 0 10px 10px 0;
+                }
+                &.mes-passado {
+                    position: relative;
+                    text-transform: uppercase;
+                    &:before {
+                        content: "";
+                        position: absolute;
+                        background-color: $verde;
+                        width: calc(100% + 5px);
+                        height: 5px;
+                        bottom: calc(100% + 12px);
+                        left: 0;
+                    }
+                    &.primeiro-mes-passado {
+                        &:before {
+                            border-radius: 5px 0 0 5px;
+                        }
+                    }
+                    &.ultimo-mes-passado {
+                        &:before {
+                            width: 100%;
+                            border-radius: 0 5px 5px 0;
+                        }
+                        .progress-mark {
+                            position: absolute;
+                            bottom: calc(100% + 20px);
+                            right: 0;
+                            white-space: nowrap;
+                            &:after {
+                                content: "";
+                                display: inline-block;
+                                width: 0;
+                                height: 0;
+                                border-left: 4px solid transparent;
+                                border-right: 4px solid transparent;
+                                border-top: 8px solid $verde;
+                                border-bottom: 0;
+                                margin-left: 5px;
+                            }
+                        }
+                    }
+                }
+                &.mes-futuro {
+                    text-transform: uppercase;
+                }
+                &.total-geral {
+                    background-color: $verde;
+                    color: $white;
+                    text-transform: uppercase;
+                }
+                &.th-ref,
+                &.th-mes {
+                    border-left: $borda-style;
+                    border-right: $borda-style;
+                }
+                &.row-title {
+                    font-size: .875rem;
+                    font-weight: 400;
+                }
+            }
+            &.no-bg {
+                th {
+                    background-color: transparent;
+                    text-transform: uppercase;
+                    font-size: 0.8em;
+                }
+            }
         }
     }
     tbody {
@@ -92,9 +128,15 @@ $wide-th-width: 200px;
         td {
             border: none;
             padding: 5px 20px;
-            font-size: 14px;
+            font-size: .875rem;
             background: $white;
             vertical-align: middle;
+            &:first-child {
+                border-radius: 10px 0 0 10px;
+            }
+            &:last-child {
+                border-radius: 0 10px 10px 0;
+            }
         }
         td {
             &.resultado-contratado,
@@ -170,13 +212,13 @@ $wide-th-width: 200px;
             }
             &.cell-contratado,
             &.total-contratado {
-                background-color: $verde;
+                background-color: $cinza;
                 color: $black;
                 padding-inline: 1ch;
             }
             &.cell-entregue,
             &.total-entregue {
-                background-color: $azul;
+                background-color: $verde-claro;
                 color: $black;
                 padding-inline: 1ch;
             }

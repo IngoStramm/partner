@@ -206,42 +206,49 @@ function partner_cronograma_output_single($clientes_data)
     $output .= '<table class="table">';
     $output .= '<thead>';
 
+    $output .= '<tr class="no-bg">';
+
+    $output .= '<th>';
+    $output .= __('Status do Projeto', 'partner');
+    $output .= '</th>';
+
+    $output .= '</tr>';
     $output .= '<tr>';
 
-    $output .= '<th class="wide-th"><div>';
-    $output .= __('Projetos contratados vs realizados', 'partner');
-    $output .= '</div></th>';
+    $output .= '<th class="row-title">';
+    $output .= __('Contratados VS Realizados', 'partner');
+    $output .= '</th>';
 
     // Ref
     foreach ($meses_anos as $ref => $mes_ano) {
         $index = (int)str_replace('M', '', $ref);
+        $mes_ano['mes'] = str_replace('Janeiro', 'Jan', $mes_ano['mes']);
+        $mes_ano['mes'] = str_replace('Fevereiro', 'Fev', $mes_ano['mes']);
+        $mes_ano['mes'] = str_replace('Março', 'Mar', $mes_ano['mes']);
+        $mes_ano['mes'] = str_replace('Abril', 'Abr', $mes_ano['mes']);
+        $mes_ano['mes'] = str_replace('Maio', 'Mai', $mes_ano['mes']);
+        $mes_ano['mes'] = str_replace('Junho', 'Jun', $mes_ano['mes']);
+        $mes_ano['mes'] = str_replace('Julho', 'Jul', $mes_ano['mes']);
+        $mes_ano['mes'] = str_replace('Agosto', 'Ago', $mes_ano['mes']);
+        $mes_ano['mes'] = str_replace('Setembro', 'Set', $mes_ano['mes']);
+        $mes_ano['mes'] = str_replace('Outubro', 'Out', $mes_ano['mes']);
+        $mes_ano['mes'] = str_replace('Novembro', 'Nov', $mes_ano['mes']);
+        $mes_ano['mes'] = str_replace('Dezembro', 'Dez', $mes_ano['mes']);
         $css_class = (int)$index <= (int)$index_atual ? 'mes-passado' : 'mes-futuro';
-        $output .= '<th class="vertical-text th-ref ' . $css_class . '" colspan="2"><div>';
+        $css_class .= (int)$index == 1 ? ' primeiro-mes-passado' : '';
+        $css_class .= (int)$index == (int)$index_atual ? ' ultimo-mes-passado' : '';
+        $output .= '<th class="' . $css_class . '" colspan="2">';
+        $output .= (int)$index == (int)$index_atual ? '<span class="progress-mark">' . __('Você está aqui', 'partner') . '</span>' : '';
+        $output .= '<div>';
+        $output .= $mes_ano['mes'];
+        $output .= '</div><div>';
         $output .= $ref;
         $output .= '</div></th>';
     }
 
-    $output .= '<th class="total-geral vertical-text" colspan="2" rowspan="2"><div>';
+    $output .= '<th class="total-geral" colspan="2">';
     $output .= __('Geral', 'partner');
-    $output .= '</div></th>';
-
-    $output .= '</tr>';
-
-    $output .= '<tr>';
-
-    $output .= '<th class="th-block"><div>';
-    $output .= __('Escopo de Projetos', 'partner');
-    $output .= '</div></th>';
-
-    // Mês
-    foreach ($meses_anos as $ref => $mes_ano) {
-        $index = (int)str_replace('M', '', $ref);
-        $css_class = (int)$index <= (int)$index_atual ? 'mes-passado' : 'mes-futuro';
-        // partner_debug($index);
-        $output .= '<th class="vertical-text th-mes ' . $css_class . '" colspan="2"><div>';
-        $output .= $mes_ano['mes'] . '/' . $mes_ano['ano'];
-        $output .= '</div></th>';
-    }
+    $output .= '</th>';
 
     $output .= '</tr>';
 
