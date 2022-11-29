@@ -321,3 +321,15 @@ function partner_display_name_shortcode($atts)
 }
 
 add_shortcode('partner_display_name', 'partner_display_name_shortcode');
+
+function partner_display_cliente_name_shortcode()
+{
+    $user_id = get_current_user_id();
+    $partner_user_cliente_id = get_user_meta($user_id, 'partner_user_cliente', true);
+    if (!$partner_user_cliente_id)
+        return;
+    $partner_user_cliente = get_the_title($partner_user_cliente_id);
+    return $partner_user_cliente;
+}
+
+add_shortcode('partner_display_cliente_name', 'partner_display_cliente_name_shortcode');
