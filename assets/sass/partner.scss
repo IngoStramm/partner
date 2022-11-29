@@ -70,23 +70,6 @@ $wide-th-width: 200px;
                             width: 100%;
                             border-radius: 0 5px 5px 0;
                         }
-                        .progress-mark {
-                            position: absolute;
-                            bottom: calc(100% + 20px);
-                            right: 0;
-                            white-space: nowrap;
-                            &:after {
-                                content: "";
-                                display: inline-block;
-                                width: 0;
-                                height: 0;
-                                border-left: 4px solid transparent;
-                                border-right: 4px solid transparent;
-                                border-top: 8px solid $verde;
-                                border-bottom: 0;
-                                margin-left: 5px;
-                            }
-                        }
                     }
                 }
                 &.mes-futuro {
@@ -104,8 +87,31 @@ $wide-th-width: 200px;
                     border-right: $borda-style;
                 }
                 &.row-title {
-                    font-size: .875rem;
+                    font-size: 0.875rem;
                     font-weight: 400;
+                }
+                &:nth-last-child(2) {
+                    &:before {
+                        width: 100%;
+                        border-radius: 0 5px 5px 0;
+                    }
+                }
+                .progress-mark {
+                    position: absolute;
+                    bottom: calc(100% + 20px);
+                    right: 0;
+                    white-space: nowrap;
+                    &:after {
+                        content: "";
+                        display: inline-block;
+                        width: 0;
+                        height: 0;
+                        border-left: 4px solid transparent;
+                        border-right: 4px solid transparent;
+                        border-top: 8px solid $verde;
+                        border-bottom: 0;
+                        margin-left: 5px;
+                    }
                 }
             }
             &.no-bg {
@@ -129,14 +135,14 @@ $wide-th-width: 200px;
         td {
             border: none;
             padding: 5px 20px;
-            font-size: .875rem;
+            font-size: 0.875rem;
             background: $white;
             vertical-align: middle;
             &:first-child {
-                border-radius: 10px 0 0 10px;
+                border-radius: 7px 0 0 7px;
             }
             &:last-child {
-                border-radius: 0 10px 10px 0;
+                border-radius: 0 7px 7px 0;
             }
         }
         td {

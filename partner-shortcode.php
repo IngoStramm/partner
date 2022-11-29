@@ -62,7 +62,7 @@ function partner_show_cliente_data_shortcode()
     $cliente_data = [];
     $theaders = $rows[0];
     $rows = array_slice($rows, 1);
-    $selected_cliente = get_the_title($selected_cliente_id);
+    $selected_cliente = get_post_meta($selected_cliente_id, 'cliente_planilha', true);
     foreach ($rows as $row) {
         if ($row[0] === $selected_cliente) {
             $cliente_data[] = $row;
