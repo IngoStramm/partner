@@ -1,6 +1,6 @@
 {
   "name": "partner",
-  "version": "0.0.35",
+  "version": "0.0.36",
   "description": "Plugin Model to start a plugin for WordPress",
   "main": "Gruntfile.js",
   "scripts": {
