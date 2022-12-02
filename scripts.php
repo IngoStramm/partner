@@ -15,7 +15,7 @@ function partner_frontend_scripts()
 
     wp_enqueue_script('partner-script');
 
-    wp_localize_script('partner-script', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
+    wp_localize_script('partner-script', 'ajax_object', array('partner_nonce' => wp_create_nonce('partner-nonce'), 'ajax_url' => admin_url('admin-ajax.php')));
     wp_enqueue_style('partner-style', PARTNER_URL . 'assets/css/partner.css', array(), SCRIPT_VERSION, 'all');
 }
 
@@ -31,5 +31,5 @@ function partner_admin_scripts()
 
     wp_register_script('partner-admin-script', PARTNER_URL . 'assets/js/partner-admin' . $min . '.js', array('jquery'), SCRIPT_VERSION, true);
     wp_enqueue_script('partner-admin-script');
-    wp_localize_script('partner-admin-script', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
+    wp_localize_script('partner-admin-script', 'ajax_object', array('partner_nonce' => wp_create_nonce('partner-nonce'), 'ajax_url' => admin_url('admin-ajax.php')));
 }

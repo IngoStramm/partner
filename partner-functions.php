@@ -105,7 +105,7 @@ function partner_list_post_clientes_with_id()
 function partner_list_admin_users()
 {
     $users = get_users([
-        'role__in' => ['administrator', 'editor'],
+        'role__in' => ['editor'],
         'orderby' => 'display_name',
         'order' => 'ASC',
         'fields' => ['ID', 'display_name'],
@@ -193,7 +193,7 @@ function partner_chamados_titulo($data, $postarr)
         return $data;
 
     $data_formatada = date('d/m/Y H:i', strtotime($postarr['post_date']));
-    $data['post_title'] = $data['post_title'] == '' ? 'Chamado #' . $postarr['ID'] . ' - ' . $data_formatada : $data['post_title'];
+    $data['post_title'] = 'Chamado #' . $postarr['ID'] . ' - ' . $data_formatada;
 
     return $data;
 }
@@ -315,3 +315,232 @@ function partner_get_cliente_marcas()
 }
 
 add_action('wp_ajax_partner_get_cliente_marcas', 'partner_get_cliente_marcas');
+
+function partner_get_chamado()
+{
+    $response = '';
+    $post_id = $_GET['post_id'];
+
+    $chamado = null;
+    $metas = null;
+    $cliente_selecionado = null;
+    $marca_selecionada = null;
+    if (!empty($post_id)) {
+        // dados do chamado selecionado
+        $post = get_post($post_id);
+
+        if (!$post) {
+            $msg = __('Não foi possível carregar o chamado.', 'partner');
+            $response = array('success' => false, 'msg' => $msg);
+            wp_send_json($response);
+        }
+
+        $metas = get_post_meta($post_id);
+        $cliente_selecionado = get_post_meta($post_id, 'chamado_post', true);
+        $marca_selecionada = get_post_meta($post_id, 'chamado_marca_select', true);
+
+        $chamado = new stdClass();
+        $chamado->id = $post->ID;
+        $chamado->titulo = $post->post_title;
+        $chamado->post_date = $post->post_date;
+        $chamado->post_modified = $post->post_modified;
+        $chamado->cliente = get_post_meta($post->ID, 'chamado_post', true);
+        $chamado->marca = get_post_meta(
+            $post->ID,
+            'chamado_marca_select',
+            true
+        );
+        $chamado->assunto = get_post_meta($post->ID, 'chamado_assunto', true);
+        $chamado->detalhamento_solicitacao = get_post_meta($post->ID, 'chamado_detalhes_solicitacao', true);
+        $data_solicitacao = get_post_meta($post->ID, 'chamado_solicitacao', true);
+        if ($data_solicitacao) {
+            $data_solicitacao = date('Y-m-d\TH:i', $data_solicitacao);
+        }
+        $chamado->data_solicitacao = $data_solicitacao;
+        $data_entrega = get_post_meta($post->ID, 'chamado_entrega', true);
+        if ($data_entrega) {
+            $data_entrega = date('Y-m-d\TH:i', $data_entrega);
+        }
+        $chamado->data_entrega = $data_entrega;
+        $chamado->urgencia = get_post_meta($post->ID, 'chamado_urgencia', true);
+        $chamado->status = get_post_meta($post->ID, 'chamado_status', true);
+        $chamado->ponto_focal = get_post_meta($post->ID, 'chamado_ponto_focal', true);
+        $chamado->detalhamento_resolucao = get_post_meta($post->ID, 'chamado_detalhes_resolucao', true);
+    }
+
+    // dados gerais
+    $args_clientes = array(
+        'post_type'          => 'cliente',
+        'posts_per_page'     => -1,
+        'orderby'            => 'title',
+        'order'              => 'ASC',
+        'post_status'        => 'publish',
+        'suppress_filters'   => false
+    );
+
+    $clientes = get_posts($args_clientes);
+    $marcas_array = array();
+    foreach ($clientes as $cliente) {
+        $marcas = get_post_meta($cliente->ID, 'marcas', true);
+        foreach ($marcas as $marca) {
+            $marcas_array[$cliente->ID][] = $marca['nome-da-marca'];
+        }
+    }
+
+    $args_urgencia = array(
+        'taxonomy' => 'urgencia',
+        'hide_empty' => false,
+        'meta_key' => 'ordem',
+        'orderby' => 'meta_value_num',
+        'order' => 'ASC',
+        'fields' => 'all',
+    );
+    $urgencias_terms = get_terms($args_urgencia);
+    $urgencias = array();
+    foreach ($urgencias_terms as $term) {
+        $urgencia = $term;
+        $cor = get_term_meta($term->term_id, 'cor', true);
+        $ordem = get_term_meta($term->term_id, 'ordem', true);
+        $ordem = $ordem ? (int)$ordem : $ordem;
+        $icone = get_term_meta($term->term_id, 'icone', true);
+        $urgencia->cor = $cor;
+        $urgencia->ordem = $ordem;
+        $urgencia->icone = $icone;
+        $urgencias[] = $urgencia;
+    }
+    $args_status = array(
+        'taxonomy' => 'status-chamado',
+        'hide_empty' => false,
+        'meta_key' => 'ordem',
+        'orderby' => 'meta_value_num',
+        'order' => 'ASC',
+        'fields' => 'all',
+    );
+    $status = get_terms($args_status);
+
+    $users = partner_list_admin_users();
+
+    $response = array(
+        'success' => true, 'clientes' => $clientes, 'marcas' => $marcas_array, 'urgencias' => $urgencias, 'status' => $status, 'users' => $users,
+        'chamado' => $chamado, 'metas' => $metas, 'cliente' => $cliente_selecionado, 'marca' => $marca_selecionada
+    );
+    wp_send_json($response);
+}
+
+add_action('wp_ajax_partner_get_chamado', 'partner_get_chamado');
+add_action('wp_ajax_nopriv_partner_get_chamado', 'partner_get_chamado');
+
+function partner_save_chamado()
+{
+    $response = '';
+    $partner_nonce = $_GET['partner_nonce'];
+    if (!wp_verify_nonce($partner_nonce, 'partner-nonce')) {
+        $response = array(
+            'success' => false,
+            'message' => __('Requisição inválida!', 'partner')
+        );
+        wp_send_json($response);
+    }
+    $post_id = isset($_GET['post_id']) ? $_GET['post_id'] : '';
+    $chamado_cliente_id = $_GET['partner-chamado-cliente'];
+    $chamado_marca = $_GET['partner-chamado-marca'];
+    $chamado_assunto = $_GET['chamado-assunto'];
+    $chamado_detalhamento_solicitacao = $_GET['chamado-detalhamento-solicitacao'];
+
+    $chamado_data_solicitacao = $_GET['chamado-data-solicitacao'];
+    $chamado_data_solicitacao = strtotime($chamado_data_solicitacao);
+
+    $chamado_data_entrega = $_GET['chamado-data-entrega'];
+    $chamado_data_entrega = strtotime($chamado_data_entrega);
+
+    $chamado_urgencia = $_GET['chamado-urgencia'];
+    $chamado_ponto_focal = $_GET['chamado-ponto-focal'];
+    $chamado_status = $_GET['chamado-status'];
+    $chamado_detalhamento_resolucao = $_GET['chamado-detalhamento-resolucao'];
+
+    $curr_user = wp_get_current_user();
+    $curr_user_id = $curr_user->ID;
+
+    // data atual
+    $data_atual = date('Y-m-d');
+    $data_formatada = date('d/m/Y H:i', strtotime($data_atual));
+    // pegar o título do post $chamado_cliente_id
+    $cliente_nome = get_the_title($chamado_cliente_id);
+    $post_title = 'Chamado de ' . $cliente_nome . ', aberto em ' . $data_formatada;
+
+
+    $args = [
+        'post_author' => $curr_user_id,
+        'post_status' => 'publish',
+        'post_title' => $post_title,
+        'post_content' => ' ',
+        'post_type' => 'chamados',
+        'tax_input'    => array(
+            'non_hierarchical_tax' => array('urgencia' => $chamado_urgencia, 'status-chamado' => $chamado_status),
+        ),
+        'meta_input'   => array(
+            'chamado_post' => $chamado_cliente_id,
+            'chamado_marca_select' => $chamado_marca,
+            'chamado_marca' => $chamado_marca,
+            'chamado_assunto' => $chamado_assunto,
+            'chamado_detalhes_solicitacao' => $chamado_detalhamento_solicitacao,
+            'chamado_solicitacao' => $chamado_data_solicitacao,
+            'chamado_entrega' => $chamado_data_entrega,
+            'chamado_urgencia' => $chamado_urgencia,
+            'chamado_ponto_focal' => $chamado_ponto_focal,
+            'chamado_status' => $chamado_status,
+            'chamado_detalhes_resolucao' => $chamado_detalhamento_resolucao,
+        ),
+    ];
+    if ($post_id) {
+        $args['ID'] = $post_id;
+    }
+    $post_atualizado = wp_insert_post($args);
+    if (is_wp_error($post_atualizado)) {
+        $response = [
+            'status' => 'error',
+            'message' => $post_atualizado->get_error_message(),
+        ];
+        wp_send_json($response);
+    }
+    $response = array(
+        'success' => true,
+        'post_id' => $post_atualizado,
+        'chamado_cliente_id' => $chamado_cliente_id,
+        'chamado_marca' => $chamado_marca,
+        'chamado_assunto' => $chamado_assunto,
+        'chamado_detalhamento_solicitacao' => $chamado_detalhamento_solicitacao,
+        'chamado_data_solicitacao' => $chamado_data_solicitacao,
+        'chamado_data_entrega' => $chamado_data_entrega,
+        'chamado_urgencia' => $chamado_urgencia,
+        'chamado_ponto_focal' => $chamado_ponto_focal,
+        'chamado_status' => $chamado_status,
+        'chamado_detalhamento_resolucao' => $chamado_detalhamento_resolucao,
+    );
+
+    wp_send_json($response);
+}
+
+add_action('wp_ajax_partner_save_chamado', 'partner_save_chamado');
+add_action('wp_ajax_nopriv_partner_save_chamado', 'partner_save_chamado');
+
+// add_action('wp_head', function () {
+//     $args = array(
+//         'post_type'          => 'cliente',
+//         'posts_per_page'     => -1,
+//         'orderby'            => 'title',
+//         'order'              => 'ASC',
+//         'post_status'        => 'publish',
+//         'suppress_filters'   => false
+//     );
+
+//     $clientes = get_posts($args);
+//     $marcas_array = array();
+//     foreach ($clientes as $cliente) {
+//         $marcas = get_post_meta($cliente->ID, 'marcas', true);
+//         foreach ($marcas as $marca) {
+//             $marcas_array[$cliente->ID][] = $marca['nome-da-marca'];
+//         }
+//     }
+//     partner_debug($marcas_array);
+// });

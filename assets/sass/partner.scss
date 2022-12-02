@@ -10,10 +10,21 @@ $azul: #0070c0;
 $azul-escuro: #40318e;
 $amarelo: #fbbc04;
 $cinza: #e8e8e8;
+$cinza-escuro: #616161;
 $prata: #f6f6f6;
 $borda: #808080;
 $borda-style: 4px solid $white;
 $wide-th-width: 200px;
+$bg-popup-wrapper: rgba(255, 255, 255, 0.85);
+$bg-poup-content: #ebebeb;
+@mixin bg-gradient {
+    background: rgb(116, 53, 255);
+    background: linear-gradient(90deg, rgba(116, 53, 255, 1) 0%, rgba(49, 107, 255, 1) 100%);
+}
+@mixin bg-gradient-hover {
+    background: rgb(116, 53, 255);
+    background: linear-gradient(100%, rgba(116, 53, 255, 1) 0%, rgba(49, 107, 255, 1) 90deg);
+}
 
 .table-wrap {
     overflow-x: auto;
@@ -315,24 +326,42 @@ $wide-th-width: 200px;
     transition: all 0.3s;
     transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
     overflow: hidden;
-    background: rgba(0, 0, 0, 0.75);
+    background: $bg-popup-wrapper;
     .partner-popup {
         display: block;
         position: absolute;
         top: 0;
         left: 0;
-        padding: 40px;
-        background: $black;
-        color: $white;
+        background: $bg-poup-content;
+        color: $cinza-escuro;
         text-align: left;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        white-space: pre-line;
-        word-break: break-all;
+        // box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         z-index: 1;
         max-height: 100vh;
-        overflow: auto;
+        width: 100%;
+        border-radius: 10px;
+        .popup-content {
+            display: block;
+            padding: 40px;
+            max-height: 100vh;
+            width: 100%;
+            white-space: pre-line;
+            word-break: break-all;
+            overflow: auto;
+        }
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: $azul;
+        }
         a {
-            color: $amarelo;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            color: $azul;
             text-decoration: none;
             transition: all 0.3s ease;
             &:active,
@@ -343,29 +372,76 @@ $wide-th-width: 200px;
             }
         }
         .partner-popup-close {
-            display: flex;
             width: 30px;
             height: 30px;
             position: absolute;
-            top: 0;
-            right: 0;
-            color: $danger;
-            font-size: 2rem;
-            line-height: 0.7em;
+            top: 10px;
+            right: 10px;
+            @include bg-gradient;
+            color: $white;
+            font-size: 1.5rem;
+            line-height: 25px;
             font-weight: bold;
             cursor: pointer;
             z-index: 2;
             transition: all 0.3s ease;
             text-align: center;
-            justify-content: center;
-            align-items: center;
             &:active,
             &:focus,
             &:hover,
             &:focus:hover {
                 color: $white;
-                text-decoration: none;
+                // @include bg-gradient-hover;
             }
+        }
+    }
+}
+
+.partner-chamado-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    input,
+    input[type="date"],
+    input[type="email"],
+    input[type="number"],
+    input[type="password"],
+    input[type="search"],
+    input[type="tel"],
+    input[type="text"],
+    input[type="url"],
+    select,
+    textarea {
+        display: block;
+        border: none;
+        grid-column: 1 / -1;
+        padding: 0.5em 1em;
+        &.error {
+            border: 1px solid $danger;
+        }
+    }
+    label {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        &:first-child {
+            grid-column: 1 / 2;
+        }
+        &:last-child {
+            grid-column: 2/-1;
+        }
+    }
+    .chamado-button {
+        background-color: $azul;
+        color: $white;
+        border: none;
+        transition: all 0.3s ease;
+        border-radius: 7px;
+        &:active,
+        &:focus,
+        &:hover,
+        &:focus:hover {
+            background-color: $azul-escuro;
         }
     }
 }
@@ -380,7 +456,13 @@ $wide-th-width: 200px;
             width: 600px;
             height: auto;
             transform: translate(-50%, -50%);
-            max-height: 80vh;
+            .popup-content {
+                max-height: 80vh;
+            }
+            .partner-popup-close {
+                top: -35px;
+                right: -35px;
+            }
         }
     }
 }

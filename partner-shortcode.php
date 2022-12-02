@@ -224,6 +224,10 @@ function partner_list_all_chamados_shortcode()
     $output .= __('Detalhes da Resolução', 'partner');
     $output .= '</th>';
 
+    $output .= '<th>';
+    $output .= __('Ações', 'partner');
+    $output .= '</th>';
+
     $output .= '</tr>';
 
     $output .= '</thead>';
@@ -292,6 +296,10 @@ function partner_list_all_chamados_shortcode()
 
         $output .= '<td>';
         $output .= $chamado_detalhes_resolucao;
+        $output .= '</td>';
+
+        $output .= '<td>';
+        $output .= '<a class="partner-trigger-popup-chamados partner-btn btn button" href="?post_id=' . $chamado_id . '">' . __('Editar', 'partner') . '</a>';
         $output .= '</td>';
 
         $output .= '</tr>';
