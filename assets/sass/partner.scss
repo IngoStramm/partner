@@ -411,7 +411,10 @@ $bg-poup-content: #ebebeb;
     input[type="text"],
     input[type="url"],
     select,
-    textarea {
+    textarea,
+    .mce-tinymce.mce-container.mce-panel,
+    .tox-tinymce,
+    .wp-core-ui.wp-editor-wrap.tmce-active {
         display: block;
         border: none;
         grid-column: 1 / -1;
@@ -420,6 +423,10 @@ $bg-poup-content: #ebebeb;
         &.error {
             border: 1px solid $danger;
         }
+    }
+    .mce-tinymce.mce-container.mce-panel,
+    .wp-core-ui.wp-editor-wrap.tmce-active {
+        width: auto !important;
     }
     label {
         display: flex;

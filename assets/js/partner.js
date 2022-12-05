@@ -7,7 +7,8 @@ const closePopup = () => {
         const body = document.body;
         html.style.overflow = '';
         body.style.overflow = '';
-
+        wp.editor.remove('chamado-detalhamento-solicitacao');
+        wp.editor.remove('chamado-detalhamento-resolucao');
     }
 };
 
@@ -135,6 +136,7 @@ const triggerPopupChamados = function (link) {
     });
 
     const chamado = partner_get_chamado(postId, popup, popupContent);
+
     // });
 };
 
@@ -158,6 +160,22 @@ const partner_get_chamado = (post_id, popup, popupContent) => {
                 loading.remove();
             }
             partner_set_chamado_form(response, post_id, popup, popupContent);
+
+            wp.editor.initialize('chamado-detalhamento-solicitacao', { tinymce: true });
+            wp.editor.initialize('chamado-detalhamento-resolucao', { tinymce: true });
+
+            // tinymce.init({
+            //     selector: '.chamado-textarea',
+            //     plugins: [
+            //         'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+            //         'lists', 'link', 'image', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+            //         'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount'
+            //     ],
+            //     toolbar: 'undo redo | formatpainter casechange blocks | bold italic backcolor | ' +
+            //         'alignleft aligncenter alignright alignjustify | ' +
+            //         'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+            // });
+
         }
     };
 
@@ -235,6 +253,7 @@ const partner_set_chamado_form = (response, post_id, popup, popupContent) => {
     // pega o evento submit do form
     form.addEventListener('submit', function (event) {
         event.preventDefault();
+        tinyMCE.triggerSave();
         const formData = new FormData(form);
         const chamado = {};
         let error = null;
@@ -256,7 +275,6 @@ const partner_set_chamado_form = (response, post_id, popup, popupContent) => {
         loading.textContent = 'Processando...';
         // adiciona o loading no início do popup
         popupContent.insertBefore(loading, popupContent.firstChild);
-
         partner_save_chamado(chamado, post_id, form, popup);
     });
 
@@ -542,4 +560,8 @@ const partner_save_chamado = (chamado, post_id, form, popup) => {
 document.addEventListener('DOMContentLoaded', function () {
     popupCronogramaInit();
     // popupChamadosInit();
+});
+
+jQuery(document).on('tinymce-editor-setup', function (event, editor) {
+    editor.settings.toolbar1 = 'bold,italic,underline,blockquote,strikethrough,bullist,numlist,alignleft,aligncenter,alignright,undo,redo,link'; //Teeny -fullscreen
 });

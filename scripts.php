@@ -14,6 +14,10 @@ function partner_frontend_scripts()
 
     $script_version = empty($min) ? rand(1, 1000000) : SCRIPT_VERSION;
 
+    // wp_enqueue_script('tinymce-script', 'https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js', array(), null, true);
+
+    wp_enqueue_editor();
+
     wp_register_script('partner-script', PARTNER_URL . 'assets/js/partner' . $min . '.js', array('jquery'), $script_version, true);
 
     wp_enqueue_script('partner-script');
