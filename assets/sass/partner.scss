@@ -454,8 +454,10 @@ $bg-poup-content: #ebebeb;
     }
 }
 
-.mce-toolbar .mce-btn button, 
-.qt-dfw {
+.mce-toolbar .mce-btn button,
+.mce-toolbar .mce-btn button:hover,
+.qt-dfw,
+.qt-dfw:hover {
     background-color: transparent;
     border: none;
     border-radius: 0;
