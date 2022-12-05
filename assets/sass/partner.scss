@@ -454,6 +454,13 @@ $bg-poup-content: #ebebeb;
     }
 }
 
+.mce-toolbar .mce-btn button, 
+.qt-dfw {
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+}
+
 @media (min-width: 768px) {
     .partner-popup-wrapper {
         .partner-popup {
