@@ -356,7 +356,7 @@ function partner_onclick_chamado_listing_shortcode($atts)
 
     if (!$post_ID)
         return;
-        
+
     $unique_random_id = uniqid('partner-btn-');
     $output = '';
     $output .= '<div id="' . $unique_random_id . '"></div>';
@@ -364,8 +364,9 @@ function partner_onclick_chamado_listing_shortcode($atts)
     <script>
     function partnerAddNewButton() {
         const btn = document.createElement("a");
+        btn.textContent = "Ver";
         btn.classList.add("btn-edit-chamado");
-        btn.style.display = "none";
+        // btn.style.display = "none";
         btn.href = "?post_id=' . $post_ID . '";
         btn.onclick = function(e) {
             e.preventDefault();
@@ -374,6 +375,16 @@ function partner_onclick_chamado_listing_shortcode($atts)
         };
         const btnContainer = document.getElementById("' . $unique_random_id . '");
         btnContainer.appendChild(btn);
+        const wrappers = document.querySelectorAll(".chamado-wrapper");
+        for (const wrapper of wrappers) {
+            const btn = wrapper.querySelector(".btn-edit-chamado");
+            if (typeof (btn) === "undefined" || btn === null) {
+                return;
+            }
+            wrapper.addEventListener("click", function (e) {
+                btn.click();
+            });
+        }
     }
     partnerAddNewButton();
     </script>

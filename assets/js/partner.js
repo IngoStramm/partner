@@ -566,23 +566,9 @@ const partner_save_chamado = (chamado, post_id, form, popup) => {
 
 };
 
-function chamadoWrapper() {
-    const chamadosWrapper = document.querySelectorAll('.chamado-wrapper');
-    for (const chamadoWrapper of chamadosWrapper) {
-        const btn = chamadoWrapper.querySelector('.btn-edit-chamado');
-        if (typeof (btn) === 'undefined' || btn === null) {
-            return;
-        }
-        chamadoWrapper.addEventListener('click', function (e) {
-            btn.click();
-        });
-    }
-}
-
 document.addEventListener('DOMContentLoaded', function () {
     popupCronogramaInit();
     popupChamadosInit();
-    chamadoWrapper();
 });
 
 jQuery(document).on('tinymce-editor-setup', function (event, editor) {
