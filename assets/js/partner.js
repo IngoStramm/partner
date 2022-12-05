@@ -73,13 +73,16 @@ const popupChamadosInit = () => {
         } else {
             link = trigger.querySelector('a');
         }
-        triggerPopupChamados(link);
+        clickEventChamado(link);
     }
 
 };
 
-const clickEventChamado = (postId) => {
-    triggerPopupChamados(postId);
+const clickEventChamado = (link) => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        triggerPopupChamados(link);
+    });
 };
 
 const triggerPopupChamados = function (link) {
@@ -312,6 +315,9 @@ const partner_set_marcas_options = (response, chamado_cliente_id, selected_clien
         selected_marca = select_marcas.value;
         if (selected_marca) {
             addChamadoInputs(response, chamado_cliente_id, selected_cliente_id, chamado_marca, selected_marca, form);
+            wp.editor.initialize('chamado-detalhamento-solicitacao', { tinymce: true });
+            wp.editor.initialize('chamado-detalhamento-resolucao', { tinymce: true });
+
         }
     });
     form.appendChild(select_marcas);
@@ -511,6 +517,9 @@ const removeChamadoInputs = () => {
     if (typeof (submitButton) !== 'undefined' && submitButton !== null) {
         submitButton.remove();
     }
+    wp.editor.remove('chamado-detalhamento-solicitacao');
+    wp.editor.remove('chamado-detalhamento-resolucao');
+
 };
 
 const partner_save_chamado = (chamado, post_id, form, popup) => {
@@ -557,9 +566,23 @@ const partner_save_chamado = (chamado, post_id, form, popup) => {
 
 };
 
+function chamadoWrapper() {
+    const chamadosWrapper = document.querySelectorAll('.chamado-wrapper');
+    for (const chamadoWrapper of chamadosWrapper) {
+        const btn = chamadoWrapper.querySelector('.btn-edit-chamado');
+        if (typeof (btn) === 'undefined' || btn === null) {
+            return;
+        }
+        chamadoWrapper.addEventListener('click', function (e) {
+            btn.click();
+        });
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     popupCronogramaInit();
-    // popupChamadosInit();
+    popupChamadosInit();
+    chamadoWrapper();
 });
 
 jQuery(document).on('tinymce-editor-setup', function (event, editor) {

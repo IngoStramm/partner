@@ -364,13 +364,13 @@ function partner_onclick_chamado_listing_shortcode($atts)
     <script>
     function partnerAddNewButton() {
         const btn = document.createElement("a");
-        btn.textContent = "Ver";
-        btn.classList.add("btn", "btn-primary", "btn-sm");
+        btn.classList.add("btn-edit-chamado");
+        btn.style.display = "none";
         btn.href = "?post_id=' . $post_ID . '";
         btn.onclick = function(e) {
             e.preventDefault();
             const postId = ' . $post_ID . ';
-            clickEventChamado(btn);
+            triggerPopupChamados(btn);
         };
         const btnContainer = document.getElementById("' . $unique_random_id . '");
         btnContainer.appendChild(btn);
