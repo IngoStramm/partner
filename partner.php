@@ -4,7 +4,7 @@
  * Plugin Name: Partner
  * Plugin URI: https://agencialaf.com
  * Description: Descrição do Partner.
- * Version: 0.1.1
+ * Version: 0.1.2
  * Author: Ingo Stramm
  * Text Domain: partner
  * License: GPLv2
@@ -15,8 +15,7 @@ defined('ABSPATH') or die('No script kiddies please!');
 define('PARTNER_DIR', plugin_dir_path(__FILE__));
 define('PARTNER_URL', plugin_dir_url(__FILE__));
 
-define('SCRIPT_VERSION', '1.0.14');
-// define('SCRIPT_VERSION', rand(1, 1000000));
+define('SCRIPT_VERSION', '1.0.15');
 
 function partner_debug($debug)
 {

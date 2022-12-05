@@ -341,3 +341,45 @@ function partner_display_cliente_name_shortcode()
 }
 
 add_shortcode('partner_display_cliente_name', 'partner_display_cliente_name_shortcode');
+
+function partner_onclick_chamado_listing_shortcode($atts)
+{
+    // $atts = shortcode_atts(array(
+    //     'id' => '',
+    // ), $atts);
+    // $post_ID = $atts['id'];
+
+    // if (!isset($post_ID))
+    //     return;
+
+    $post_ID = get_the_ID();
+
+    if (!$post_ID)
+        return;
+        
+    $unique_random_id = uniqid('partner-btn-');
+    $output = '';
+    $output .= '<div id="' . $unique_random_id . '"></div>';
+    $output .= '
+    <script>
+    function partnerAddNewButton() {
+        const btn = document.createElement("a");
+        btn.textContent = "Ver";
+        btn.classList.add("btn", "btn-primary", "btn-sm");
+        btn.href = "?post_id=' . $post_ID . '";
+        btn.onclick = function(e) {
+            e.preventDefault();
+            const postId = ' . $post_ID . ';
+            clickEventChamado(btn);
+        };
+        const btnContainer = document.getElementById("' . $unique_random_id . '");
+        btnContainer.appendChild(btn);
+    }
+    partnerAddNewButton();
+    </script>
+    ';
+
+    return $output;
+}
+
+add_shortcode('partner_onclick_chamado_listing', 'partner_onclick_chamado_listing_shortcode');
