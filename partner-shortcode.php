@@ -356,7 +356,7 @@ function partner_onclick_edit_chamado_listing_shortcode($atts)
 
     $random_id = uniqid('partner-btn-');
     ob_start(); ?>
-    <button id="<?php echo $random_id ?>" class="<?php echo $mode !== 'view' ? 'btn-edit-chamado' : 'btn-view-chamado'; ?>" onclick="partnerAddNewButton('<?php echo $mode ?>', <?php echo $post_ID ?>);"><?php echo $mode ?></button>
+    <button id="<?php echo $random_id ?>" class="<?php echo $mode !== 'view' ? 'btn-edit-chamado' : 'btn-view-chamado'; ?>" onclick="partnerAddNewButton('<?php echo $mode ?>', <?php echo $post_ID ?>);" style="display: none;"><?php echo $mode ?></button>
     <script>
         (function() {
             const btn = document.getElementById('<?php echo $random_id ?>');
