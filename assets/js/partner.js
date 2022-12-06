@@ -587,6 +587,7 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
         }
     }
 
+    form.appendChild(submitButton);
     form.appendChild(assuntoInput);
     form.appendChild(detalhamentoSolicitacaoInput);
     form.appendChild(dataSolicitacaoLabel);
@@ -595,7 +596,6 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
     form.appendChild(pontoFocalSelect);
     form.appendChild(statusSelect);
     form.appendChild(detalhamentoResolucaoInput);
-    form.appendChild(submitButton);
 };
 
 const removeChamadoInputs = () => {

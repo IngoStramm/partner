@@ -399,7 +399,6 @@ $bg-poup-content: #ebebeb;
 
 .partner-chamado-form {
     display: grid;
-    grid-template-columns: 1fr 1fr;
     gap: 20px;
     input,
     input[type="date"],
@@ -417,7 +416,6 @@ $bg-poup-content: #ebebeb;
     .wp-core-ui.wp-editor-wrap.tmce-active {
         display: block;
         border: none;
-        grid-column: 1 / -1;
         padding: 0.5em 1em;
         background-color: $white;
         &.error {
@@ -470,7 +468,8 @@ $bg-poup-content: #ebebeb;
             left: 50%;
             right: auto;
             bottom: auto;
-            width: 600px;
+            width: 90vw;
+            max-width: 1200px;
             height: auto;
             transform: translate(-50%, -50%);
             .popup-content {
@@ -480,6 +479,78 @@ $bg-poup-content: #ebebeb;
                 top: -35px;
                 right: -35px;
             }
+        }
+    }
+    .partner-chamado-form {
+        display: grid;
+        grid-template-columns: 1fr 0.5fr 0.5fr 1fr;
+        grid-template-areas:
+            "titulo titulo titulo btn"
+            "cliente-sem-marca cliente-sem-marca cliente-sem-marca cliente-sem-marca"
+            "marca-nao-selecionada marca-nao-selecionada marca-nao-selecionada marca-nao-selecionada"
+            "marca marca assunto assunto"
+            "detalhes-solicitacao detalhes-solicitacao detalhes-solicitacao detalhes-solicitacao"
+            "data-solicitacao data-solicitacao data-entrega data-entrega"
+            "urgencia ponto-focal ponto-focal status"
+            "detalhes-entrega detalhes-entrega detalhes-entrega detalhes-entrega";
+        gap: 20px;
+        input,
+        input[type="date"],
+        input[type="email"],
+        input[type="number"],
+        input[type="password"],
+        input[type="search"],
+        input[type="tel"],
+        input[type="text"],
+        input[type="url"],
+        select,
+        textarea,
+        .mce-tinymce.mce-container.mce-panel,
+        .tox-tinymce,
+        .wp-core-ui.wp-editor-wrap.tmce-active {
+            // grid-column: 1 / -1;
+        }
+        h4 {
+            grid-area: titulo;
+        }
+        #partner-chamado-cliente {
+            grid-area: cliente-sem-marca;
+        }
+        #partner-chamado-cliente:has(+ #partner-chamado-marca + #chamado-button) {
+            grid-area: titulo;
+        }
+        #chamado-button {
+            grid-area: btn;
+        }
+        #partner-chamado-marca {
+            grid-area: marca-nao-selecionada;
+        }
+        #partner-chamado-marca:has(+ #chamado-button) {
+            grid-area: marca;
+        }
+        #chamado-assunto {
+            grid-area: assunto;
+        }
+        div:has(+ #chamado-detalhamento-solicitacao) {
+            grid-area: detalhes-solicitacao;
+        }
+        #chamado-data-solicitacao-label {
+            grid-area: data-solicitacao;
+        }
+        #chamado-data-entrega-label {
+            grid-area: data-entrega;
+        }
+        #chamado-urgencia {
+            grid-area: urgencia;
+        }
+        #chamado-ponto-focal {
+            grid-area: ponto-focal;
+        }
+        #chamado-status {
+            grid-area: status;
+        }
+        div:has(+ #chamado-detalhamento-resolucao) {
+            grid-area: detalhes-entrega;
         }
     }
 }
