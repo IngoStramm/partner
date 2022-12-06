@@ -130,12 +130,12 @@ const triggerPopupChamados = function (mode, postId = null) {
         }
     });
 
-    const chamado = partner_get_chamado(postId, popup, popupContent);
+    const chamado = partner_get_chamado(mode, postId, popup, popupContent);
 
     // });
 };
 
-const partner_get_chamado = (post_id, popup, popupContent) => {
+const partner_get_chamado = (mode, post_id, popup, popupContent) => {
     const action = 'partner_get_chamado';
     const xhr = new XMLHttpRequest();
     const params = post_id ? `post_id=${post_id}` : '';
@@ -154,7 +154,11 @@ const partner_get_chamado = (post_id, popup, popupContent) => {
             if (typeof (loading) !== 'undefined' && loading !== null) {
                 loading.remove();
             }
-            partner_set_chamado_form(response, post_id, popup, popupContent);
+            if (mode === 'view') {
+                partner_view_chamado(response, post_id, popup, popupContent);
+            } else {
+                partner_set_chamado_form(response, post_id, popup, popupContent);
+            }
 
             wp.editor.initialize('chamado-detalhamento-solicitacao', { tinymce: true });
             wp.editor.initialize('chamado-detalhamento-resolucao', { tinymce: true });
@@ -178,8 +182,112 @@ const partner_get_chamado = (post_id, popup, popupContent) => {
 
 };
 
+const partner_view_chamado = (response, post_id, popup, popupContent) => {
+    if (typeof (response.chamado) === 'undefined' || response.chamado === null) {
+        console.log(response);
+        return;
+    }
+    const chamado = response.chamado;
+    const currClienteId = parseInt(chamado.cliente);
+    const clientes = response.clientes;
+    let currCliente = null;
+    for (const cliente of clientes) {
+        if (cliente.ID === currClienteId) {
+            currCliente = cliente;
+        }
+    }
+    const currUrgenciaId = parseInt(chamado.urgencia);
+    const urgencias = response.urgencias;
+    let currUrgencia = null;
+    for (const urgencia of urgencias) {
+        if (urgencia.term_id === currUrgenciaId) {
+            currUrgencia = urgencia;
+        }
+    }
+    const currStatId = parseInt(chamado.status);
+    const stats = response.status;
+    let currStatus = null;
+    for (const stat of stats) {
+        if (stat.term_id === currStatId) {
+            currStatus = stat;
+        }
+    }
+    const pontoFocalId = chamado.ponto_focal;
+    const users = response.users;
+    const pontoFocal = users[pontoFocalId];
+
+    const clienteH4 = document.createElement('h4');
+    clienteH4.classList.add('cliente-title');
+    clienteH4.textContent = currCliente.post_title;
+    popupContent.appendChild(clienteH4);
+
+    const marcaP = document.createElement('p');
+    marcaP.classList.add('chamado-marca');
+    marcaP.innerHTML = `<strong>Marca:</strong> ${chamado.marca}`;
+    popupContent.appendChild(marcaP);
+
+    const assuntoP = document.createElement('p');
+    assuntoP.classList.add('chamado-assunto');
+    assuntoP.innerHTML = `<strong>Assunto:</strong> ${chamado.assunto}`;
+    popupContent.appendChild(assuntoP);
+
+    const detalhamentoSolicitacaoP = document.createElement('p');
+    detalhamentoSolicitacaoP.classList.add('chamado-detalhamento-solicitacao-title');
+    detalhamentoSolicitacaoP.innerHTML = `<strong>Detalhes da Solicitação:</strong>`;
+    popupContent.appendChild(detalhamentoSolicitacaoP);
+
+    const detalhamentoSolicitacaoDiv = document.createElement('div');
+    detalhamentoSolicitacaoDiv.classList.add('chamado-detalhamento-solicitacao-text');
+    detalhamentoSolicitacaoDiv.innerHTML = chamado.detalhamento_solicitacao;
+    popupContent.appendChild(detalhamentoSolicitacaoDiv);
+
+    const dataSolicitacaoP = document.createElement('p');
+    dataSolicitacaoP.classList.add('chamado-data-solicitacao');
+    const dataSolicitacaoFormatada = new Date(chamado.data_solicitacao);
+    dataSolicitacaoP.innerHTML = `<strong>Data da Solicitação:</strong> ${dataSolicitacaoFormatada.toLocaleDateString('pt-BR', { hour: 'numeric', minute: 'numeric', hour12: false })}`;
+    popupContent.appendChild(dataSolicitacaoP);
+
+    const dataUltimaModificacaoP = document.createElement('p');
+    dataUltimaModificacaoP.classList.add('chamado-data-ultima-modificacao');
+    const dataUltimaModificacaoFormatada = new Date(chamado.post_modified);
+    dataUltimaModificacaoP.innerHTML = `<strong>Última atualização:</strong> ${dataUltimaModificacaoFormatada.toLocaleDateString('pt-BR', { hour: 'numeric', minute: 'numeric', hour12: false })}`;
+    popupContent.appendChild(dataUltimaModificacaoP);
+
+    const previsaoEntregaP = document.createElement('p');
+    previsaoEntregaP.classList.add('chamado-previsao-entrega');
+    const previsaoEntregaFormatada = new Date(chamado.data_entrega);
+    previsaoEntregaP.innerHTML = `<strong>Previsão de entrega:</strong> ${previsaoEntregaFormatada.toLocaleDateString('pt-BR', { hour: 'numeric', minute: 'numeric', hour12: false })}`;
+    popupContent.appendChild(previsaoEntregaP);
+
+    const urgenciaP = document.createElement('p');
+    urgenciaP.classList.add('chamado-urgencia');
+    urgenciaP.innerHTML = `<strong>Urgência:</strong> <span style="color: ${currUrgencia.cor}">${currUrgencia.name}</span>`;
+    popupContent.appendChild(urgenciaP);
+
+    const pontoFocalP = document.createElement('p');
+    pontoFocalP.classList.add('chamado-ponto-focal');
+    pontoFocalP.innerHTML = `<strong>Ponto focal:</strong> ${pontoFocal}`;
+    popupContent.appendChild(pontoFocalP);
+
+    const statusP = document.createElement('p');
+    statusP.classList.add('chamado-status');
+    statusP.innerHTML = `<strong>Status:</strong> <span style="color: ${currStatus.cor}">${currStatus.name}</span>`;
+    popupContent.appendChild(statusP);
+
+    const detalhamentoResolucaoP = document.createElement('p');
+    detalhamentoResolucaoP.classList.add('chamado-detalhamento-resolucao-title');
+    detalhamentoResolucaoP.innerHTML = `<strong>Detalhes da Resolução:</strong>`;
+    popupContent.appendChild(detalhamentoResolucaoP);
+
+    const detalhamentoResolucaoDiv = document.createElement('div');
+    detalhamentoResolucaoDiv.classList.add('chamado-detalhamento-resolucao-text');
+    detalhamentoResolucaoDiv.innerHTML = chamado.detalhamento_resolucao;
+    popupContent.appendChild(detalhamentoResolucaoDiv);
+
+    popup.appendChild(popupContent);
+};
+
 const partner_set_chamado_form = (response, post_id, popup, popupContent) => {
-    // console.log(post_id);
 
     // form
     const chamado_cliente_id = parseInt(response.cliente);
