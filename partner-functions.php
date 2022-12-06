@@ -524,6 +524,20 @@ function partner_save_chamado()
 add_action('wp_ajax_partner_save_chamado', 'partner_save_chamado');
 add_action('wp_ajax_nopriv_partner_save_chamado', 'partner_save_chamado');
 
+function partner_add_chamado_edit_js()
+{
+?>
+    <script>
+        function partnerAddNewButton(mode, postId) {
+            triggerPopupChamados(mode, postId);
+            return false;
+        }
+    </script>
+<?php
+}
+
+add_action('wp_head', 'partner_add_chamado_edit_js');
+
 // add_action('wp_head', function () {
 //     $args = array(
 //         'post_type'          => 'cliente',

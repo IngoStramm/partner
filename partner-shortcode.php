@@ -344,44 +344,36 @@ add_shortcode('partner_display_cliente_name', 'partner_display_cliente_name_shor
 
 function partner_onclick_edit_chamado_listing_shortcode($atts)
 {
+    $atts = shortcode_atts(array(
+        'mode' => 'view',
+    ), $atts);
+    $mode = $atts['mode'];
+    // partner_debug($mode);
     $post_ID = get_the_ID();
 
     if (!$post_ID)
         return;
 
-    $unique_random_id = uniqid('partner-btn-');
-    $output = '';
-    $output .= '<div id="' . $unique_random_id . '"></div>';
-    $output .= '
+    $random_id = uniqid('partner-btn-');
+    ob_start(); ?>
+    <button id="<?php echo $random_id ?>" class="<?php echo $mode !== 'view' ? 'btn-edit-chamado' : 'btn-view-chamado'; ?>" onclick="partnerAddNewButton('<?php echo $mode ?>', <?php echo $post_ID ?>);"><?php echo $mode ?></button>
     <script>
-    function partnerAddNewButton() {
-        const btn = document.createElement("a");
-        btn.classList.add("btn-edit-chamado");
-        btn.style.display = "none";
-        btn.href = "?post_id=' . $post_ID . '";
-        btn.onclick = function(e) {
-            e.preventDefault();
-            const postId = ' . $post_ID . ';
-            triggerPopupChamados(btn);
-        };
-        const btnContainer = document.getElementById("' . $unique_random_id . '");
-        btnContainer.appendChild(btn);
-        const wrappers = document.querySelectorAll(".chamado-wrapper");
-        for (const wrapper of wrappers) {
-            const btn = wrapper.querySelector(".btn-edit-chamado");
-            if (typeof (btn) === "undefined" || btn === null) {
+        (function() {
+            const btn = document.getElementById('<?php echo $random_id ?>');
+            if (typeof(btn) === 'undefined' || btn === null) {
                 return;
             }
-            wrapper.addEventListener("click", function (e) {
+            const wrapper = btn.closest('.chamado-wrapper');
+            if (typeof(wrapper) === 'undefined' || wrapper === null) {
+                return;
+            }
+            wrapper.addEventListener('click', function(e) {
+                e.preventDefault();
                 btn.click();
             });
-        }
-    }
-    partnerAddNewButton();
+        }());
     </script>
-    ';
-
-    return $output;
+<?php return ob_get_clean();
 }
 
 add_shortcode('partner_edit_chamado', 'partner_onclick_edit_chamado_listing_shortcode');

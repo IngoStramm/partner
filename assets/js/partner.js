@@ -85,17 +85,9 @@ const clickEventChamado = (link) => {
     });
 };
 
-const triggerPopupChamados = function (link) {
-    // link.addEventListener('click', e => {
-
-    // e.preventDefault();
+const triggerPopupChamados = function (mode, postId = null) {
 
     closePopup();
-
-    // verifica se o e.targethref possui "post_id" na string
-    const checkQueryString = link.href.match(/post_id=(\d+)/);
-    // pegar o parametro "post_id" query string do href e ignorar os outros parâmetros
-    const postId = typeof (checkQueryString) !== undefined && checkQueryString !== null ? link.href.split('?')[1].split('=')[1] : null;
     const popup = document.createElement('div');
     popup.classList.add('partner-popup');
 
@@ -264,7 +256,7 @@ const partner_set_chamado_form = (response, post_id, popup, popupContent) => {
             const currInput = document.getElementById(key);
             currInput.classList.remove('error');
             chamado[key] = value;
-            if (!value) {
+            if ((key !== 'chamado-detalhamento-solicitacao' && key !== 'chamado-detalhamento-resolucao') && !value) {
                 error = true;
                 currInput.classList.add('error');
             }
@@ -351,7 +343,7 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
     detalhamentoSolicitacaoInput.className = 'chamado-textarea';
     detalhamentoSolicitacaoInput.placeholder = 'Detalhamento da Solicitação';
     detalhamentoSolicitacaoInput.rows = '5';
-    detalhamentoSolicitacaoInput.required = true;
+    // detalhamentoSolicitacaoInput.required = true;
 
     // Label da data de solicitação
     const dataSolicitacaoLabel = document.createElement('label');
@@ -444,7 +436,7 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
     detalhamentoResolucaoInput.className = 'chamado-textarea';
     detalhamentoResolucaoInput.placeholder = 'Detalhamento da Resolução';
     detalhamentoResolucaoInput.rows = '5';
-    detalhamentoResolucaoInput.required = true;
+    // detalhamentoResolucaoInput.required = true;
 
     // Submit button
     const submitButton = document.createElement('button');
@@ -452,6 +444,9 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
     submitButton.className = 'chamado-button';
     submitButton.id = 'chamado-button';
     submitButton.textContent = 'Enviar';
+    submitButton.addEventListener('click', () => {
+        tinyMCE.triggerSave();
+    });
 
     // Se o chamado já existir
     if (response.chamado) {
@@ -565,6 +560,7 @@ const partner_save_chamado = (chamado, post_id, form, popup) => {
     xhr.send();
 
 };
+
 
 document.addEventListener('DOMContentLoaded', function () {
     popupCronogramaInit();
