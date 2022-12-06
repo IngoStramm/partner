@@ -342,16 +342,8 @@ function partner_display_cliente_name_shortcode()
 
 add_shortcode('partner_display_cliente_name', 'partner_display_cliente_name_shortcode');
 
-function partner_onclick_chamado_listing_shortcode($atts)
+function partner_onclick_edit_chamado_listing_shortcode($atts)
 {
-    // $atts = shortcode_atts(array(
-    //     'id' => '',
-    // ), $atts);
-    // $post_ID = $atts['id'];
-
-    // if (!isset($post_ID))
-    //     return;
-
     $post_ID = get_the_ID();
 
     if (!$post_ID)
@@ -364,9 +356,8 @@ function partner_onclick_chamado_listing_shortcode($atts)
     <script>
     function partnerAddNewButton() {
         const btn = document.createElement("a");
-        btn.textContent = "Ver";
         btn.classList.add("btn-edit-chamado");
-        // btn.style.display = "none";
+        btn.style.display = "none";
         btn.href = "?post_id=' . $post_ID . '";
         btn.onclick = function(e) {
             e.preventDefault();
@@ -393,4 +384,4 @@ function partner_onclick_chamado_listing_shortcode($atts)
     return $output;
 }
 
-add_shortcode('partner_onclick_chamado_listing', 'partner_onclick_chamado_listing_shortcode');
+add_shortcode('partner_edit_chamado', 'partner_onclick_edit_chamado_listing_shortcode');
