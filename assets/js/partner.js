@@ -12,6 +12,16 @@ const closePopup = () => {
     }
 };
 
+const wpEditorSettings = () => {
+    return {
+        tinymce: true,
+        quicktags: false,
+        mediaButtons: false
+    };
+};
+
+
+
 const popupCronogramaInit = () => {
     const partnerTriggerPopup = document.querySelectorAll('.partner-trigger-popup');
     const html = document.documentElement;
@@ -160,8 +170,10 @@ const partner_get_chamado = (mode, post_id, popup, popupContent) => {
                 partner_set_chamado_form(response, post_id, popup, popupContent);
             }
 
-            wp.editor.initialize('chamado-detalhamento-solicitacao', { tinymce: true });
-            wp.editor.initialize('chamado-detalhamento-resolucao', { tinymce: true });
+            const settings = wpEditorSettings();
+
+            wp.editor.initialize('chamado-detalhamento-solicitacao', settings);
+            wp.editor.initialize('chamado-detalhamento-resolucao', settings);
 
             // tinymce.init({
             //     selector: '.chamado-textarea',
@@ -415,8 +427,11 @@ const partner_set_marcas_options = (response, chamado_cliente_id, selected_clien
         selected_marca = select_marcas.value;
         if (selected_marca) {
             addChamadoInputs(response, chamado_cliente_id, selected_cliente_id, chamado_marca, selected_marca, form);
-            wp.editor.initialize('chamado-detalhamento-solicitacao', { tinymce: true });
-            wp.editor.initialize('chamado-detalhamento-resolucao', { tinymce: true });
+            
+            const settings = wpEditorSettings();
+
+            wp.editor.initialize('chamado-detalhamento-solicitacao', settings);
+            wp.editor.initialize('chamado-detalhamento-resolucao', settings);
 
         }
     });
@@ -675,6 +690,10 @@ document.addEventListener('DOMContentLoaded', function () {
     popupChamadosInit();
 });
 
-jQuery(document).on('tinymce-editor-setup', function (event, editor) {
-    editor.settings.toolbar1 = 'bold,italic,underline,blockquote,strikethrough,bullist,numlist,alignleft,aligncenter,alignright,undo,redo,link'; //Teeny -fullscreen
-});
+// document.addEventListener('tinymce-editor-setup', function (e, editor) {
+//     editor.settings.toolbar1 = 'bold,italic,underline,blockquote,strikethrough,bullist,numlist,alignleft,aligncenter,alignright,undo,redo,link'; //Teeny -fullscreen
+// });
+
+// jQuery(document).on('tinymce-editor-setup', function (event, editor) {
+//     editor.settings.toolbar1 = 'bold,italic,underline,blockquote,strikethrough,bullist,numlist,alignleft,aligncenter,alignright,undo,redo,link'; //Teeny -fullscreen
+// });
