@@ -273,7 +273,7 @@ const partner_view_chamado = (response, post_id, popup, popupContent) => {
 
     const urgenciaP = document.createElement('p');
     urgenciaP.classList.add('chamado-urgencia');
-    urgenciaP.innerHTML = `<strong>Urgência:</strong> <span style="color: ${currUrgencia.cor}">${currUrgencia.name}</span>`;
+    urgenciaP.innerHTML = `<strong>Urgência:</strong> <span class="urgencia-label" style="background-color: ${currUrgencia.cor}">${currUrgencia.name}</span>`;
     popupContent.appendChild(urgenciaP);
 
     const pontoFocalP = document.createElement('p');

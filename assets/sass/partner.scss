@@ -461,6 +461,13 @@ $bg-poup-content: #ebebeb;
     border-radius: 0;
 }
 
+.urgencia-label {
+    color: $white;
+    padding: 6px 15px;
+    border-radius: 6px;
+    font-size: 13.6px;
+}
+
 @media (min-width: 768px) {
     .partner-popup-wrapper {
         .partner-popup {
