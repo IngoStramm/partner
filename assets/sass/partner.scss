@@ -486,8 +486,6 @@ $bg-poup-content: #ebebeb;
         grid-template-columns: 1fr 0.5fr 0.5fr 1fr;
         grid-template-areas:
             "titulo titulo titulo btn"
-            "cliente-sem-marca cliente-sem-marca cliente-sem-marca cliente-sem-marca"
-            "marca-nao-selecionada marca-nao-selecionada marca-nao-selecionada marca-nao-selecionada"
             "marca marca assunto assunto"
             "detalhes-solicitacao detalhes-solicitacao detalhes-solicitacao detalhes-solicitacao"
             "data-solicitacao data-solicitacao data-entrega data-entrega"
@@ -514,7 +512,7 @@ $bg-poup-content: #ebebeb;
             grid-area: titulo;
         }
         #partner-chamado-cliente {
-            grid-area: cliente-sem-marca;
+            grid-column: 1 / -1;
         }
         #partner-chamado-cliente:has(+ #partner-chamado-marca + #chamado-button) {
             grid-area: titulo;
@@ -523,7 +521,7 @@ $bg-poup-content: #ebebeb;
             grid-area: btn;
         }
         #partner-chamado-marca {
-            grid-area: marca-nao-selecionada;
+            grid-column: 1 / -1;
         }
         #partner-chamado-marca:has(+ #chamado-button) {
             grid-area: marca;
