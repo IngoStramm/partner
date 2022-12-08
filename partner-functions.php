@@ -164,7 +164,7 @@ function partner_get_status_list()
 function partner_admin_head_style()
 {
     global $post;
-    if ($post->post_type == 'chamados') {
+    if (isset($post->post_type) && $post->post_type == 'chamados') {
         echo '<style>
         #tagsdiv-status-chamado,
         #radio-tagsdiv-status-chamado,

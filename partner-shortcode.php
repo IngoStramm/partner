@@ -377,3 +377,32 @@ function partner_onclick_edit_chamado_listing_shortcode($atts)
 }
 
 add_shortcode('partner_edit_chamado', 'partner_onclick_edit_chamado_listing_shortcode');
+
+function partner_ocultar_entregues_checkbox_shortcode($atts)
+{
+    $chamado_status_entregue_id = partner_get_option('chamado_status_entregue');
+
+    if (!$chamado_status_entregue_id)
+        return;
+
+    ob_start(); ?>
+    <label for="ocultar-entregues">
+        <input type="checkbox" id="ocultar-entregues" name="ocultar-entregues" value="1" />
+        <?php _e('Ocultar entregues', 'partner'); ?>
+    </label>
+    <script>
+        (function() {
+            const checkbox = document.getElementById('ocultar-entregues');
+            if (typeof(checkbox) === 'undefined' || checkbox === null) {
+                return;
+            }
+            checkbox.addEventListener('change', function(e) {
+                e.preventDefault();
+                partner_ocultar_entregues(<?php echo $chamado_status_entregue_id; ?>);
+            });
+        }());
+    </script>
+<?php return ob_get_clean();
+}
+
+add_shortcode('partner_ocultar_entregues_checkbox', 'partner_ocultar_entregues_checkbox_shortcode');

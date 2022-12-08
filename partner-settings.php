@@ -58,6 +58,22 @@ function partner_settings_metabox()
         'desc'    => esc_html__('Selecione qual é a página de troca de senha para onde o usuário não logado será redirecionado. Não pode ser igual à pagina de login!', 'partner'),
         'options' => 'partner_list_published_pages_except_login_page'
     ));
+
+    $cmb_options->add_field(array(
+        'name'    => esc_html__('Status Entregue', 'partner'),
+        'id'      => 'chamado_status_entregue',
+        'type'    => 'select',
+        'desc'    => esc_html__('Selecione qual é o status que equivale ao chamado finalizado/entregue.', 'partner'),
+        'options' => function () {
+            $statuses = partner_get_status_list();
+            $options = array();
+            $options[] = esc_html__('Selecione um status', 'partner');
+            foreach ($statuses as $id => $status) {
+                $options[$id] = $status;
+            }
+            return $options;
+        }
+    ));
 }
 
 add_action('cmb2_admin_init', 'partner_settings_metabox');

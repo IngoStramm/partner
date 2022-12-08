@@ -427,7 +427,7 @@ const partner_set_marcas_options = (response, chamado_cliente_id, selected_clien
         selected_marca = select_marcas.value;
         if (selected_marca) {
             addChamadoInputs(response, chamado_cliente_id, selected_cliente_id, chamado_marca, selected_marca, form);
-            
+
             const settings = wpEditorSettings();
 
             wp.editor.initialize('chamado-detalhamento-solicitacao', settings);
@@ -683,6 +683,23 @@ const partner_save_chamado = (chamado, post_id, form, popup) => {
     xhr.send();
 
 };
+
+function partner_ocultar_entregues(status_entregue_id) {
+    if (typeof (status_entregue_id) === 'undefined' || status_entregue_id === null) {
+        return;
+    }
+    const filtroStatus = document.getElementById('filtro-status');
+    if (typeof (filtroStatus) === 'undefined' || filtroStatus === null) {
+        return;
+    }
+    const checkboxes = filtroStatus.querySelectorAll('input[type="checkbox"]');
+    for (const checkbox of checkboxes) {
+        if (parseInt(checkbox.value) !== parseInt(status_entregue_id)) {
+            const ele = checkbox.parentNode;
+            ele.click();
+        }
+    }
+}
 
 
 document.addEventListener('DOMContentLoaded', function () {
