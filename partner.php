@@ -4,7 +4,7 @@
  * Plugin Name: Partner
  * Plugin URI: https://agencialaf.com
  * Description: Descrição do Partner.
- * Version: 0.1.19
+ * Version: 1.2.0
  * Author: Ingo Stramm
  * Text Domain: partner
  * License: GPLv2
@@ -15,7 +15,7 @@ defined('ABSPATH') or die('No script kiddies please!');
 define('PARTNER_DIR', plugin_dir_path(__FILE__));
 define('PARTNER_URL', plugin_dir_url(__FILE__));
 
-define('SCRIPT_VERSION', '1.0.29');
+define('SCRIPT_VERSION', '1.2.0');
 
 function partner_debug($debug)
 {
@@ -27,12 +27,10 @@ function partner_debug($debug)
 require_once 'tgm/tgm.php';
 require_once 'classes/classes.php';
 require_once 'scripts.php';
-require_once 'partner-cmb.php';
-require_once 'partner-settings.php';
 require_once 'partner-functions.php';
 require_once 'partner-adminbar.php';
 require_once 'partner-cronograma.php';
-require_once 'partner-user.php';
+require_once 'cmb/partner-cmb.php';
 require_once 'partner-shortcode.php';
 
 require 'plugin-update-checker-4.10/plugin-update-checker.php';

@@ -13,6 +13,14 @@ function partner_register_user_profile_metabox()
     ));
 
     $cmb_user->add_field(array(
+        'name'    => esc_html__('Dados do Cliente', 'partner'),
+        'desc'    => esc_html__('Informações sobre o cliente da Agência.', 'partner'),
+        'id'      => $prefix . 'title_cliente_section',
+        'type'    => 'title',
+    ));
+
+
+    $cmb_user->add_field(array(
         'name'    => esc_html__('Cliente', 'partner'),
         'desc'    => esc_html__('Selecione qual é o cliente deste usuário.', 'partner'),
         'id'      => $prefix . 'cliente',
@@ -40,6 +48,30 @@ function partner_register_user_profile_metabox()
         'id'      => $prefix . 'dados_midia',
         'type'    => 'text'
     ));
+
+
+    $cmb_user->add_field(array(
+        'name'    => esc_html__('Dados do Atendimento', 'partner'),
+        'desc'    => esc_html__('Informações sobre o responsável em atender o(s) cliente(s).', 'partner'),
+        'id'      => $prefix . 'title_responsavel_section',
+        'type'    => 'title',
+    ));
+
+    $cmb_user->add_field(array(
+        'name' => esc_html__('Imagem do usuário', 'cmb2'),
+        'id'   => $prefix . 'image',
+        'type' => 'file',
+    ));
+
+    $cmb_user->add_field(array(
+        'name'    => esc_html__('Descrição do usuário', 'cmb2'),
+        'id'      => $prefix . 'description',
+        'type'    => 'wysiwyg',
+        'options' => array(
+            'textarea_rows' => 5,
+        ),
+    ));
+
 }
 
 add_action('cmb2_admin_init', 'partner_register_user_profile_metabox');

@@ -1,5 +1,62 @@
 <?php
 
+function partner_list_published_pages($exclude_page_id)
+{
+    $pages = get_pages(array(
+        'post_status' => 'publish',
+        'post_type' => 'page',
+        'sort_order' => 'ASC',
+        'sort_column' => 'post_title',
+    ));
+    $pages_array = [];
+    $pages_array[] = __('Selecione uma página', 'partner');
+    foreach ($pages as $page) {
+        if ($page->ID !== (int)$exclude_page_id)
+            $pages_array[$page->ID] = $page->post_title;
+    }
+    return $pages_array;
+}
+
+function partner_list_published_pages_except_reset_password_page()
+{
+    $reset_password_page_id = partner_get_option('reset_password_page_id');
+    $pages_array = partner_list_published_pages($reset_password_page_id);
+    return $pages_array;
+}
+
+function partner_list_published_pages_except_login_page()
+{
+    $login_page_id = partner_get_option('login_page_id');
+    $pages_array = partner_list_published_pages($login_page_id);
+    return $pages_array;
+}
+
+/**
+ * partner_get_option
+ *
+ * @param  mixed $key
+ * @param  mixed $default
+ * @return void
+ */
+function partner_get_option($key = '', $default = false)
+{
+    if (function_exists('cmb2_get_option')) {
+        return cmb2_get_option('partner_settings', $key, $default);
+    }
+
+    $opts = get_option('partner_settings', $default);
+
+    $val = $default;
+
+    if ('all' == $key) {
+        $val = $opts;
+    } elseif (is_array($opts) && array_key_exists($key, $opts) && false !== $opts[$key]) {
+        $val = $opts[$key];
+    }
+
+    return $val;
+}
+
 /**
  * partner_list_planilha_clientes_name
  *
@@ -112,7 +169,7 @@ function partner_list_admin_users()
     ]);
 
     $users_array = [];
-    $users_array[] = __('Selecione o Ponto Focal', 'partner');
+    $users_array[] = __('Selecione o usuário', 'partner');
     foreach ($users as $user) {
         $users_array[$user->ID] = $user->display_name;
     }
@@ -364,7 +421,21 @@ function partner_get_chamado()
         $chamado->data_entrega = $data_entrega;
         $chamado->urgencia = (string)get_post_meta($post->ID, 'chamado_urgencia', true);
         $chamado->status = get_post_meta($post->ID, 'chamado_status', true);
-        $chamado->ponto_focal = get_post_meta($post->ID, 'chamado_ponto_focal', true);
+
+        $sucesso_cliente_id = get_post_meta($chamado->cliente, 'chamado_sucesso_cliente', true);
+        $chamado->sucesso_cliente = new stdClass();
+        $chamado->sucesso_cliente->id = $sucesso_cliente_id;
+        $chamado->sucesso_cliente->name = get_userdata($sucesso_cliente_id)->display_name;
+        $chamado->sucesso_cliente->image = get_user_meta($sucesso_cliente_id, 'partner_user_image', true);
+        $chamado->sucesso_cliente->description = get_user_meta($sucesso_cliente_id, 'partner_user_description', true);
+
+        $contato_emergencia_id = get_post_meta($chamado->cliente, 'chamado_contato_emergencia', true);
+        $chamado->contato_emergencia = new stdClass();
+        $chamado->contato_emergencia->id = $contato_emergencia_id;
+        $chamado->contato_emergencia->name = get_userdata($contato_emergencia_id)->display_name;
+        $chamado->contato_emergencia->image = get_user_meta($contato_emergencia_id, 'partner_user_image', true);
+        $chamado->contato_emergencia->description = get_user_meta($contato_emergencia_id, 'partner_user_description', true);
+
         $chamado->detalhamento_resolucao = get_post_meta($post->ID, 'chamado_detalhes_resolucao', true);
     }
 
@@ -466,7 +537,7 @@ function partner_save_chamado()
     $chamado_data_entrega = strtotime($chamado_data_entrega);
 
     $chamado_urgencia = $_GET['chamado-urgencia'];
-    $chamado_ponto_focal = $_GET['chamado-ponto-focal'];
+    // $chamado_ponto_focal = $_GET['chamado-ponto-focal'];
     $chamado_status = $_GET['chamado-status'];
     $chamado_detalhamento_resolucao = $_GET['chamado-detalhamento-resolucao'];
 
@@ -500,7 +571,7 @@ function partner_save_chamado()
             'chamado_solicitacao' => $chamado_data_solicitacao,
             'chamado_entrega' => $chamado_data_entrega,
             'chamado_urgencia' => $chamado_urgencia,
-            'chamado_ponto_focal' => $chamado_ponto_focal,
+            // 'chamado_ponto_focal' => $chamado_ponto_focal,
             'chamado_status' => $chamado_status,
             'chamado_detalhes_resolucao' => $chamado_detalhamento_resolucao,
         ),
@@ -526,7 +597,7 @@ function partner_save_chamado()
         'chamado_data_solicitacao' => $chamado_data_solicitacao,
         'chamado_data_entrega' => $chamado_data_entrega,
         'chamado_urgencia' => $chamado_urgencia,
-        'chamado_ponto_focal' => $chamado_ponto_focal,
+        // 'chamado_ponto_focal' => $chamado_ponto_focal,
         'chamado_status' => $chamado_status,
         'chamado_detalhamento_resolucao' => $chamado_detalhamento_resolucao,
     );

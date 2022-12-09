@@ -227,7 +227,9 @@ const partner_view_chamado = (response, post_id, popup, popupContent) => {
 
     const pontoFocalId = chamado.ponto_focal;
     const users = response.users;
-    const pontoFocal = users[pontoFocalId];
+
+    const sucessoCliente = chamado.sucesso_cliente.name;
+    const contatoEmergencia = chamado.contato_emergencia.name;
 
     const clienteH4 = document.createElement('h4');
     clienteH4.classList.add('cliente-title');
@@ -277,10 +279,15 @@ const partner_view_chamado = (response, post_id, popup, popupContent) => {
     urgenciaP.innerHTML = `<strong>Urgência:</strong> <span class="chamado-label" style="background-color: ${currUrgencia.cor}">${currUrgencia.name}</span>`;
     popupContent.appendChild(urgenciaP);
 
-    const pontoFocalP = document.createElement('p');
-    pontoFocalP.classList.add('chamado-ponto-focal');
-    pontoFocalP.innerHTML = `<strong>Ponto focal:</strong> ${pontoFocal}`;
-    popupContent.appendChild(pontoFocalP);
+    const sucessoClienteP = document.createElement('p');
+    sucessoClienteP.classList.add('chamado-sucesso-cliente');
+    sucessoClienteP.innerHTML = `<strong>Sucesso do Cliente:</strong> ${sucessoCliente}`;
+    popupContent.appendChild(sucessoClienteP);
+
+    const contatoEmergenciaP = document.createElement('p');
+    contatoEmergenciaP.classList.add('chamado-contato-emergencia');
+    contatoEmergenciaP.innerHTML = `<strong>Contato de Emergência:</strong> ${contatoEmergencia}`;
+    popupContent.appendChild(contatoEmergenciaP);
 
     const statusP = document.createElement('p');
     statusP.classList.add('chamado-status');
@@ -447,7 +454,7 @@ const partner_set_marcas_options = (response, chamado_cliente_id, selected_clien
 const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, chamado_marca, selected_marca, form) => {
 
     const urgencias = response.urgencias;
-    const users = response.users;
+    // const users = response.users;
     const statuses = response.status;
     // console.log(chamado_marca, selected_marca);
 
@@ -526,19 +533,19 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
         urgenciaSelect.appendChild(option);
     }
 
-    // Ponto focal
-    const pontoFocalSelect = document.createElement('select');
-    pontoFocalSelect.id = 'chamado-ponto-focal';
-    pontoFocalSelect.name = 'chamado-ponto-focal';
-    pontoFocalSelect.className = 'chamado-select';
-    pontoFocalSelect.required = true;
+    // // Ponto focal
+    // const pontoFocalSelect = document.createElement('select');
+    // pontoFocalSelect.id = 'chamado-ponto-focal';
+    // pontoFocalSelect.name = 'chamado-ponto-focal';
+    // pontoFocalSelect.className = 'chamado-select';
+    // pontoFocalSelect.required = true;
 
-    for (const k in users) {
-        const option = document.createElement('option');
-        option.value = parseInt(k) === 0 ? '' : parseInt(k);
-        option.textContent = users[k];
-        pontoFocalSelect.appendChild(option);
-    }
+    // for (const k in users) {
+    //     const option = document.createElement('option');
+    //     option.value = parseInt(k) === 0 ? '' : parseInt(k);
+    //     option.textContent = users[k];
+    //     pontoFocalSelect.appendChild(option);
+    // }
 
     // Status
     const statusSelect = document.createElement('select');
@@ -594,7 +601,7 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
             dataSolicitacaoInput.value = response.chamado.data_solicitacao;
             dataEntregaInput.value = response.chamado.data_entrega;
             urgenciaSelect.value = response.chamado.urgencia;
-            pontoFocalSelect.value = response.chamado.ponto_focal;
+            // pontoFocalSelect.value = response.chamado.ponto_focal;
             statusSelect.value = response.chamado.status;
             detalhamentoResolucaoInput.value = response.chamado.detalhamento_resolucao;
         }
@@ -606,7 +613,7 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
     form.appendChild(dataSolicitacaoLabel);
     form.appendChild(dataEntregaLabel);
     form.appendChild(urgenciaSelect);
-    form.appendChild(pontoFocalSelect);
+    // form.appendChild(pontoFocalSelect);
     form.appendChild(statusSelect);
     form.appendChild(detalhamentoResolucaoLabel);
 };
