@@ -616,9 +616,9 @@ const removeChamadoInputs = () => {
     if (typeof (assuntoInput) !== 'undefined' && assuntoInput !== null) {
         assuntoInput.remove();
     }
-    const detalhamentoSolicitacaoInput = document.getElementById('chamado-detalhamento-solicitacao');
-    if (typeof (detalhamentoSolicitacaoInput) !== 'undefined' && detalhamentoSolicitacaoInput !== null) {
-        detalhamentoSolicitacaoInput.remove();
+    const detalhamentoSolicitacaoLabel = document.getElementById('chamado-detalhamento-solicitacao-label');
+    if (typeof (detalhamentoSolicitacaoLabel) !== 'undefined' && detalhamentoSolicitacaoLabel !== null) {
+        detalhamentoSolicitacaoLabel.remove();
     }
     const dataSolicitacaoLabel = document.getElementById('chamado-data-solicitacao-label');
     if (typeof (dataSolicitacaoLabel) !== 'undefined' && dataSolicitacaoLabel !== null) {
@@ -640,9 +640,9 @@ const removeChamadoInputs = () => {
     if (typeof (statusSelect) !== 'undefined' && statusSelect !== null) {
         statusSelect.remove();
     }
-    const detalhamentoResolucaoInput = document.getElementById('chamado-detalhamento-resolucao');
-    if (typeof (detalhamentoResolucaoInput) !== 'undefined' && detalhamentoResolucaoInput !== null) {
-        detalhamentoResolucaoInput.remove();
+    const detalhamentoResolucaoLabel = document.getElementById('chamado-detalhamento-resolucao-label');
+    if (typeof (detalhamentoResolucaoLabel) !== 'undefined' && detalhamentoResolucaoLabel !== null) {
+        detalhamentoResolucaoLabel.remove();
     }
     const submitButton = document.getElementById('chamado-button');
     if (typeof (submitButton) !== 'undefined' && submitButton !== null) {
