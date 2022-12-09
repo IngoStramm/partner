@@ -224,6 +224,7 @@ const partner_view_chamado = (response, post_id, popup, popupContent) => {
             currStatus = stat;
         }
     }
+
     const pontoFocalId = chamado.ponto_focal;
     const users = response.users;
     const pontoFocal = users[pontoFocalId];
@@ -273,7 +274,7 @@ const partner_view_chamado = (response, post_id, popup, popupContent) => {
 
     const urgenciaP = document.createElement('p');
     urgenciaP.classList.add('chamado-urgencia');
-    urgenciaP.innerHTML = `<strong>Urgência:</strong> <span class="urgencia-label" style="background-color: ${currUrgencia.cor}">${currUrgencia.name}</span>`;
+    urgenciaP.innerHTML = `<strong>Urgência:</strong> <span class="chamado-label" style="background-color: ${currUrgencia.cor}">${currUrgencia.name}</span>`;
     popupContent.appendChild(urgenciaP);
 
     const pontoFocalP = document.createElement('p');
@@ -283,7 +284,7 @@ const partner_view_chamado = (response, post_id, popup, popupContent) => {
 
     const statusP = document.createElement('p');
     statusP.classList.add('chamado-status');
-    statusP.innerHTML = `<strong>Status:</strong> <span style="color: ${currStatus.cor}">${currStatus.name}</span>`;
+    statusP.innerHTML = `<strong>Status:</strong> <span class="chamado-label" style="background-color: ${currStatus.cor}">${currStatus.name}</span>`;
     popupContent.appendChild(statusP);
 
     const detalhamentoResolucaoP = document.createElement('p');

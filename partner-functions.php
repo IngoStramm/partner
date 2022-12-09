@@ -416,7 +416,19 @@ function partner_get_chamado()
         'order' => 'ASC',
         'fields' => 'all',
     );
-    $status = get_terms($args_status);
+    $status_terms = get_terms($args_status);
+    $status = array();
+    foreach ($status_terms as $term) {
+        $stat = $term;
+        $cor = get_term_meta($term->term_id, 'cor', true);
+        $ordem = get_term_meta($term->term_id, 'ordem', true);
+        $ordem = $ordem ? (int)$ordem : $ordem;
+        $icone = get_term_meta($term->term_id, 'icone', true);
+        $stat->cor = $cor;
+        $stat->ordem = $ordem;
+        $stat->icone = $icone;
+        $status[] = $stat;
+    }
 
     $users = partner_list_admin_users();
 
