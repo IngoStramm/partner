@@ -460,6 +460,12 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
     assuntoInput.placeholder = 'Assunto';
     assuntoInput.required = true;
 
+    // Label do Detalhamento de solicitação
+    const detalhamentoSolicitacaoLabel = document.createElement('label');
+    detalhamentoSolicitacaoLabel.id = 'chamado-detalhamento-solicitacao-label';
+    detalhamentoSolicitacaoLabel.htmlFor = 'chamado-detalhamento-solicitacao';
+    detalhamentoSolicitacaoLabel.innerText = 'Detalhamento da solicitação';
+
     // Detalhamento da Solicitação
     const detalhamentoSolicitacaoInput = document.createElement('textarea');
     detalhamentoSolicitacaoInput.name = 'chamado-detalhamento-solicitacao';
@@ -467,7 +473,7 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
     detalhamentoSolicitacaoInput.className = 'chamado-textarea';
     detalhamentoSolicitacaoInput.placeholder = 'Detalhamento da Solicitação';
     detalhamentoSolicitacaoInput.rows = '5';
-    // detalhamentoSolicitacaoInput.required = true;
+    detalhamentoSolicitacaoLabel.appendChild(detalhamentoSolicitacaoInput);
 
     // Label da data de solicitação
     const dataSolicitacaoLabel = document.createElement('label');
@@ -553,6 +559,12 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
         statusSelect.appendChild(option);
     }
 
+    // Label do Detalhamento de solicitação
+    const detalhamentoResolucaoLabel = document.createElement('label');
+    detalhamentoResolucaoLabel.id = 'chamado-detalhamento-resolucao-label';
+    detalhamentoResolucaoLabel.htmlFor = 'chamado-detalhamento-resolucao';
+    detalhamentoResolucaoLabel.innerText = 'Detalhamento da Resolução';
+
     // Detalhamento da Resolução
     const detalhamentoResolucaoInput = document.createElement('textarea');
     detalhamentoResolucaoInput.name = 'chamado-detalhamento-resolucao';
@@ -560,7 +572,7 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
     detalhamentoResolucaoInput.className = 'chamado-textarea';
     detalhamentoResolucaoInput.placeholder = 'Detalhamento da Resolução';
     detalhamentoResolucaoInput.rows = '5';
-    // detalhamentoResolucaoInput.required = true;
+    detalhamentoResolucaoLabel.appendChild(detalhamentoResolucaoInput);
 
     // Submit button
     const submitButton = document.createElement('button');
@@ -590,13 +602,13 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
 
     form.appendChild(submitButton);
     form.appendChild(assuntoInput);
-    form.appendChild(detalhamentoSolicitacaoInput);
+    form.appendChild(detalhamentoSolicitacaoLabel);
     form.appendChild(dataSolicitacaoLabel);
     form.appendChild(dataEntregaLabel);
     form.appendChild(urgenciaSelect);
     form.appendChild(pontoFocalSelect);
     form.appendChild(statusSelect);
-    form.appendChild(detalhamentoResolucaoInput);
+    form.appendChild(detalhamentoResolucaoLabel);
 };
 
 const removeChamadoInputs = () => {

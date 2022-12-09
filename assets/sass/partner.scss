@@ -524,7 +524,7 @@ $bg-poup-content: #ebebeb;
         #chamado-assunto {
             grid-area: assunto;
         }
-        div:has(+ #chamado-detalhamento-solicitacao) {
+        #chamado-detalhamento-solicitacao-label {
             grid-area: detalhes-solicitacao;
         }
         #chamado-data-solicitacao-label {
@@ -542,7 +542,7 @@ $bg-poup-content: #ebebeb;
         #chamado-status {
             grid-area: status;
         }
-        div:has(+ #chamado-detalhamento-resolucao) {
+        #chamado-detalhamento-resolucao-label {
             grid-area: detalhes-entrega;
         }
     }

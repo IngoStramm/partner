@@ -112,7 +112,7 @@ function partner_list_admin_users()
     ]);
 
     $users_array = [];
-    $users_array[] = __('Selecione um usuário', 'partner');
+    $users_array[] = __('Selecione o Ponto Focal', 'partner');
     foreach ($users as $user) {
         $users_array[$user->ID] = $user->display_name;
     }
