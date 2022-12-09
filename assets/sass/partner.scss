@@ -461,11 +461,15 @@ $bg-poup-content: #ebebeb;
     border-radius: 0;
 }
 
-.urgencia-label {
+.urgencia-label,
+.chamado-label {
     color: $white;
     padding: 6px 15px;
     border-radius: 6px;
-    font-size: 13.6px;
+    font-size: 11px;
+    &.chamado-label-no-color {
+        color: inherit;
+    }
 }
 
 @media (min-width: 768px) {
@@ -499,22 +503,6 @@ $bg-poup-content: #ebebeb;
             "urgencia ponto-focal ponto-focal status"
             "detalhes-entrega detalhes-entrega detalhes-entrega detalhes-entrega";
         gap: 20px;
-        input,
-        input[type="date"],
-        input[type="email"],
-        input[type="number"],
-        input[type="password"],
-        input[type="search"],
-        input[type="tel"],
-        input[type="text"],
-        input[type="url"],
-        select,
-        textarea,
-        .mce-tinymce.mce-container.mce-panel,
-        .tox-tinymce,
-        .wp-core-ui.wp-editor-wrap.tmce-active {
-            // grid-column: 1 / -1;
-        }
         h4 {
             grid-area: titulo;
         }

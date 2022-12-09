@@ -406,3 +406,32 @@ function partner_ocultar_entregues_checkbox_shortcode($atts)
 }
 
 add_shortcode('partner_ocultar_entregues_checkbox', 'partner_ocultar_entregues_checkbox_shortcode');
+
+function partner_show_urgencia_chamado_shortcode($atts)
+{
+    $post_ID = get_the_ID();
+    if (!$post_ID)
+        return;
+
+    $atts = shortcode_atts(array(
+        'tax' => 'urgencia',
+    ), $atts);
+    $tax = $atts['tax'];
+
+
+    $terms = get_the_terms($post_ID, $tax);
+    if (!$terms || is_wp_error($terms))
+        return;
+    // partner_debug($terms);
+    $term_id = $terms[0]->term_id;
+    $term_name = $terms[0]->name;
+    $term_cor = get_term_meta($term_id, 'cor', true);
+    $css_class = 'chamado-label';
+    $css_class .= !$term_cor ? ' chamado-label-no-color' : '';
+    ob_start(); ?>
+    <span class="<?php echo $css_class; ?>" style="background-color: <?php echo $term_cor; ?>">
+        <?php echo $term_name; ?>
+    </span>
+<?php return ob_get_clean();
+}
+add_shortcode('partner_chamado_label', 'partner_show_urgencia_chamado_shortcode');

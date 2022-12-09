@@ -362,7 +362,7 @@ function partner_get_chamado()
             $data_entrega = date('Y-m-d\TH:i', $data_entrega);
         }
         $chamado->data_entrega = $data_entrega;
-        $chamado->urgencia = get_post_meta($post->ID, 'chamado_urgencia', true);
+        $chamado->urgencia = (string)get_post_meta($post->ID, 'chamado_urgencia', true);
         $chamado->status = get_post_meta($post->ID, 'chamado_status', true);
         $chamado->ponto_focal = get_post_meta($post->ID, 'chamado_ponto_focal', true);
         $chamado->detalhamento_resolucao = get_post_meta($post->ID, 'chamado_detalhes_resolucao', true);
@@ -476,7 +476,8 @@ function partner_save_chamado()
         'post_content' => ' ',
         'post_type' => 'chamados',
         'tax_input'    => array(
-            'non_hierarchical_tax' => array('urgencia' => $chamado_urgencia, 'status-chamado' => $chamado_status),
+            'urgencia' => array((int)$chamado_urgencia),
+            'status-chamado' => array((int)$chamado_status)
         ),
         'meta_input'   => array(
             'chamado_post' => $chamado_cliente_id,
