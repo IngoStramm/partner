@@ -20,8 +20,6 @@ const wpEditorSettings = () => {
     };
 };
 
-
-
 const popupCronogramaInit = () => {
     const partnerTriggerPopup = document.querySelectorAll('.partner-trigger-popup');
     const html = document.documentElement;
@@ -94,10 +92,70 @@ const clickEventChamado = (link) => {
         triggerPopupChamados(link);
     });
 };
+// quando o popup está abrindo
+// muda o filtro para qualquer opção diferente da atual
+// quando o popup está fechando
+// volta a para a opção original
+const changeSortSelect = () => {
+
+    // Verifica se o filtro existe
+    const jetSort = document.querySelector('.jet-sorting-select');
+    if (typeof (jetSort) === 'undefined' || jetSort === null) {
+        return;
+    }
+
+    // Pega a opção atual
+    const currOptionValue = jetSort.value;
+
+    // Pega todas as opções do filtro (select)
+    const sortOptions = jetSort.options;
+
+    // define como null a próxima opção (será verificado mais a frente)
+    let nextOptionValue = null;
+
+    // pega a opção anterior nas propriedades do filtro (select)
+    let oldValue = jetSort.dataset.oldValue;
+
+    // verifica se está abrindo ou fechando o popup nas opções do filtro (select)
+    let popupStatus = jetSort.dataset.popupStatus;
+
+    // Se o popup estiver aberto, significa que está fechando o popup
+    if (popupStatus === 'opened') {
+
+        // salva o status do popup para fechado nas propriedades do filtro (select)
+        jetSort.setAttribute('data-popup-status', 'closed');
+
+        // define a próxima opção do filtro (select) como a opção anterior
+        nextOptionValue = oldValue;
+    } else { // Se o popup estiver fechado, está abrindo o popup
+
+        // salva o status do popup para aberto nas propriedades do filtro (select)
+        jetSort.setAttribute('data-popup-status', 'opened');
+
+        // salva o valor atual como a opção anterior nas propriedades do filtro (select)
+        jetSort.setAttribute('data-old-value', currOptionValue);
+
+        for (const option of sortOptions) {
+            // procura a primeira ocorrência da próxima opção que seja diferente da atual
+            if (option.value !== currOptionValue) {
+                nextOptionValue = option.value;
+                break;
+            }
+        }
+    }
+
+    // muda a opção selecionada para a próxima opção do filtro (select)
+    jetSort.value = nextOptionValue;
+
+    // dispara o evento de mudança de opção do select
+    jetSort.dispatchEvent(new Event('change'));
+};
 
 const triggerPopupChamados = function (mode, postId = null) {
 
     closePopup();
+    changeSortSelect();
+
     const popup = document.createElement('div');
     popup.classList.add('partner-popup');
 
@@ -694,8 +752,9 @@ const partner_save_chamado = (chamado, post_id, form, popup) => {
 
             form.remove();
             //recarrega a página
-            // closePopup();
-            location.reload();
+            closePopup();
+            changeSortSelect();
+            // location.reload();
             // partner_atualiza_grid_list();
         }
     };
@@ -726,11 +785,3 @@ document.addEventListener('DOMContentLoaded', function () {
     popupCronogramaInit();
     popupChamadosInit();
 });
-
-// document.addEventListener('tinymce-editor-setup', function (e, editor) {
-//     editor.settings.toolbar1 = 'bold,italic,underline,blockquote,strikethrough,bullist,numlist,alignleft,aligncenter,alignright,undo,redo,link'; //Teeny -fullscreen
-// });
-
-// jQuery(document).on('tinymce-editor-setup', function (event, editor) {
-//     editor.settings.toolbar1 = 'bold,italic,underline,blockquote,strikethrough,bullist,numlist,alignleft,aligncenter,alignright,undo,redo,link'; //Teeny -fullscreen
-// });
