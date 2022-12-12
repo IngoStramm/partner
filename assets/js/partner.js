@@ -190,11 +190,13 @@ const triggerPopupChamados = function (mode, postId = null) {
 
     closePopupBtn.addEventListener('click', () => {
         closePopup();
+        changeSortSelect();
     });
 
     popupBackground.addEventListener('click', (e) => {
         if (e.target.classList.contains('partner-popup-wrapper')) {
             closePopup();
+            changeSortSelect();
         }
     });
 
