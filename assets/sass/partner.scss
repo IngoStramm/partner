@@ -525,18 +525,19 @@ $bg-poup-content: #ebebeb;
 
     .partner-ponto-focal-atendimento_description a {
         color: $azul-escuro;
+        transition: all 0.2s ease;
     }
     .partner-ponto-focal-atendimento_description a:active,
     .partner-ponto-focal-atendimento_description a:hover,
     .partner-ponto-focal-atendimento_description a:focus,
     .partner-ponto-focal-atendimento_description a:hover:focus {
-        text-decoration: underline;
+        color: $azul;
     }
     .partner-ponto-focal-footer {
         margin-top: 20px;
-        padding: 5px 10px;
+        padding: 7px 10px;
         background-color: $bg-poup-content;
-        border-radius: 10px;
+        border-radius: 5px;
         a {
             color: $azul-escuro;
             transition: all 0.2s ease;
