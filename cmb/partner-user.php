@@ -72,6 +72,23 @@ function partner_register_user_profile_metabox()
         ),
     ));
 
+    $cmb_user->add_field(array(
+        'name'    => esc_html__('Instagram do usuário', 'cmb2'),
+        'id'      => $prefix . 'instagram',
+        'type'    => 'text_url',
+        'attributes' => array(
+            'placeholder' => 'https://',
+        )
+    ));
+
+    $cmb_user->add_field(array(
+        'name'    => esc_html__('Linkedin do usuário', 'cmb2'),
+        'id'      => $prefix . 'linkedin',
+        'type'    => 'text_url',
+        'attributes' => array(
+            'placeholder' => 'https://',
+        )
+    ));
 }
 
 add_action('cmb2_admin_init', 'partner_register_user_profile_metabox');

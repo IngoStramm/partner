@@ -435,3 +435,62 @@ function partner_show_urgencia_chamado_shortcode($atts)
 <?php return ob_get_clean();
 }
 add_shortcode('partner_chamado_label', 'partner_show_urgencia_chamado_shortcode');
+
+function partner_ponto_focal_shortcode($atts)
+{
+    // pegar o ID do usuário
+    $user_id = get_current_user_id();
+    // verifica se o usuário não existe
+    if (!$user_id)
+        return;
+
+    $atts = shortcode_atts(array(
+        'type' => 'sucesso',
+    ), $atts);
+    $type = $atts['type'];
+
+    // pegar o meta dado 'partner_user_cliente' do usuário
+    $selected_cliente_id = get_user_meta($user_id, 'partner_user_cliente', true);
+
+    if (!$selected_cliente_id)
+        return;
+
+    $meta_key = $type === 'sucesso' ? 'chamado_sucesso_cliente' : 'chamado_contato_emergencia';
+    $subtitle = $type === 'sucesso' ? __('Sucesso do Cliente', 'partner') : __('Contato de Emergência de sua conta', 'partner');
+
+    $atendimento_id = get_post_meta($selected_cliente_id, $meta_key, true);
+
+    $atendimento_display_name = get_the_author_meta('display_name', $atendimento_id);
+    $atendimento_image = get_user_meta($atendimento_id, 'partner_user_image', true);
+    $atendimento_description = get_user_meta($atendimento_id, 'partner_user_description', true);
+    $atendimento_instagram = get_user_meta($atendimento_id, 'partner_user_instagram', true);
+    $atendimento_linkedin = get_user_meta($atendimento_id, 'partner_user_linkedin', true);
+
+    ob_start(); ?>
+    <div class="partner-ponto-focal">
+        <div class="partner-ponto-focal-header">
+            <figure class="partner-ponto-focal-image">
+                <img src="<?php echo $atendimento_image; ?>" alt="<?php echo $atendimento_display_name; ?>" />
+            </figure>
+            <h3 class="partner-ponto-focal-display-name"><?php echo $atendimento_display_name; ?></h3>
+            <p class="partner-ponto-focal-subtitle"><?php echo $subtitle; ?></p>
+        </div>
+        <div class="partner-ponto-focal-atendimento_description">
+            <?php echo $atendimento_description; ?>
+        </div>
+        <?php if (!empty($atendimento_instagram) || !empty($atendimento_linkedin)) { ?>
+            <div class="partner-ponto-focal-footer">
+                <ul>
+                    <?php if ($atendimento_instagram) { ?>
+                        <li><a href="<?php echo $atendimento_instagram; ?>" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                    <?php } ?>
+                    <?php if ($atendimento_linkedin) { ?>
+                        <li><a href="<?php echo $atendimento_linkedin; ?>" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+                    <?php } ?>
+                </ul>
+            </div>
+        <?php } ?>
+    </div>
+<?php return ob_get_clean();
+}
+add_shortcode('partner_pf', 'partner_ponto_focal_shortcode');

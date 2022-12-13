@@ -472,6 +472,93 @@ $bg-poup-content: #ebebeb;
     }
 }
 
+.partner-ponto-focal {
+    padding: 30px;
+    background-color: $white;
+    border-radius: 20px;
+    border: 4px $bg-poup-content solid;
+    .partner-ponto-focal-header {
+        display: grid;
+        align-items: center;
+        grid-template-columns: auto 1.5fr;
+        column-gap: 20px;
+        row-gap: 10px;
+        margin-bottom: 20px;
+        .partner-ponto-focal-image {
+            grid-area: image;
+            grid-column: 1 / 2;
+            grid-row: 1 / 3;
+            img {
+                border-radius: 50%;
+                max-width: 150px;
+            }
+        }
+        .partner-ponto-focal-display-name {
+            grid-column: 2 / 3;
+            margin: 0;
+            align-self: end;
+            color: $azul-escuro;
+            font-size: 22px;
+            line-height: 1.2em;
+            font-weight: 900;
+        }
+        .partner-ponto-focal-subtitle {
+            grid-column: 2 / 3;
+            margin: 0;
+            align-self: start;
+            color: $borda;
+            font-size: 11px;
+            line-height: 1.2em;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+    }
+    .partner-ponto-focal-atendimento_description,
+    .partner-ponto-focal-atendimento_description > * {
+        color: $borda;
+        font-size: 0.85rem;
+        font-weight: 400;
+        line-height: 1.2em;
+        word-break: break-word;
+    }
+
+    .partner-ponto-focal-atendimento_description a {
+        color: $azul-escuro;
+    }
+    .partner-ponto-focal-atendimento_description a:active,
+    .partner-ponto-focal-atendimento_description a:hover,
+    .partner-ponto-focal-atendimento_description a:focus,
+    .partner-ponto-focal-atendimento_description a:hover:focus {
+        text-decoration: underline;
+    }
+    .partner-ponto-focal-footer {
+        margin-top: 20px;
+        padding: 5px 10px;
+        background-color: $bg-poup-content;
+        border-radius: 10px;
+        a {
+            color: $azul-escuro;
+            transition: all 0.2s ease;
+        }
+        a:active,
+        a:focus,
+        a:hover,
+        a:focus:hover {
+            color: $azul;
+        }
+        ul {
+            display: flex;
+            justify-content: end;
+            align-content: center;
+            gap: 20px;
+            list-style: none;
+            font-size: 1.2em;
+            color: $azul-escuro;
+        }
+    }
+}
+
 @media (min-width: 768px) {
     .partner-popup-wrapper {
         .partner-popup {
