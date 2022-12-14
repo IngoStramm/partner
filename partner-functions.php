@@ -537,7 +537,10 @@ function partner_save_chamado()
     $chamado_data_entrega = strtotime($chamado_data_entrega);
 
     $chamado_urgencia = $_GET['chamado-urgencia'];
-    // $chamado_ponto_focal = $_GET['chamado-ponto-focal'];
+
+    $chamado_sucesso_cliente = get_post_meta($chamado_cliente_id, 'chamado_sucesso_cliente', true);
+    $chamado_contato_emergencia = get_post_meta($chamado_cliente_id, 'chamado_contato_emergencia', true);
+
     $chamado_status = $_GET['chamado-status'];
     $chamado_detalhamento_resolucao = $_GET['chamado-detalhamento-resolucao'];
 
@@ -571,7 +574,8 @@ function partner_save_chamado()
             'chamado_solicitacao' => $chamado_data_solicitacao,
             'chamado_entrega' => $chamado_data_entrega,
             'chamado_urgencia' => $chamado_urgencia,
-            // 'chamado_ponto_focal' => $chamado_ponto_focal,
+            'chamado_sucesso_cliente' => $chamado_sucesso_cliente,
+            'chamado_contato_emergencia' => $chamado_contato_emergencia,
             'chamado_status' => $chamado_status,
             'chamado_detalhes_resolucao' => $chamado_detalhamento_resolucao,
         ),
