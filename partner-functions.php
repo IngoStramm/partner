@@ -516,33 +516,34 @@ add_action('wp_ajax_nopriv_partner_get_chamado', 'partner_get_chamado');
 function partner_save_chamado()
 {
     $response = '';
-    $partner_nonce = $_GET['partner_nonce'];
+    $partner_nonce = $_REQUEST['partner_nonce'];
     if (!wp_verify_nonce($partner_nonce, 'partner-nonce')) {
         $response = array(
             'success' => false,
-            'message' => __('Requisição inválida!', 'partner')
+            'message' => __('Requisição inválida!', 'partner'),
+            'data' => $_REQUEST
         );
         wp_send_json($response);
     }
-    $post_id = isset($_GET['post_id']) ? $_GET['post_id'] : '';
-    $chamado_cliente_id = $_GET['partner-chamado-cliente'];
-    $chamado_marca = $_GET['partner-chamado-marca'];
-    $chamado_assunto = $_GET['chamado-assunto'];
-    $chamado_detalhamento_solicitacao = $_GET['chamado-detalhamento-solicitacao'];
+    $post_id = isset($_REQUEST['post_id']) ? $_REQUEST['post_id'] : '';
+    $chamado_cliente_id = $_REQUEST['partner-chamado-cliente'];
+    $chamado_marca = $_REQUEST['partner-chamado-marca'];
+    $chamado_assunto = $_REQUEST['chamado-assunto'];
+    $chamado_detalhamento_solicitacao = $_REQUEST['chamado-detalhamento-solicitacao'];
 
-    $chamado_data_solicitacao = $_GET['chamado-data-solicitacao'];
+    $chamado_data_solicitacao = $_REQUEST['chamado-data-solicitacao'];
     $chamado_data_solicitacao = strtotime($chamado_data_solicitacao);
 
-    $chamado_data_entrega = $_GET['chamado-data-entrega'];
+    $chamado_data_entrega = $_REQUEST['chamado-data-entrega'];
     $chamado_data_entrega = strtotime($chamado_data_entrega);
 
-    $chamado_urgencia = $_GET['chamado-urgencia'];
+    $chamado_urgencia = $_REQUEST['chamado-urgencia'];
 
     $chamado_sucesso_cliente = get_post_meta($chamado_cliente_id, 'chamado_sucesso_cliente', true);
     $chamado_contato_emergencia = get_post_meta($chamado_cliente_id, 'chamado_contato_emergencia', true);
 
-    $chamado_status = $_GET['chamado-status'];
-    $chamado_detalhamento_resolucao = $_GET['chamado-detalhamento-resolucao'];
+    $chamado_status = $_REQUEST['chamado-status'];
+    $chamado_detalhamento_resolucao = $_REQUEST['chamado-detalhamento-resolucao'];
 
     $curr_user = wp_get_current_user();
     $curr_user_id = $curr_user->ID;
@@ -592,6 +593,7 @@ function partner_save_chamado()
         wp_send_json($response);
     }
     $response = array(
+        'request_method' => $_SERVER['REQUEST_METHOD'],
         'success' => true,
         'post_id' => $post_atualizado,
         'chamado_cliente_id' => $chamado_cliente_id,

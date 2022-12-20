@@ -721,22 +721,20 @@ const removeChamadoInputs = () => {
 };
 
 const partner_save_chamado = (chamado, post_id, form, popup) => {
+    const formData = new FormData(form);
     const action = 'partner_save_chamado';
-    const xhr = new XMLHttpRequest();
-    const params = new URLSearchParams(chamado).toString();
-    let query = `${ajax_object.ajax_url}?action=${action}&${params}`;
-    query += `&partner_nonce=${ajax_object.partner_nonce}`;
-    if (typeof (post_id) !== 'undefined' && post_id !== null) {
-        query += `&post_id=${post_id}`;
-    }
-    xhr.responseType = 'json';
-    xhr.open('POST', query);
-    xhr.onload = function () {
-        const response = xhr.response;
-        // console.log(response);
+    let url = ajax_object.ajax_url;
+    formData.append('action', action);
+    formData.append('post_id', post_id);
+    formData.append('partner_nonce', ajax_object.partner_nonce);
 
-        if (xhr.status === 200) {
-
+    const options = {
+        method: 'POST',
+        body: formData
+    };
+    fetch(url, options)
+        .then(response => response.json())
+        .then(response => {
             if (!response.success) {
                 const loading = document.getElementById('loading');
                 if (typeof (loading) !== 'undefined' && loading !== null) {
@@ -747,21 +745,20 @@ const partner_save_chamado = (chamado, post_id, form, popup) => {
                     error.textContent = 'Ocorreu um erro ao tentar salvar o chamado.';
                     // adiciona o error no início do popup
                     popup.insertBefore(error, popup.firstChild);
-                    console.log(response);
                 }
                 return;
             }
-
             form.remove();
-            //recarrega a página
             closePopup();
+            // atualiza a tela dos chamados
             changeSortSelect();
+            //recarrega a página
             // location.reload();
             // partner_atualiza_grid_list();
-        }
-    };
-
-    xhr.send();
+        })
+        .catch(function (error) {
+            console.error(error);
+        });
 
 };
 
