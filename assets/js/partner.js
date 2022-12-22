@@ -347,15 +347,19 @@ const partner_view_chamado = (response, post_id, popup, popupContent) => {
     urgenciaP.innerHTML = `<strong>Urgência:</strong> <span class="chamado-label" style="background-color: ${currUrgencia.cor}">${currUrgencia.name}</span>`;
     popupContent.appendChild(urgenciaP);
 
-    const profissionalP = document.createElement('p');
-    profissionalP.classList.add('chamado-profissional');
-    profissionalP.innerHTML = `<strong>Profissional:</strong> ${profissional}`;
-    popupContent.appendChild(profissionalP);
+    if (profissional) {
+        const profissionalP = document.createElement('p');
+        profissionalP.classList.add('chamado-profissional');
+        profissionalP.innerHTML = `<strong>Profissional:</strong> ${profissional}`;
+        popupContent.appendChild(profissionalP);
+    }
 
-    const etapaP = document.createElement('p');
-    etapaP.classList.add('chamado-etapa');
-    etapaP.innerHTML = `<strong>Etapa:</strong> ${currEtapa.name}`;
-    popupContent.appendChild(etapaP);
+    if (currEtapa) {
+        const etapaP = document.createElement('p');
+        etapaP.classList.add('chamado-etapa');
+        etapaP.innerHTML = `<strong>Etapa:</strong> ${currEtapa.name}`;
+        popupContent.appendChild(etapaP);
+    }
 
     const sucessoClienteP = document.createElement('p');
     sucessoClienteP.classList.add('chamado-sucesso-cliente');
