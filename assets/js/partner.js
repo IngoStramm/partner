@@ -1,4 +1,4 @@
-
+let completed_fields = [];
 const closePopup = () => {
     const existingPopups = document.querySelector('.partner-popup-wrapper');
     if (existingPopups) {
@@ -10,6 +10,7 @@ const closePopup = () => {
         wp.editor.remove('chamado-detalhamento-solicitacao');
         wp.editor.remove('chamado-detalhamento-resolucao');
     }
+    completed_fields = [];
 };
 
 const wpEditorSettings = () => {
@@ -507,11 +508,11 @@ const partner_set_marcas_options = (response, chamado_cliente_id, selected_clien
 
     if (parseInt(chamado_cliente_id) === parseInt(selected_cliente_id)) {
         selected_marca = chamado_marca;
-        addChamadoInputs(response, chamado_cliente_id, selected_cliente_id, chamado_marca, selected_marca, form);
+        addChamadoInputs(response, chamado_cliente_id, selected_cliente_id, chamado_marca, selected_marca, form, true);
     }
 };
 
-const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, chamado_marca, selected_marca, form) => {
+const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, chamado_marca, selected_marca, form, load_chamado = false) => {
 
     const urgencias = response.urgencias;
     // const users = response.users;
@@ -651,21 +652,42 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
         tinyMCE.triggerSave();
     });
 
-    // Se o chamado já existir
-    if (response.chamado) {
-        // Se for o cliente do chamado cadastrado
-        if ((parseInt(chamado_cliente_id) === parseInt(selected_cliente_id)) && (chamado_marca === selected_marca)) {
-            // Define os valores dos campos do chamado
-            assuntoInput.value = response.chamado.assunto;
-            detalhamentoSolicitacaoInput.value = response.chamado.detalhamento_solicitacao;
-            dataSolicitacaoInput.value = response.chamado.data_solicitacao;
-            dataEntregaInput.value = response.chamado.data_entrega;
-            urgenciaSelect.value = response.chamado.urgencia;
-            // pontoFocalSelect.value = response.chamado.ponto_focal;
-            statusSelect.value = response.chamado.status;
-            detalhamentoResolucaoInput.value = response.chamado.detalhamento_resolucao;
-        }
+    // console.log(completed_fields);
+    // se for a primeira vez que estiver carregando o chamado, exibe os dados do response.chamado
+    // senão, exibe os dados dos campos
+    if (load_chamado && response.chamado) {
+        assuntoInput.value = response.chamado.assunto;
+        detalhamentoSolicitacaoInput.value = response.chamado.detalhamento_solicitacao;
+        dataSolicitacaoInput.value = response.chamado.data_solicitacao;
+        dataEntregaInput.value = response.chamado.data_entrega;
+        urgenciaSelect.value = response.chamado.urgencia;
+        statusSelect.value = response.chamado.status;
+        detalhamentoResolucaoInput.value = response.chamado.detalhamento_resolucao;
+    } else {
+        assuntoInput.value = completed_fields.assunto ? completed_fields.assunto : '';
+        detalhamentoSolicitacaoInput.value = completed_fields.detalhamento_solicitacao ? completed_fields.detalhamento_solicitacao : '';
+        dataSolicitacaoInput.value = completed_fields.data_solicitacao ? completed_fields.data_solicitacao : '';
+        dataEntregaInput.value = completed_fields.data_entrega ? completed_fields.data_entrega : '';
+        urgenciaSelect.value = completed_fields.urgencia ? completed_fields.urgencia : '';
+        statusSelect.value = completed_fields.status ? completed_fields.status : '';
+        detalhamentoResolucaoInput.value = completed_fields.detalhamento_resolucao ? completed_fields.detalhamento_resolucao : '';
     }
+
+    // Se o chamado já existir
+    // if (response.chamado) {
+    //     // Se for o cliente do chamado cadastrado
+    //     if ((parseInt(chamado_cliente_id) === parseInt(selected_cliente_id)) && (chamado_marca === selected_marca)) {
+    //         // Define os valores dos campos do chamado
+    //         assuntoInput.value = response.chamado.assunto;
+    //         detalhamentoSolicitacaoInput.value = response.chamado.detalhamento_solicitacao;
+    //         dataSolicitacaoInput.value = response.chamado.data_solicitacao;
+    //         dataEntregaInput.value = response.chamado.data_entrega;
+    //         urgenciaSelect.value = response.chamado.urgencia;
+    //         // pontoFocalSelect.value = response.chamado.ponto_focal;
+    //         statusSelect.value = response.chamado.status;
+    //         detalhamentoResolucaoInput.value = response.chamado.detalhamento_resolucao;
+    //     }
+    // }
 
     form.appendChild(submitButton);
     form.appendChild(assuntoInput);
@@ -679,6 +701,23 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
 };
 
 const removeChamadoInputs = () => {
+    tinyMCE.triggerSave();
+    const inputs_id = {
+        cliente: 'partner-chamado-cliente',
+        marca: 'partner-chamado-marca',
+        assunto: 'chamado-assunto',
+        detalhamento_solicitacao: 'chamado-detalhamento-solicitacao',
+        data_solicitacao: 'chamado-data-solicitacao',
+        data_entrega: 'chamado-data-entrega',
+        urgencia: 'chamado-urgencia',
+        status: 'chamado-status',
+        detalhamento_resolucao: 'chamado-detalhamento-resolucao'
+    };
+    for (const key in inputs_id) {
+        if (typeof (document.getElementById(inputs_id[key])) !== 'undefined' && document.getElementById(inputs_id[key]) !== null) {
+            completed_fields[key] = document.getElementById(inputs_id[key]).value;
+        }
+    }
     const assuntoInput = document.getElementById('chamado-assunto');
     if (typeof (assuntoInput) !== 'undefined' && assuntoInput !== null) {
         assuntoInput.remove();
@@ -717,7 +756,6 @@ const removeChamadoInputs = () => {
     }
     wp.editor.remove('chamado-detalhamento-solicitacao');
     wp.editor.remove('chamado-detalhamento-resolucao');
-
 };
 
 const partner_save_chamado = (chamado, post_id, form, popup) => {
