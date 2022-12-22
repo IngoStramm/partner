@@ -459,7 +459,7 @@ const partner_set_chamado_form = (response, post_id, popup, popupContent) => {
         loading.textContent = 'Processando...';
         // adiciona o loading no início do popup
         popupContent.insertBefore(loading, popupContent.firstChild);
-        partner_save_chamado(chamado, post_id, form, popup);
+        partner_save_chamado(post_id, form, popup);
     });
 
     popupContent.appendChild(form);
@@ -514,9 +514,12 @@ const partner_set_marcas_options = (response, chamado_cliente_id, selected_clien
 
 const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, chamado_marca, selected_marca, form, load_chamado = false) => {
 
+    console.log(response);
+
     const urgencias = response.urgencias;
-    // const users = response.users;
     const statuses = response.status;
+    const users = response.users;
+    const etapas = response.etapas;
     // console.log(chamado_marca, selected_marca);
 
     // Assunto
@@ -594,20 +597,6 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
         urgenciaSelect.appendChild(option);
     }
 
-    // // Ponto focal
-    // const pontoFocalSelect = document.createElement('select');
-    // pontoFocalSelect.id = 'chamado-ponto-focal';
-    // pontoFocalSelect.name = 'chamado-ponto-focal';
-    // pontoFocalSelect.className = 'chamado-select';
-    // pontoFocalSelect.required = true;
-
-    // for (const k in users) {
-    //     const option = document.createElement('option');
-    //     option.value = parseInt(k) === 0 ? '' : parseInt(k);
-    //     option.textContent = users[k];
-    //     pontoFocalSelect.appendChild(option);
-    // }
-
     // Status
     const statusSelect = document.createElement('select');
     statusSelect.name = 'chamado-status';
@@ -625,6 +614,42 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
         option.value = status.term_id;
         option.textContent = status.name;
         statusSelect.appendChild(option);
+    }
+
+    // Profissional
+    const profissionalSelect = document.createElement('select');
+    profissionalSelect.id = 'chamado-profissional';
+    profissionalSelect.name = 'chamado-profissional';
+    profissionalSelect.className = 'chamado-select';
+    profissionalSelect.required = true;
+
+    for (const k in users) {
+        const option = document.createElement('option');
+        option.value = parseInt(k) === 0 ? '' : parseInt(k);
+        option.textContent = users[k];
+        if (option.textContent === 'Selecione o usuário') {
+            option.textContent = 'Selecione o profissional';
+        }
+        profissionalSelect.appendChild(option);
+    }
+
+    // Estapa
+    const etapaSelect = document.createElement('select');
+    etapaSelect.name = 'chamado-etapa';
+    etapaSelect.id = 'chamado-etapa';
+    etapaSelect.className = 'chamado-select';
+    etapaSelect.required = true;
+
+    const etapaDefaultOption = document.createElement('option');
+    etapaDefaultOption.value = '';
+    etapaDefaultOption.textContent = 'Selecione a etapa';
+    etapaSelect.appendChild(etapaDefaultOption);
+
+    for (const etapa of etapas) {
+        const option = document.createElement('option');
+        option.value = etapa.term_id;
+        option.textContent = etapa.name;
+        etapaSelect.appendChild(option);
     }
 
     // Label do Detalhamento de solicitação
@@ -662,6 +687,8 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
         dataEntregaInput.value = response.chamado.data_entrega;
         urgenciaSelect.value = response.chamado.urgencia;
         statusSelect.value = response.chamado.status;
+        profissionalSelect.value = response.chamado.profissional.id;
+        etapaSelect.value = response.chamado.etapa;
         detalhamentoResolucaoInput.value = response.chamado.detalhamento_resolucao;
     } else {
         assuntoInput.value = completed_fields.assunto ? completed_fields.assunto : '';
@@ -670,24 +697,10 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
         dataEntregaInput.value = completed_fields.data_entrega ? completed_fields.data_entrega : '';
         urgenciaSelect.value = completed_fields.urgencia ? completed_fields.urgencia : '';
         statusSelect.value = completed_fields.status ? completed_fields.status : '';
+        profissionalSelect.value = completed_fields.profissional ? completed_fields.profissional : '';
+        etapaSelect.value = completed_fields.etapa ? completed_fields.etapa : '';
         detalhamentoResolucaoInput.value = completed_fields.detalhamento_resolucao ? completed_fields.detalhamento_resolucao : '';
     }
-
-    // Se o chamado já existir
-    // if (response.chamado) {
-    //     // Se for o cliente do chamado cadastrado
-    //     if ((parseInt(chamado_cliente_id) === parseInt(selected_cliente_id)) && (chamado_marca === selected_marca)) {
-    //         // Define os valores dos campos do chamado
-    //         assuntoInput.value = response.chamado.assunto;
-    //         detalhamentoSolicitacaoInput.value = response.chamado.detalhamento_solicitacao;
-    //         dataSolicitacaoInput.value = response.chamado.data_solicitacao;
-    //         dataEntregaInput.value = response.chamado.data_entrega;
-    //         urgenciaSelect.value = response.chamado.urgencia;
-    //         // pontoFocalSelect.value = response.chamado.ponto_focal;
-    //         statusSelect.value = response.chamado.status;
-    //         detalhamentoResolucaoInput.value = response.chamado.detalhamento_resolucao;
-    //     }
-    // }
 
     form.appendChild(submitButton);
     form.appendChild(assuntoInput);
@@ -697,6 +710,8 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
     form.appendChild(urgenciaSelect);
     // form.appendChild(pontoFocalSelect);
     form.appendChild(statusSelect);
+    form.appendChild(profissionalSelect);
+    form.appendChild(etapaSelect);
     form.appendChild(detalhamentoResolucaoLabel);
 };
 
@@ -711,6 +726,8 @@ const removeChamadoInputs = () => {
         data_entrega: 'chamado-data-entrega',
         urgencia: 'chamado-urgencia',
         status: 'chamado-status',
+        profissional: 'chamado-profissional',
+        etapa: 'chamado-etapa',
         detalhamento_resolucao: 'chamado-detalhamento-resolucao'
     };
     for (const key in inputs_id) {
@@ -746,6 +763,14 @@ const removeChamadoInputs = () => {
     if (typeof (statusSelect) !== 'undefined' && statusSelect !== null) {
         statusSelect.remove();
     }
+    const profissionalSelect = document.getElementById('chamado-profissional');
+    if (typeof (profissionalSelect) !== 'undefined' && profissionalSelect !== null) {
+        profissionalSelect.remove();
+    }
+    const etapaSelect = document.getElementById('chamado-etapa');
+    if (typeof (etapaSelect) !== 'undefined' && etapaSelect !== null) {
+        etapaSelect.remove();
+    }
     const detalhamentoResolucaoLabel = document.getElementById('chamado-detalhamento-resolucao-label');
     if (typeof (detalhamentoResolucaoLabel) !== 'undefined' && detalhamentoResolucaoLabel !== null) {
         detalhamentoResolucaoLabel.remove();
@@ -758,7 +783,7 @@ const removeChamadoInputs = () => {
     wp.editor.remove('chamado-detalhamento-resolucao');
 };
 
-const partner_save_chamado = (chamado, post_id, form, popup) => {
+const partner_save_chamado = (post_id, form, popup) => {
     const formData = new FormData(form);
     const action = 'partner_save_chamado';
     let url = ajax_object.ajax_url;

@@ -113,17 +113,6 @@ function partner_register_chamado_metabox()
         ),
     ));
 
-    // $cmb_chamado->add_field(array(
-    //     'name'    => esc_html__('Ponto Focal', 'partner'),
-    //     // 'desc'    => esc_html__('', 'partner'),
-    //     'id'      => 'chamado_ponto_focal',
-    //     'type' => 'select',
-    //     'options' => 'partner_list_admin_users',
-    //     'attributes' => array(
-    //         'required' => 'required',
-    //     ),
-    // ));
-
     $cmb_chamado->add_field(array(
         'name'    => esc_html__('Status', 'partner'),
         // 'desc'    => esc_html__('', 'partner'),
@@ -135,6 +124,36 @@ function partner_register_chamado_metabox()
             $statuses = partner_get_status_list();
             foreach ($statuses as $id => $status) {
                 $options[$id] = $status;
+            }
+            return $options;
+        },
+        'attributes' => array(
+            'required' => 'required',
+        ),
+    ));
+
+    $cmb_chamado->add_field(array(
+        'name'    => esc_html__('Profissional', 'partner'),
+        // 'desc'    => esc_html__('', 'partner'),
+        'id'      => 'chamado_profissional',
+        'type' => 'select',
+        'options' => 'partner_list_editor_users',
+        'attributes' => array(
+            'required' => 'required',
+        ),
+    ));
+
+    $cmb_chamado->add_field(array(
+        'name'    => esc_html__('Etapa', 'partner'),
+        // 'desc'    => esc_html__('', 'partner'),
+        'id'      => 'chamado_etapa',
+        'type' => 'select',
+        'options' => function () {
+            $options = [];
+            $options[0] = esc_html__('Selecione uma opção', 'partner');
+            $etapas = partner_get_etapa_list();
+            foreach ($etapas as $id => $etapa) {
+                $options[$id] = $etapa;
             }
             return $options;
         },

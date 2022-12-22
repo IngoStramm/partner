@@ -155,11 +155,11 @@ function partner_list_post_clientes_with_id()
 }
 
 /**
- * partner_list_admin_users
+ * partner_list_editor_users
  *
  * @return array
  */
-function partner_list_admin_users()
+function partner_list_editor_users()
 {
     $users = get_users([
         'role__in' => ['editor'],
@@ -213,6 +213,22 @@ function partner_get_status_list()
     return $status_array;
 }
 
+function partner_get_etapa_list()
+{
+    $terms = get_terms([
+        'taxonomy' => 'etapa',
+        'hide_empty' => false,
+        'meta_key' => 'ordem',
+        'orderby' => 'meta_value_num',
+        'order' => 'ASC',
+    ]);
+    $status_array = [];
+    foreach ($terms as $term) {
+        $status_array[$term->term_id] = $term->name;
+    }
+    return $status_array;
+}
+
 /**
  * partner_admin_head_style
  *
@@ -227,6 +243,8 @@ function partner_admin_head_style()
         #radio-tagsdiv-status-chamado,
         #tagsdiv-urgencia,
         #radio-tagsdiv-urgencia,
+        #tagsdiv-etapa,
+        #radio-tagsdiv-etapa,
         #pageparentdiv {
             display: none;
         }
@@ -285,8 +303,14 @@ function partner_chamados_save_term_order($post_id)
     if (!$status_id)
         return;
 
+    $etapa_id = get_post_meta($post_id, 'chamado_etapa', true);
+
+    if (!$etapa_id)
+        return;
+
     $urgencia_ordem = get_term_meta($urgencia_id, 'ordem', true);
     $status_ordem = get_term_meta($status_id, 'ordem', true);
+    $etapa_ordem = get_term_meta($etapa_id, 'ordem', true);
 
     // Previne loop ao atualizar o post
     remove_action('save_post', 'partner_chamados_save_term_order', 999);
@@ -294,6 +318,7 @@ function partner_chamados_save_term_order($post_id)
     wp_update_post(array('ID' => $post_id, 'menu_order' => $urgencia_ordem));
     update_post_meta($post_id, 'urgencia_ordem', $urgencia_ordem);
     update_post_meta($post_id, 'status_ordem', $status_ordem);
+    update_post_meta($post_id, 'etapa_ordem', $etapa_ordem);
 
     // readiciona a função após atualizar o post
     add_action('save_post', 'partner_chamados_save_term_order', 999, 1);
@@ -422,12 +447,21 @@ function partner_get_chamado()
         $chamado->urgencia = (string)get_post_meta($post->ID, 'chamado_urgencia', true);
         $chamado->status = get_post_meta($post->ID, 'chamado_status', true);
 
+        $profissional_id = get_post_meta($post->ID, 'chamado_profissional', true);
+        $chamado->profissional = new stdClass();
+        $chamado->profissional->id = $profissional_id;
+        $chamado->profissional->name = get_userdata($profissional_id)->display_name;
+        $chamado->profissional->image = get_user_meta($profissional_id, 'partner_user_image', true);
+        $chamado->profissional->description = get_user_meta($profissional_id, 'partner_user_description', true);
+
         $sucesso_cliente_id = get_post_meta($chamado->cliente, 'chamado_sucesso_cliente', true);
         $chamado->sucesso_cliente = new stdClass();
         $chamado->sucesso_cliente->id = $sucesso_cliente_id;
         $chamado->sucesso_cliente->name = get_userdata($sucesso_cliente_id)->display_name;
         $chamado->sucesso_cliente->image = get_user_meta($sucesso_cliente_id, 'partner_user_image', true);
         $chamado->sucesso_cliente->description = get_user_meta($sucesso_cliente_id, 'partner_user_description', true);
+
+        $chamado->etapa = get_post_meta($post->ID, 'chamado_etapa', true);
 
         $contato_emergencia_id = get_post_meta($chamado->cliente, 'chamado_contato_emergencia', true);
         $chamado->contato_emergencia = new stdClass();
@@ -479,6 +513,7 @@ function partner_get_chamado()
         $urgencia->icone = $icone;
         $urgencias[] = $urgencia;
     }
+
     $args_status = array(
         'taxonomy' => 'status-chamado',
         'hide_empty' => false,
@@ -501,11 +536,42 @@ function partner_get_chamado()
         $status[] = $stat;
     }
 
-    $users = partner_list_admin_users();
+    $args_etapa = array(
+        'taxonomy' => 'etapa',
+        'hide_empty' => false,
+        'meta_key' => 'ordem',
+        'orderby' => 'meta_value_num',
+        'order' => 'ASC',
+        'fields' => 'all',
+    );
+    $etapa_terms = get_terms($args_etapa);
+    $etapas = array();
+    foreach ($etapa_terms as $term) {
+        $stat = $term;
+        $cor = get_term_meta($term->term_id, 'cor', true);
+        $ordem = get_term_meta($term->term_id, 'ordem', true);
+        $ordem = $ordem ? (int)$ordem : $ordem;
+        $icone = get_term_meta($term->term_id, 'icone', true);
+        $stat->cor = $cor;
+        $stat->ordem = $ordem;
+        $stat->icone = $icone;
+        $etapas[] = $stat;
+    }
+
+    $users = partner_list_editor_users();
 
     $response = array(
-        'success' => true, 'clientes' => $clientes, 'marcas' => $marcas_array, 'urgencias' => $urgencias, 'status' => $status, 'users' => $users,
-        'chamado' => $chamado, 'metas' => $metas, 'cliente' => $cliente_selecionado, 'marca' => $marca_selecionada
+        'success' => true,
+        'clientes' => $clientes,
+        'marcas' => $marcas_array,
+        'urgencias' => $urgencias,
+        'status' => $status,
+        'etapas' => $etapas,
+        'users' => $users,
+        'chamado' => $chamado,
+        'metas' => $metas,
+        'cliente' => $cliente_selecionado,
+        'marca' => $marca_selecionada
     );
     wp_send_json($response);
 }
@@ -543,6 +609,8 @@ function partner_save_chamado()
     $chamado_contato_emergencia = get_post_meta($chamado_cliente_id, 'chamado_contato_emergencia', true);
 
     $chamado_status = $_REQUEST['chamado-status'];
+    $chamado_profissional = $_REQUEST['chamado-profissional'];
+    $chamado_etapa = $_REQUEST['chamado-etapa'];
     $chamado_detalhamento_resolucao = $_REQUEST['chamado-detalhamento-resolucao'];
 
     $curr_user = wp_get_current_user();
@@ -564,7 +632,8 @@ function partner_save_chamado()
         'post_type' => 'chamados',
         'tax_input'    => array(
             'urgencia' => array((int)$chamado_urgencia),
-            'status-chamado' => array((int)$chamado_status)
+            'status-chamado' => array((int)$chamado_status),
+            'etapa' => array((int)$chamado_etapa),
         ),
         'meta_input'   => array(
             'chamado_post' => $chamado_cliente_id,
@@ -578,6 +647,8 @@ function partner_save_chamado()
             'chamado_sucesso_cliente' => $chamado_sucesso_cliente,
             'chamado_contato_emergencia' => $chamado_contato_emergencia,
             'chamado_status' => $chamado_status,
+            'chamado_profissional' => $chamado_profissional,
+            'chamado_etapa' => $chamado_etapa,
             'chamado_detalhes_resolucao' => $chamado_detalhamento_resolucao,
         ),
     ];
@@ -603,8 +674,9 @@ function partner_save_chamado()
         'chamado_data_solicitacao' => $chamado_data_solicitacao,
         'chamado_data_entrega' => $chamado_data_entrega,
         'chamado_urgencia' => $chamado_urgencia,
-        // 'chamado_ponto_focal' => $chamado_ponto_focal,
         'chamado_status' => $chamado_status,
+        'chamado_profissional' => $chamado_profissional,
+        'chamado_etapa' => $chamado_etapa,
         'chamado_detalhamento_resolucao' => $chamado_detalhamento_resolucao,
     );
 

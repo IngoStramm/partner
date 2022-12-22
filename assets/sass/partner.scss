@@ -589,6 +589,7 @@ $bg-poup-content: #ebebeb;
             "detalhes-solicitacao detalhes-solicitacao detalhes-solicitacao detalhes-solicitacao"
             "data-solicitacao data-solicitacao data-entrega data-entrega"
             "urgencia urgencia status status"
+            "profissional profissional etapa etapa"
             "detalhes-entrega detalhes-entrega detalhes-entrega detalhes-entrega";
         gap: 20px;
         h4 {
@@ -623,6 +624,12 @@ $bg-poup-content: #ebebeb;
         }
         #chamado-urgencia {
             grid-area: urgencia;
+        }
+        #chamado-profissional {
+            grid-area: profissional;
+        }
+        #chamado-etapa {
+            grid-area: etapa;
         }
         #chamado-ponto-focal {
             grid-area: ponto-focal;

@@ -23,7 +23,7 @@ function partner_register_cliente_metabox()
         // 'desc'    => esc_html__('', 'partner'),
         'id'      => 'chamado_sucesso_cliente',
         'type' => 'select',
-        'options' => 'partner_list_admin_users',
+        'options' => 'partner_list_editor_users',
         'attributes' => array(
             'required' => 'required',
         ),
@@ -34,7 +34,7 @@ function partner_register_cliente_metabox()
         // 'desc'    => esc_html__('', 'partner'),
         'id'      => 'chamado_contato_emergencia',
         'type' => 'select',
-        'options' => 'partner_list_admin_users',
+        'options' => 'partner_list_editor_users',
         'attributes' => array(
             'required' => 'required',
         ),

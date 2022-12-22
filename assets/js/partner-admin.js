@@ -123,52 +123,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
     }
 
-    function partner_set_term_for_urgencia_event() {
-        // #chamado_urgencia
-        // #urgenciachecklist
-        // #chamado_status
-        // #status-chamadochecklist
-        const chamado_urgencia_select = document.getElementById('chamado_urgencia');
-        if (typeof (chamado_urgencia_select) === 'undefined' || chamado_urgencia_select === null) {
+    function partner_set_term_event(select_id, checklist_wrapper_id) {
+
+        const select = document.getElementById(select_id);
+        if (typeof (select) === 'undefined' || select === null) {
             return;
         }
 
-        const urgenciachecklist_select = document.getElementById('urgenciachecklist');
-        if (typeof (urgenciachecklist_select) === 'undefined' || urgenciachecklist_select === null) {
+        const checklist_wrapper = document.getElementById(checklist_wrapper_id);
+        if (typeof (checklist_wrapper) === 'undefined' || checklist_wrapper === null) {
             return;
         }
 
-        partner_set_term_for_select(chamado_urgencia_select, urgenciachecklist_select);
+        partner_set_term_for_select(select, checklist_wrapper);
 
-        chamado_urgencia_select.addEventListener('change', () => {
-            partner_set_term_for_select(chamado_urgencia_select, urgenciachecklist_select);
+        select.addEventListener('change', () => {
+            partner_set_term_for_select(select, checklist_wrapper);
         });
     }
 
-    function partner_set_term_for_status_event() {
-        // #chamado_urgencia
-        // #urgenciachecklist
-        // #chamado_status
-        // #status-chamadochecklist
-        const chamado_status_select = document.getElementById('chamado_status');
-        if (typeof (chamado_status_select) === 'undefined' || chamado_status_select === null) {
-            return;
-        }
-
-        const statuschecklist_select = document.getElementById('status-chamadochecklist');
-        if (typeof (statuschecklist_select) === 'undefined' || statuschecklist_select === null) {
-            return;
-        }
-
-        partner_set_term_for_select(chamado_status_select, statuschecklist_select);
-
-        chamado_status_select.addEventListener('change', () => {
-            partner_set_term_for_select(chamado_status_select, statuschecklist_select);
-        });
-    }
-
-    partner_set_term_for_urgencia_event();
-    partner_set_term_for_status_event();
+    partner_set_term_event('chamado_urgencia', 'urgenciachecklist');
+    partner_set_term_event('chamado_status', 'status-chamadochecklist');
+    partner_set_term_event('chamado_etapa', 'etapachecklist');
     partner_delete_transient_evt();
     partner_cliente_selected();
 });
