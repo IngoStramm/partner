@@ -1,6 +1,6 @@
 {
     "name": "Partner",
-    "version": "1.2.8",
+    "version": "1.2.9",
     "download_url": "https://github.com/IngoStramm/partner/raw/master/dist/partner.zip",
     "homepage": "https://agencialaf.com",
     "requires": "4.7",

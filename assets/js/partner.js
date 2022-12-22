@@ -285,9 +285,16 @@ const partner_view_chamado = (response, post_id, popup, popupContent) => {
             currStatus = stat;
         }
     }
+    const currEtapaId = parseInt(chamado.etapa);
+    const etapas = response.etapas;
+    let currEtapa = null;
+    for (const etapa of etapas) {
+        if (etapa.term_id === currEtapaId) {
+            currEtapa = etapa;
+        }
+    }
 
-    const pontoFocalId = chamado.ponto_focal;
-    const users = response.users;
+    const profissional = chamado.profissional.name;
 
     const sucessoCliente = chamado.sucesso_cliente.name;
     const contatoEmergencia = chamado.contato_emergencia.name;
@@ -339,6 +346,16 @@ const partner_view_chamado = (response, post_id, popup, popupContent) => {
     urgenciaP.classList.add('chamado-urgencia');
     urgenciaP.innerHTML = `<strong>Urgência:</strong> <span class="chamado-label" style="background-color: ${currUrgencia.cor}">${currUrgencia.name}</span>`;
     popupContent.appendChild(urgenciaP);
+
+    const profissionalP = document.createElement('p');
+    profissionalP.classList.add('chamado-profissional');
+    profissionalP.innerHTML = `<strong>Profissional:</strong> ${profissional}`;
+    popupContent.appendChild(profissionalP);
+
+    const etapaP = document.createElement('p');
+    etapaP.classList.add('chamado-etapa');
+    etapaP.innerHTML = `<strong>Etapa:</strong> ${currEtapa.name}`;
+    popupContent.appendChild(etapaP);
 
     const sucessoClienteP = document.createElement('p');
     sucessoClienteP.classList.add('chamado-sucesso-cliente');
@@ -513,8 +530,6 @@ const partner_set_marcas_options = (response, chamado_cliente_id, selected_clien
 };
 
 const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, chamado_marca, selected_marca, form, load_chamado = false) => {
-
-    console.log(response);
 
     const urgencias = response.urgencias;
     const statuses = response.status;
