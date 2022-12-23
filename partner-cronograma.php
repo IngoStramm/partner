@@ -235,13 +235,13 @@ function partner_cronograma_output_single($clientes_data)
         $mes_ano['mes'] = str_replace('Outubro', 'Out', $mes_ano['mes']);
         $mes_ano['mes'] = str_replace('Novembro', 'Nov', $mes_ano['mes']);
         $mes_ano['mes'] = str_replace('Dezembro', 'Dez', $mes_ano['mes']);
-        $css_class = (int)$index <= (int)$index_atual || (int)$index_atual === 0 ? 'mes-passado' : 'mes-futuro';
+        $css_class = (int)$index <= (int)$index_atual || ((int)$index_atual === 0 && (int)$ano_atual === $mes_ano['ano']) ? 'mes-passado' : 'mes-futuro';
         $css_class .= (int)$index === 1 ? ' primeiro-mes-passado' : '';
         $css_class .= (int)$index === (int)$index_atual ? ' ultimo-mes-passado' : '';
         $output .= '<th class="' . $css_class . '" colspan="2">';
         if ((int)$index === (int)$index_atual) {
             $output .= '<span class="progress-mark">' . __('Você está aqui', 'partner') . '</span>';
-        } elseif ((int)$index_atual === 0 && (int)$index === count($meses_anos)) {
+        } elseif ((int)$index_atual === 0 && (int)$index === count($meses_anos) && (int)$ano_atual === $mes_ano['ano']) {
             $output .= '<span class="progress-mark">' . __('Você está aqui', 'partner') . '</span>';
         }
         $output .= '<div>';
