@@ -706,7 +706,7 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
     submitButton.type = 'submit';
     submitButton.className = 'chamado-button';
     submitButton.id = 'chamado-button';
-    submitButton.textContent = 'Enviar';
+    submitButton.textContent = 'Salvar';
     submitButton.addEventListener('click', () => {
         tinyMCE.triggerSave();
     });
