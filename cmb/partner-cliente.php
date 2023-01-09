@@ -15,7 +15,7 @@ function partner_register_cliente_metabox()
         'desc'    => esc_html__('Selecione qual é o cliente da planilha.', 'partner'),
         'id'      => 'cliente_planilha',
         'type'    => 'select',
-        'options' => 'partner_list_planilha_clientes_name'
+        'options_cb' => 'partner_list_planilha_clientes_name'
     ));
 
     $cmb_cliente->add_field(array(
@@ -23,7 +23,7 @@ function partner_register_cliente_metabox()
         // 'desc'    => esc_html__('', 'partner'),
         'id'      => 'chamado_sucesso_cliente',
         'type' => 'select',
-        'options' => 'partner_list_editor_users',
+        'options_cb' => 'partner_list_editor_users',
         'attributes' => array(
             'required' => 'required',
         ),
@@ -34,7 +34,7 @@ function partner_register_cliente_metabox()
         // 'desc'    => esc_html__('', 'partner'),
         'id'      => 'chamado_contato_emergencia',
         'type' => 'select',
-        'options' => 'partner_list_editor_users',
+        'options_cb' => 'partner_list_editor_users',
         'attributes' => array(
             'required' => 'required',
         ),

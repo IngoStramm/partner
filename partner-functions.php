@@ -663,6 +663,29 @@ function partner_save_chamado()
         ];
         wp_send_json($response);
     }
+
+    if (isset($_REQUEST['chamado-notificacao']) && $_REQUEST['chamado-notificacao'] === 'on') {
+        $args = array(
+            'meta_key' => 'partner_user_cliente',
+            'meta_value' => $chamado_cliente_id
+        );
+
+        $users = get_users($args);
+        foreach ($users as $user) {
+            $user_email = $user->user_email;
+            $subject = sprintf(__('Chamado atualizado (%s)', 'partner'), $chamado_marca);
+            $message = '<h3>' . sprintf(__('Olá, %s!', 'partner'), $user->display_name) . '</h3>';
+            $message .= '<p>' . sprintf(__('O chamado da marca "<strong>%s</strong>" com o assunto "<strong>%s</strong>" foi atualizado.', 'partner'), $chamado_marca, $chamado_assunto) . '</p>';
+            $message .= '<p>' . sprintf(__('Acesse a sua conta do <a href="%s" target="_blank">%s</a> para visualizá-lo.', 'partner'), get_site_url(), get_bloginfo('name')) . '</p>';
+            $message .= '</body></html>';
+            $headers = [];
+            $headers[] = 'Content-Type: text/html; charset=UTF-8';
+            $domain = parse_url(get_site_url(), PHP_URL_HOST);
+            $headers[] = 'From: ' . get_bloginfo('name') . ' <noreply@' . $domain . '>';
+            wp_mail($user_email, $subject, $message, $headers);
+        }
+    }
+
     $response = array(
         'request_method' => $_SERVER['REQUEST_METHOD'],
         'success' => true,
@@ -702,21 +725,14 @@ add_action('wp_head', 'partner_add_chamado_edit_js');
 
 // add_action('wp_head', function () {
 //     $args = array(
-//         'post_type'          => 'cliente',
-//         'posts_per_page'     => -1,
-//         'orderby'            => 'title',
-//         'order'              => 'ASC',
-//         'post_status'        => 'publish',
-//         'suppress_filters'   => false
+//         'meta_key' => 'partner_user_cliente',
+//         'meta_value' => '42'
 //     );
 
-//     $clientes = get_posts($args);
-//     $marcas_array = array();
-//     foreach ($clientes as $cliente) {
-//         $marcas = get_post_meta($cliente->ID, 'marcas', true);
-//         foreach ($marcas as $marca) {
-//             $marcas_array[$cliente->ID][] = $marca['nome-da-marca'];
-//         }
+//     $users = get_users($args);
+//     foreach ($users as $user) {
+//         $user_id = $user->ID;
+//         $user_email = $user->user_email;
+//         partner_debug($user_email);
 //     }
-//     partner_debug($marcas_array);
 // });

@@ -48,7 +48,7 @@ function partner_settings_metabox()
         'id'      => 'login_page_id',
         'type'    => 'select',
         'desc'    => esc_html__('Selecione qual é a página de login para onde o usuário não logado será redirecionado. Não pode ser igual à pagina de troca de senha!', 'partner'),
-        'options' => 'partner_list_published_pages_except_reset_password_page'
+        'options_cb' => 'partner_list_published_pages_except_reset_password_page'
     ));
 
     $cmb_options->add_field(array(
@@ -56,7 +56,7 @@ function partner_settings_metabox()
         'id'      => 'reset_password_page_id',
         'type'    => 'select',
         'desc'    => esc_html__('Selecione qual é a página de troca de senha para onde o usuário não logado será redirecionado. Não pode ser igual à pagina de login!', 'partner'),
-        'options' => 'partner_list_published_pages_except_login_page'
+        'options_cb' => 'partner_list_published_pages_except_login_page'
     ));
 
     $cmb_options->add_field(array(
@@ -64,7 +64,7 @@ function partner_settings_metabox()
         'id'      => 'chamado_status_entregue',
         'type'    => 'select',
         'desc'    => esc_html__('Selecione qual é o status que equivale ao chamado finalizado/entregue.', 'partner'),
-        'options' => function () {
+        'options_cb' => function () {
             $statuses = partner_get_status_list();
             $options = array();
             $options[] = esc_html__('Selecione um status', 'partner');

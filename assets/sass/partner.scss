@@ -584,7 +584,7 @@ $bg-poup-content: #ebebeb;
         display: grid;
         grid-template-columns: 1fr 0.5fr 0.5fr 1fr;
         grid-template-areas:
-            "titulo titulo titulo btn"
+            "titulo titulo notificacao btn"
             "marca marca assunto assunto"
             "detalhes-solicitacao detalhes-solicitacao detalhes-solicitacao detalhes-solicitacao"
             "data-solicitacao data-solicitacao data-entrega data-entrega"
@@ -600,6 +600,12 @@ $bg-poup-content: #ebebeb;
         }
         #partner-chamado-cliente:has(+ #partner-chamado-marca + #chamado-button) {
             grid-area: titulo;
+        }
+        #chamado-notificacao-label {
+            grid-area: notificacao;
+            flex-direction: row-reverse;
+            align-items: center;
+            justify-self: start;
         }
         #chamado-button {
             grid-area: btn;

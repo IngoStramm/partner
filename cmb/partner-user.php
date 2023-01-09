@@ -25,7 +25,7 @@ function partner_register_user_profile_metabox()
         'desc'    => esc_html__('Selecione qual é o cliente deste usuário.', 'partner'),
         'id'      => $prefix . 'cliente',
         'type'    => 'select',
-        'options' => 'partner_list_post_clientes'
+        'options_cb' => 'partner_list_post_clientes'
     ));
 
     $cmb_user->add_field(array(

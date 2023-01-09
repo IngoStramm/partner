@@ -686,6 +686,21 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
     detalhamentoResolucaoInput.rows = '5';
     detalhamentoResolucaoLabel.appendChild(detalhamentoResolucaoInput);
 
+    // Label Notificação
+    const notificacaoLabel = document.createElement('label');
+    notificacaoLabel.id = 'chamado-notificacao-label';
+    notificacaoLabel.htmlFor = 'chamado-notificacao';
+    notificacaoLabel.innerText = 'Notificação';
+
+    // Checkbox Notificação
+    const notificacaoCheckbox = document.createElement('input');
+    notificacaoCheckbox.type = 'checkbox';
+    notificacaoCheckbox.id = 'chamado-notificacao';
+    notificacaoCheckbox.name = 'chamado-notificacao';
+    notificacaoCheckbox.className = 'chamado-checkbox';
+    notificacaoCheckbox.checked = false;
+    notificacaoLabel.appendChild(notificacaoCheckbox);
+
     // Submit button
     const submitButton = document.createElement('button');
     submitButton.type = 'submit';
@@ -722,6 +737,7 @@ const addChamadoInputs = (response, chamado_cliente_id, selected_cliente_id, cha
     }
 
     form.appendChild(submitButton);
+    form.appendChild(notificacaoLabel);
     form.appendChild(assuntoInput);
     form.appendChild(detalhamentoSolicitacaoLabel);
     form.appendChild(dataSolicitacaoLabel);
@@ -797,6 +813,10 @@ const removeChamadoInputs = () => {
     const submitButton = document.getElementById('chamado-button');
     if (typeof (submitButton) !== 'undefined' && submitButton !== null) {
         submitButton.remove();
+    }
+    const notificacaoLabel = document.getElementById('chamado-notificacao-label');
+    if (typeof (notificacaoLabel) !== 'undefined' && notificacaoLabel !== null) {
+        notificacaoLabel.remove();
     }
     wp.editor.remove('chamado-detalhamento-solicitacao');
     wp.editor.remove('chamado-detalhamento-resolucao');
