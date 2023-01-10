@@ -84,7 +84,7 @@ function partner_register_user_profile_metabox()
     $cmb_user->add_field(array(
         'name'    => esc_html__('E-mail', 'cmb2'),
         'id'      => $prefix . 'email',
-        'type'    => 'text_url',
+        'type'    => 'text_email',
         'attributes' => array(
             'placeholder' => 'exemplo@email.com',
         )
