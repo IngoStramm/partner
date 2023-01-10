@@ -86,7 +86,7 @@ function partner_register_user_profile_metabox()
         'id'      => $prefix . 'email',
         'type'    => 'text_url',
         'attributes' => array(
-            'placeholder' => 'https://',
+            'placeholder' => 'exemplo@email.com',
         )
     ));
 
