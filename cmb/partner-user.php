@@ -36,14 +36,14 @@ function partner_register_user_profile_metabox()
     ));
 
     $cmb_user->add_field(array(
-        'name'    => esc_html__('Url do relatório do Dados do Site', 'partner'),
+        'name'    => esc_html__('Url do relatório do Google Ads', 'partner'),
         'desc'    => __('No Looker Studio, antigo Data Studio, usar a opção de <code>Compartilhar > Incorporar relatório > Incorporar URL</code> para obter a URL do relatório.', 'partner'),
         'id'      => $prefix . 'dados_site',
         'type'    => 'text'
     ));
 
     $cmb_user->add_field(array(
-        'name'    => esc_html__('Url do relatório do Dados de Mídia', 'partner'),
+        'name'    => esc_html__('Url do relatório do Analytics', 'partner'),
         'desc'    => __('No Looker Studio, antigo Data Studio, usar a opção de <code>Compartilhar > Incorporar relatório > Incorporar URL</code> para obter a URL do relatório.', 'partner'),
         'id'      => $prefix . 'dados_midia',
         'type'    => 'text'
@@ -73,8 +73,8 @@ function partner_register_user_profile_metabox()
     ));
 
     $cmb_user->add_field(array(
-        'name'    => esc_html__('Instagram do usuário', 'cmb2'),
-        'id'      => $prefix . 'instagram',
+        'name'    => esc_html__('Link para a reunião', 'cmb2'),
+        'id'      => $prefix . 'meeting',
         'type'    => 'text_url',
         'attributes' => array(
             'placeholder' => 'https://',
@@ -82,11 +82,22 @@ function partner_register_user_profile_metabox()
     ));
 
     $cmb_user->add_field(array(
-        'name'    => esc_html__('Linkedin do usuário', 'cmb2'),
-        'id'      => $prefix . 'linkedin',
+        'name'    => esc_html__('E-mail', 'cmb2'),
+        'id'      => $prefix . 'email',
         'type'    => 'text_url',
         'attributes' => array(
             'placeholder' => 'https://',
+        )
+    ));
+
+    $cmb_user->add_field(array(
+        'name'    => esc_html__('Telefone', 'cmb2'),
+        'id'      => $prefix . 'phone',
+        'type'    => 'text',
+        'attributes' => array(
+            'placeholder' => '(99) 99999-9999',
+            'class'        => 'phone-mask',
+            'maxlength'    => '15',
         )
     ));
 }

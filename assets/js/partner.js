@@ -881,8 +881,38 @@ function partner_ocultar_entregues(status_entregue_id) {
     }
 }
 
+function togglePontoFocalDescription() {
+    const pontosFocais = document.querySelectorAll('.partner-ponto-focal-atendimento_description');
+    for (let pontoFocal of pontosFocais) {
+        const toggleBtn = pontoFocal.nextElementSibling;
+        if (typeof (toggleBtn) === 'undefined' && toggleBtn === null) {
+            return;
+        }
+        if (!toggleBtn.classList.contains('toggle-descricao')) {
+            return;
+        }
+        let toggleStatus = toggleBtn.getAttribute('data-toggle-status');
+        const togglePanel = pontoFocal;
+        toggleBtn.addEventListener('click', (e, toggleStatus) => {
+            e.preventDefault();
+            toggleStatus = toggleBtn.getAttribute('data-toggle-status');
+            // get height from togglePanel
+            const togglePanelHeight = togglePanel.scrollHeight;
+            if (toggleStatus === 'collapsed') {
+                toggleBtn.setAttribute('data-toggle-status', 'expanded');
+                togglePanel.setAttribute('data-toggle-status', 'expanded');
+                togglePanel.style.maxHeight = togglePanelHeight + 'px';
+            } else {
+                toggleBtn.setAttribute('data-toggle-status', 'collapsed');
+                togglePanel.setAttribute('data-toggle-status', 'collapsed');
+                togglePanel.style.maxHeight = 0;
+            }
+        });
+    }
+}
 
 document.addEventListener('DOMContentLoaded', function () {
     popupCronogramaInit();
     popupChamadosInit();
+    togglePontoFocalDescription();
 });

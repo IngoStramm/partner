@@ -463,33 +463,54 @@ function partner_ponto_focal_shortcode($atts)
     $atendimento_display_name = get_the_author_meta('display_name', $atendimento_id);
     $atendimento_image = get_user_meta($atendimento_id, 'partner_user_image', true);
     $atendimento_description = get_user_meta($atendimento_id, 'partner_user_description', true);
-    $atendimento_instagram = get_user_meta($atendimento_id, 'partner_user_instagram', true);
-    $atendimento_linkedin = get_user_meta($atendimento_id, 'partner_user_linkedin', true);
+    $atendimento_meeting = get_user_meta($atendimento_id, 'partner_user_meeting', true);
+    $atendimento_email = get_user_meta($atendimento_id, 'partner_user_email', true);
+    $atendimento_phone = get_user_meta($atendimento_id, 'partner_user_phone', true);
 
     ob_start(); ?>
     <div class="partner-ponto-focal">
         <div class="partner-ponto-focal-header">
             <figure class="partner-ponto-focal-image">
-                <img src="<?php echo $atendimento_image; ?>" alt="<?php echo $atendimento_display_name; ?>" />
+                <img src="<?php echo $atendimento_image; ?>" alt="<?php echo $atendimento_display_name; ?>" width="64px" height="64px" />
             </figure>
             <h3 class="partner-ponto-focal-display-name"><?php echo $atendimento_display_name; ?></h3>
             <p class="partner-ponto-focal-subtitle"><?php echo $subtitle; ?></p>
         </div>
-        <div class="partner-ponto-focal-atendimento_description">
-            <?php echo $atendimento_description; ?>
-        </div>
-        <?php if (!empty($atendimento_instagram) || !empty($atendimento_linkedin)) { ?>
-            <div class="partner-ponto-focal-footer">
+        <?php if (!empty($atendimento_meeting) || !empty($atendimento_email) || !empty($atendimento_phone)) { ?>
+            <div class="partner-ponto-focal-links">
                 <ul>
-                    <?php if ($atendimento_instagram) { ?>
-                        <li><a href="<?php echo $atendimento_instagram; ?>" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                    <?php if ($atendimento_meeting) { ?>
+                        <li>
+                            <a href="<?php echo $atendimento_meeting; ?>" target="_blank">
+                                <i class="fas fa-calendar"></i>
+                                <span><?php _e('Marque uma reunião', 'partner'); ?></span>
+                            </a>
+                        </li>
                     <?php } ?>
-                    <?php if ($atendimento_linkedin) { ?>
-                        <li><a href="<?php echo $atendimento_linkedin; ?>" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+                    <?php if ($atendimento_email) { ?>
+                        <li>
+                            <a href="mailto:<?php echo $atendimento_email; ?>" target="_blank">
+                                <i class="fas fa-envelope"></i>
+                                <span><?php echo $atendimento_email; ?></span>
+                            </a>
+                        </li>
+                    <?php } ?>
+                    <?php if ($atendimento_phone) { ?>
+                        <?php $tel = preg_replace("/[^0-9]/", "", $atendimento_phone); ?>
+                        <li>
+                            <a href="tel:+55<?php echo $tel; ?>" target="_blank">
+                                <i class="fas fa-phone-alt"></i>
+                                <span><?php echo $atendimento_phone . ' (' . __('somente ligação', 'partner') . ')'; ?></span>
+                            </a>
+                        </li>
                     <?php } ?>
                 </ul>
             </div>
         <?php } ?>
+        <div class="partner-ponto-focal-atendimento_description" data-toggle-status="collapsed">
+            <?php echo $atendimento_description; ?>
+        </div>
+        <a href="#" class="toggle-descricao" data-toggle-status="collapsed"></a>
     </div>
 <?php return ob_get_clean();
 }

@@ -142,9 +142,23 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    function partner_phone_mask() {
+        const phone_inputs = document.querySelectorAll('.phone-mask');
+        for (let input of phone_inputs) {
+            if (typeof (input) === 'undefined' || input === null) {
+                return;
+            }
+            input.addEventListener('keyup', (e) => {
+                e.target.value = e.target.value.replace(/\D/g, '');
+                e.target.value = e.target.value.replace(/(^\d{2})(\d)/, '($1) $2');
+                e.target.value = e.target.value.replace(/(\d{4,5})(\d{4}$)/, '$1-$2');
+            });
+        }
+    }
     partner_set_term_event('chamado_urgencia', 'urgenciachecklist');
     partner_set_term_event('chamado_status', 'status-chamadochecklist');
     partner_set_term_event('chamado_etapa', 'etapachecklist');
     partner_delete_transient_evt();
     partner_cliente_selected();
+    partner_phone_mask();
 });
