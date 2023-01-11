@@ -299,93 +299,154 @@ const partner_view_chamado = (response, post_id, popup, popupContent) => {
     const sucessoCliente = chamado.sucesso_cliente.name;
     const contatoEmergencia = chamado.contato_emergencia.name;
 
-    const clienteH4 = document.createElement('h4');
-    clienteH4.classList.add('cliente-title');
-    clienteH4.textContent = currCliente.post_title;
-    popupContent.appendChild(clienteH4);
+    // const clienteH4 = document.createElement('h4');
+    // clienteH4.classList.add('cliente-title');
+    // clienteH4.textContent = currCliente.post_title;
+    // popupContent.appendChild(clienteH4);
 
-    const marcaP = document.createElement('p');
-    marcaP.classList.add('chamado-marca');
-    marcaP.innerHTML = `<strong>Marca:</strong> ${chamado.marca}`;
-    popupContent.appendChild(marcaP);
+    popupContent.classList.add('chamado-view');
 
-    const assuntoP = document.createElement('p');
-    assuntoP.classList.add('chamado-assunto');
-    assuntoP.innerHTML = `<strong>Assunto:</strong> ${chamado.assunto}`;
-    popupContent.appendChild(assuntoP);
+    const aside = document.createElement('aside');
+    aside.id = 'chamado-aside';
+    aside.classList.add('chamado-aside');
+
+    // col 1
+
+    const asideColumn1 = document.createElement('div');
+    asideColumn1.id = 'chamado-aside-column-1';
+    asideColumn1.classList.add('chamado-aside-column');
+
+    const marcaWrapper = document.createElement('div');
+    marcaWrapper.classList.add('chamado-marca');
+    marcaWrapper.innerHTML = `<h5>Marca</h5><h3>${chamado.marca}</h3>`;
+    asideColumn1.appendChild(marcaWrapper);
+
+    const assuntoWrapper = document.createElement('div');
+    assuntoWrapper.classList.add('chamado-assunto');
+    assuntoWrapper.innerHTML = `<h5>Assunto</h5><h3>${chamado.assunto}</h3>`;
+    asideColumn1.appendChild(assuntoWrapper);
+    aside.appendChild(asideColumn1);
+
+    // col 2
+
+    const asideColumn2 = document.createElement('div');
+    asideColumn2.id = 'chamado-aside-column-2';
+    asideColumn2.classList.add('chamado-aside-column');
+
+    const dataSolicitacaoWrapper = document.createElement('div');
+    dataSolicitacaoWrapper.classList.add('chamado-data-solicitacao');
+    const dataSolicitacaoFormatada = new Date(chamado.data_solicitacao);
+
+    let mesAbreviadoSolicitacao = dataSolicitacaoFormatada.toLocaleString('pt-BR', { month: 'short' });
+    mesAbreviadoSolicitacao = mesAbreviadoSolicitacao.slice(0, -1);
+
+    const diaNumericoSolicitacao = dataSolicitacaoFormatada.getDate();
+
+    const horaMinutoSolicitacao = dataSolicitacaoFormatada.toLocaleString('pt-BR', { hour: 'numeric', minute: 'numeric' });
+
+    dataSolicitacaoWrapper.innerHTML = `<h5>Data da Solicitação</h5><p><span class="dia">${diaNumericoSolicitacao}</span><span class="mes">${mesAbreviadoSolicitacao}</span><span class="hora">${horaMinutoSolicitacao}</span></p>`;
+
+    // dataSolicitacaoWrapper.innerHTML = `<h5>Data da Solicitação</h5><h3>${dataSolicitacaoFormatada.toLocaleDateString('pt-BR', { hour: 'numeric', minute: 'numeric', hour12: false })}</h3>`;
+    // dataSolicitacaoWrapper.innerHTML = `<h5>Data da Solicitação</h5><h3>${dataSolicitacaoExibicao}</h3>`;
+    asideColumn2.appendChild(dataSolicitacaoWrapper);
+
+    // const dataUltimaModificacaoWrapper = document.createElement('div');
+    // dataUltimaModificacaoWrapper.classList.add('chamado-data-ultima-modificacao');
+    // const dataUltimaModificacaoFormatada = new Date(chamado.post_modified);
+    // dataUltimaModificacaoWrapper.innerHTML = `<h5>Última atualização:</strong><h3>${dataUltimaModificacaoFormatada.toLocaleDateString('pt-BR', { hour: 'numeric', minute: 'numeric', hour12: false })}</h3>`;
+    // asideColumn2.appendChild(dataUltimaModificacaoWrapper);
+
+    const previsaoEntregaWrapper = document.createElement('div');
+    previsaoEntregaWrapper.classList.add('chamado-previsao-entrega');
+    const previsaoEntregaFormatada = new Date(chamado.data_entrega);
+
+    let mesAbreviadoEntrega = previsaoEntregaFormatada.toLocaleString('pt-BR', { month: 'short' });
+    mesAbreviadoEntrega = mesAbreviadoEntrega.slice(0, -1);
+
+    const diaNumericoEntrega = previsaoEntregaFormatada.getDate();
+
+    const horaMinutoEntrega = previsaoEntregaFormatada.toLocaleString('pt-BR', { hour: 'numeric', minute: 'numeric' });
+
+    previsaoEntregaWrapper.innerHTML = `<h5>Previsão de entrega</h5><p><span class="dia">${diaNumericoEntrega}</span><span class="mes">${mesAbreviadoEntrega}</span><span class="hora">${horaMinutoEntrega}</span></p>`;
+
+    // previsaoEntregaWrapper.innerHTML = `<h5>Previsão de entrega:</h5><h3>${previsaoEntregaFormatada.toLocaleDateString('pt-BR', { hour: 'numeric', minute: 'numeric', hour12: false })}</h3>`;
+    asideColumn2.appendChild(previsaoEntregaWrapper);
+
+    aside.appendChild(asideColumn2);
+
+    // col 3
+
+    const asideColumn3 = document.createElement('div');
+    asideColumn3.id = 'chamado-aside-column-3';
+    asideColumn3.classList.add('chamado-aside-column');
+
+    const tagsUrgenciaWrapper = document.createElement('div');
+    tagsUrgenciaWrapper.classList.add('chamado-urgencia');
+    tagsUrgenciaWrapper.innerHTML = `
+    <h5>Tags:</h5>
+    <ul class="chamado-tags">
+    <li><span class="chamado-label" style="background-color: ${currUrgencia.cor}">${currUrgencia.name}</span></li>
+    <li><span class="chamado-label" style="background-color: ${currStatus.cor}">${currStatus.name}</span></li>
+    </ul>`;
+    asideColumn3.appendChild(tagsUrgenciaWrapper);
+    aside.appendChild(asideColumn3);
+
+    popupContent.appendChild(aside);
+
+    // content
+
+    const content = document.createElement('div');
+    content.id = 'chamado-content';
+    content.classList.add('chamado-content');
 
     const detalhamentoSolicitacaoP = document.createElement('p');
     detalhamentoSolicitacaoP.classList.add('chamado-detalhamento-solicitacao-title');
-    detalhamentoSolicitacaoP.innerHTML = `<strong>Detalhes da Solicitação:</strong>`;
-    popupContent.appendChild(detalhamentoSolicitacaoP);
+    detalhamentoSolicitacaoP.innerHTML = `<h5>Solicitação</h5>`;
+    content.appendChild(detalhamentoSolicitacaoP);
 
     const detalhamentoSolicitacaoDiv = document.createElement('div');
     detalhamentoSolicitacaoDiv.classList.add('chamado-detalhamento-solicitacao-text');
     detalhamentoSolicitacaoDiv.innerHTML = chamado.detalhamento_solicitacao;
-    popupContent.appendChild(detalhamentoSolicitacaoDiv);
-
-    const dataSolicitacaoP = document.createElement('p');
-    dataSolicitacaoP.classList.add('chamado-data-solicitacao');
-    const dataSolicitacaoFormatada = new Date(chamado.data_solicitacao);
-    dataSolicitacaoP.innerHTML = `<strong>Data da Solicitação:</strong> ${dataSolicitacaoFormatada.toLocaleDateString('pt-BR', { hour: 'numeric', minute: 'numeric', hour12: false })}`;
-    popupContent.appendChild(dataSolicitacaoP);
-
-    const dataUltimaModificacaoP = document.createElement('p');
-    dataUltimaModificacaoP.classList.add('chamado-data-ultima-modificacao');
-    const dataUltimaModificacaoFormatada = new Date(chamado.post_modified);
-    dataUltimaModificacaoP.innerHTML = `<strong>Última atualização:</strong> ${dataUltimaModificacaoFormatada.toLocaleDateString('pt-BR', { hour: 'numeric', minute: 'numeric', hour12: false })}`;
-    popupContent.appendChild(dataUltimaModificacaoP);
-
-    const previsaoEntregaP = document.createElement('p');
-    previsaoEntregaP.classList.add('chamado-previsao-entrega');
-    const previsaoEntregaFormatada = new Date(chamado.data_entrega);
-    previsaoEntregaP.innerHTML = `<strong>Previsão de entrega:</strong> ${previsaoEntregaFormatada.toLocaleDateString('pt-BR', { hour: 'numeric', minute: 'numeric', hour12: false })}`;
-    popupContent.appendChild(previsaoEntregaP);
-
-    const urgenciaP = document.createElement('p');
-    urgenciaP.classList.add('chamado-urgencia');
-    urgenciaP.innerHTML = `<strong>Urgência:</strong> <span class="chamado-label" style="background-color: ${currUrgencia.cor}">${currUrgencia.name}</span>`;
-    popupContent.appendChild(urgenciaP);
-
-    if (profissional) {
-        const profissionalP = document.createElement('p');
-        profissionalP.classList.add('chamado-profissional');
-        profissionalP.innerHTML = `<strong>Profissional:</strong> ${profissional}`;
-        popupContent.appendChild(profissionalP);
-    }
-
-    if (currEtapa) {
-        const etapaP = document.createElement('p');
-        etapaP.classList.add('chamado-etapa');
-        etapaP.innerHTML = `<strong>Etapa:</strong> ${currEtapa.name}`;
-        popupContent.appendChild(etapaP);
-    }
-
-    const sucessoClienteP = document.createElement('p');
-    sucessoClienteP.classList.add('chamado-sucesso-cliente');
-    sucessoClienteP.innerHTML = `<strong>Sucesso do Cliente:</strong> ${sucessoCliente}`;
-    popupContent.appendChild(sucessoClienteP);
-
-    const contatoEmergenciaP = document.createElement('p');
-    contatoEmergenciaP.classList.add('chamado-contato-emergencia');
-    contatoEmergenciaP.innerHTML = `<strong>Contato de Emergência:</strong> ${contatoEmergencia}`;
-    popupContent.appendChild(contatoEmergenciaP);
-
-    const statusP = document.createElement('p');
-    statusP.classList.add('chamado-status');
-    statusP.innerHTML = `<strong>Status:</strong> <span class="chamado-label" style="background-color: ${currStatus.cor}">${currStatus.name}</span>`;
-    popupContent.appendChild(statusP);
+    content.appendChild(detalhamentoSolicitacaoDiv);
 
     const detalhamentoResolucaoP = document.createElement('p');
     detalhamentoResolucaoP.classList.add('chamado-detalhamento-resolucao-title');
-    detalhamentoResolucaoP.innerHTML = `<strong>Detalhes da Resolução:</strong>`;
-    popupContent.appendChild(detalhamentoResolucaoP);
+    detalhamentoResolucaoP.innerHTML = `<h5>Resolução</h5>`;
+    content.appendChild(detalhamentoResolucaoP);
 
     const detalhamentoResolucaoDiv = document.createElement('div');
     detalhamentoResolucaoDiv.classList.add('chamado-detalhamento-resolucao-text');
     detalhamentoResolucaoDiv.innerHTML = chamado.detalhamento_resolucao;
-    popupContent.appendChild(detalhamentoResolucaoDiv);
+    content.appendChild(detalhamentoResolucaoDiv);
 
+    if (profissional) {
+        const profissionalWrapper = document.createElement('div');
+        profissionalWrapper.classList.add('chamado-profissional');
+        profissionalWrapper.innerHTML = `<h5>Profissional</h5><p>${profissional}</p>`;
+        content.appendChild(profissionalWrapper);
+    }
+
+    if (currEtapa) {
+        const etapaWrapper = document.createElement('div');
+        etapaWrapper.classList.add('chamado-etapa');
+        etapaWrapper.innerHTML = `<h5>Etapa</h5><p>${currEtapa.name}</p>`;
+        content.appendChild(etapaWrapper);
+    }
+
+    const pontoFocalWrapper = document.createElement('div');
+    pontoFocalWrapper.classList.add('chamado-ponto-focal');
+
+    const pontoFocalTitle = document.createElement('h5');
+    pontoFocalTitle.innerHTML = 'Ponto Focal';
+    pontoFocalWrapper.appendChild(pontoFocalTitle);
+
+    const pontoFocalP = document.createElement('p');
+    pontoFocalP.innerHTML = `${sucessoCliente}, ${contatoEmergencia}.`;
+
+    pontoFocalWrapper.appendChild(pontoFocalP);
+    content.appendChild(pontoFocalWrapper);
+
+    popupContent.appendChild(content);
     popup.appendChild(popupContent);
 };
 

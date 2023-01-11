@@ -164,11 +164,22 @@ function partner_cronograma_output_single($clientes_data)
                 $qtd_contratada = isset($item['contratado']) ? (int)$item['contratado'] : 0;
                 $qtd_entregue = isset($item['entregue']) ? (int)$item['entregue'] : 0;
                 if ($ref == $item['ref']) {
-                    // partner_debug($item['entregue']);
-
+                    // partner_debug($qtd_contratada);
+                    // partner_debug($ref);
                     $resultados_por_servico_mes[$servico][$ref]['contratado'] += $qtd_contratada;
                     $resultados_por_servico_mes[$servico][$ref]['entregue'] += $qtd_entregue;
                     $resultados_por_servico_mes[$servico][$ref]['comentario'] = $item['comentario'];
+                    // if (!isset($resultados_por_servico_mes[$servico])) {
+                    //     // $soma_qtd_contratada = $qtd_contratada;
+                    // } else {
+                    //     $resultados_por_servico_mes[$servico] = array(
+                    //         $ref => array(
+                    //             'contratado' => $qtd_contratada,
+                    //             'entregue' => $qtd_entregue,
+                    //             'comentario' => $item['comentario'],
+                    //         )
+                    //     );
+                    // }
                 }
                 $total_contratado_por_servico += $qtd_contratada;
                 $total_entregue_por_servico += $qtd_entregue;

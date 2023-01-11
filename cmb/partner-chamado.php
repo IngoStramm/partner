@@ -18,7 +18,7 @@ function partner_register_chamado_metabox()
         'desc'    => esc_html__('Selecione qual é o cliente.', 'partner'),
         'id'      => 'chamado_post',
         'type'    => 'select',
-        'options' => function () {
+        'options_cb' => function () {
             $options_array = [];
             $options_array[] = __('Selecione uma opção', 'partner');
             $clientes = partner_list_post_clientes_with_id();
@@ -99,7 +99,7 @@ function partner_register_chamado_metabox()
         // 'desc'    => esc_html__('', 'partner'),
         'id'      => 'chamado_urgencia',
         'type' => 'select',
-        'options' => function () {
+        'options_cb' => function () {
             $options = [];
             $options[0] = esc_html__('Selecione uma opção', 'partner');
             $statuses = partner_get_urgencia_list();
@@ -118,7 +118,7 @@ function partner_register_chamado_metabox()
         // 'desc'    => esc_html__('', 'partner'),
         'id'      => 'chamado_status',
         'type' => 'select',
-        'options' => function () {
+        'options_cb' => function () {
             $options = [];
             $options[0] = esc_html__('Selecione uma opção', 'partner');
             $statuses = partner_get_status_list();
@@ -137,7 +137,7 @@ function partner_register_chamado_metabox()
         // 'desc'    => esc_html__('', 'partner'),
         'id'      => 'chamado_profissional',
         'type' => 'select',
-        'options' => 'partner_list_editor_users',
+        'options_cb' => 'partner_list_editor_users',
         'attributes' => array(
             'required' => 'required',
         ),
@@ -148,7 +148,7 @@ function partner_register_chamado_metabox()
         // 'desc'    => esc_html__('', 'partner'),
         'id'      => 'chamado_etapa',
         'type' => 'select',
-        'options' => function () {
+        'options_cb' => function () {
             $options = [];
             $options[0] = esc_html__('Selecione uma opção', 'partner');
             $etapas = partner_get_etapa_list();
