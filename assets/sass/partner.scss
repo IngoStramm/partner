@@ -3,6 +3,7 @@ $white: #fff;
 $success: #1fa750;
 $warning: #cfa00c;
 $danger: #dc3545;
+$danger-label: #ff453b;
 $roxo: #7023ba;
 $verde: #44bc8c;
 $verde-claro: #b3e0c9;
@@ -512,6 +513,16 @@ $bg-poup-content: #ebebeb;
             line-height: 1.2em;
             font-weight: 600;
             text-transform: uppercase;
+            .label {
+                display: inline-block;
+                vertical-align: middle;
+                padding: 0.5em 1em;
+                &.danger-label {
+                    background-color: $danger-label;
+                    color: $white;
+                    border-radius: 6px;
+                }
+            }
         }
     }
     .partner-ponto-focal-links {
@@ -541,14 +552,14 @@ $bg-poup-content: #ebebeb;
                     margin-right: 0.75em;
                 }
                 span {
-                    font-size: .875rem;
+                    font-size: 0.875rem;
                 }
             }
         }
     }
     .partner-ponto-focal-atendimento_description {
         padding-left: 25px;
-        transition: max-height .25s ease-in-out;
+        transition: max-height 0.25s ease-in-out;
         overflow: hidden;
         max-height: 0;
     }
@@ -609,6 +620,9 @@ $bg-poup-content: #ebebeb;
     .partner-ponto-focal-atendimento_description a:focus,
     .partner-ponto-focal-atendimento_description a:hover:focus {
         color: $roxo;
+    }
+    &.contato-emergencia {
+        opacity: 0.66;
     }
 }
 

@@ -456,7 +456,8 @@ function partner_ponto_focal_shortcode($atts)
         return;
 
     $meta_key = $type === 'sucesso' ? 'chamado_sucesso_cliente' : 'chamado_contato_emergencia';
-    $subtitle = $type === 'sucesso' ? __('Sucesso do Cliente', 'partner') : __('Contato de Emergência de sua conta', 'partner');
+    $subtitle = $type === 'sucesso' ? __('Sucesso do Cliente', 'partner') : '<span class="label danger-label">' . __('Contato de Emergência de sua conta', 'partner') . '</span>';
+    $wrapper_class = $type === 'sucesso' ? 'sucesso-cliente' : 'contato-emergencia';
 
     $atendimento_id = get_post_meta($selected_cliente_id, $meta_key, true);
 
@@ -468,7 +469,7 @@ function partner_ponto_focal_shortcode($atts)
     $atendimento_phone = get_user_meta($atendimento_id, 'partner_user_phone', true);
 
     ob_start(); ?>
-    <div class="partner-ponto-focal">
+    <div class="partner-ponto-focal <?php echo $wrapper_class; ?>">
         <div class="partner-ponto-focal-header">
             <figure class="partner-ponto-focal-image">
                 <img src="<?php echo $atendimento_image; ?>" alt="<?php echo $atendimento_display_name; ?>" width="64px" height="64px" />
