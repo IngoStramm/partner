@@ -680,8 +680,8 @@ function partner_save_chamado()
             $message .= '</body></html>';
             $headers = [];
             $headers[] = 'Content-Type: text/html; charset=UTF-8';
-            $domain = parse_url(get_site_url(), PHP_URL_HOST);
-            $headers[] = 'From: ' . get_bloginfo('name') . ' <noreply@' . $domain . '>';
+            // $domain = parse_url(get_site_url(), PHP_URL_HOST);
+            // $headers[] = 'From: ' . get_bloginfo('name') . ' <noreply@' . $domain . '>';
             wp_mail($user_email, $subject, $message, $headers);
         }
     }
