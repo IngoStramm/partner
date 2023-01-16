@@ -316,6 +316,11 @@ const partner_view_chamado = (response, post_id, popup, popupContent) => {
     asideColumn1.id = 'chamado-aside-column-1';
     asideColumn1.classList.add('chamado-aside-column');
 
+    const idWrapper = document.createElement('div');
+    idWrapper.classList.add('chamado-id');
+    idWrapper.innerHTML = `<h3>#${chamado.id}</h3>`;
+    asideColumn1.appendChild(idWrapper);
+
     const marcaWrapper = document.createElement('div');
     marcaWrapper.classList.add('chamado-marca');
     marcaWrapper.innerHTML = `<h5>Marca</h5><h3>${chamado.marca}</h3>`;
@@ -485,7 +490,7 @@ const partner_set_chamado_form = (response, post_id, popup, popupContent) => {
         const title_cliente_name = document.createElement('h4');
         for (const cliente of clientes) {
             if (chamado_cliente_id === cliente.ID) {
-                title_cliente_name.textContent = `${cliente.post_title}`;
+                title_cliente_name.textContent = `${cliente.post_title} #${response.chamado.id}`;
             }
         }
         form.appendChild(title_cliente_name);
