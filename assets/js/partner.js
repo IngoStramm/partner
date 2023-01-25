@@ -184,6 +184,8 @@ const triggerPopupChamados = function (mode, postId = null) {
     popupBackground.appendChild(popup);
     document.body.insertBefore(popupBackground, document.body.firstChild);
 
+    setAHrefToOpenInNewTab();
+
     const html = document.documentElement;
     const body = document.body;
     html.style.overflow = 'hidden';
@@ -235,6 +237,9 @@ const partner_get_chamado = (mode, post_id, popup, popupContent) => {
 
             wp.editor.initialize('chamado-detalhamento-solicitacao', settings);
             wp.editor.initialize('chamado-detalhamento-resolucao', settings);
+
+            setAHrefToOpenInNewTab();
+
 
             // tinymce.init({
             //     selector: '.chamado-textarea',
@@ -974,6 +979,24 @@ function togglePontoFocalDescription() {
                 togglePanel.style.maxHeight = 0;
             }
         });
+    }
+}
+
+function setAHrefToOpenInNewTab() {
+    const chamadoDetalhamentoSolicitacaoText = document.querySelector('.chamado-detalhamento-solicitacao-text');
+    if (typeof (chamadoDetalhamentoSolicitacaoText) !== 'undefined' && chamadoDetalhamentoSolicitacaoText !== null) {
+        const links = chamadoDetalhamentoSolicitacaoText.querySelectorAll('a');
+        for (const link of links) {
+            link.setAttribute('target', '_blank');
+        }
+    }
+
+    const chamadoDetalhamentoResolucaoText = document.querySelector('.chamado-detalhamento-resolucao-text');
+    if (typeof (chamadoDetalhamentoResolucaoText) !== 'undefined' && chamadoDetalhamentoResolucaoText !== null) {
+        const links = chamadoDetalhamentoResolucaoText.querySelectorAll('a');
+        for (const link of links) {
+            link.setAttribute('target', '_blank');
+        }
     }
 }
 
