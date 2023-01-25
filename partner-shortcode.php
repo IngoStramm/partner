@@ -387,7 +387,7 @@ function partner_ocultar_entregues_checkbox_shortcode($atts)
 
     ob_start(); ?>
     <label for="ocultar-entregues">
-        <input type="checkbox" id="ocultar-entregues" name="ocultar-entregues" value="1" />
+        <input type="checkbox" id="ocultar-entregues" name="ocultar-entregues" value="1" onload="partner_checkbox_loaded(this)" />
         <?php _e('Ocultar entregues', 'partner'); ?>
     </label>
     <script>
@@ -400,6 +400,21 @@ function partner_ocultar_entregues_checkbox_shortcode($atts)
                 e.preventDefault();
                 partner_ocultar_entregues(<?php echo $chamado_status_entregue_id; ?>);
             });
+
+            // Verifica se o filtro carregou e seleciona o checkbox quando tiver carregado
+            window.addEventListener('load', function() {
+                // loop para ter certeza que o filtro carregou
+                // precaução para caso o servidor demore a responder
+                const checkIfFiltroStatusExists = setInterval(() => {
+                    const filtroStatus = document.getElementById('filtro-status');
+                    if (typeof(filtroStatus) !== 'undefined' || filtroStatus !== null) {
+                        checkbox.checked = true;
+                        checkbox.dispatchEvent(new Event('change'));
+                        clearInterval(checkIfFiltroStatusExists);
+                    }
+                }, 100);
+            });
+
         }());
     </script>
 <?php return ob_get_clean();
