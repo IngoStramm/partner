@@ -734,8 +734,8 @@ function partner_array_to_csv_download($fields, $filename)
     foreach ($fields as $field) {
         fputcsv($outstream, $field);
     }
-    fclose($outstream);
-    return $file_url;
+    $success = fclose($outstream);
+    return array('success' => $success, 'file_url' => $file_url);
 }
 
 function partner_download_csv()
@@ -746,12 +746,7 @@ function partner_download_csv()
     //     array('Col #1', 'Col #2', 'Col #3', 'Col #4'), // this array is going to be the first row
     //     array(1, 2, 3, 4)
     // );
-    $file_url = partner_array_to_csv_download($fields, 'cronograma');
-    $response = array(
-        'success' => true,
-        'file_url' => $file_url,
-    );
-
+    $response = partner_array_to_csv_download($fields, 'cronograma');
     wp_send_json($response);
 }
 

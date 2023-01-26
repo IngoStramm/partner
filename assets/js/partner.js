@@ -1023,7 +1023,7 @@ const partner_dowload_csv = () => {
                     console.log('Erro');
                     return;
                 }
-                console.log('Sucesso', response.file_url);
+                console.log('Sucesso', response.success);
                 const downloadFile = response.file_url;
                 // abre em uma nova aba
                 window.open(downloadFile);
