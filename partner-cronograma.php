@@ -166,6 +166,18 @@ function partner_cronograma_output_single($clientes_data)
                 if ($ref == $item['ref']) {
                     // partner_debug($qtd_contratada);
                     // partner_debug($ref);
+                    if (!isset($resultados_por_servico_mes[$servico]))
+                        $resultados_por_servico_mes[$servico] = array();
+
+                    if (!isset($resultados_por_servico_mes[$servico][$ref]))
+                        $resultados_por_servico_mes[$servico][$ref] = array();
+                        
+                    if (!isset($resultados_por_servico_mes[$servico][$ref]['contratado']))
+                        $resultados_por_servico_mes[$servico][$ref]['contratado'] = 0;
+                        
+                    if (!isset($resultados_por_servico_mes[$servico][$ref]['entregue']))
+                    $resultados_por_servico_mes[$servico][$ref]['entregue'] = 0;
+
                     $resultados_por_servico_mes[$servico][$ref]['contratado'] += $qtd_contratada;
                     $resultados_por_servico_mes[$servico][$ref]['entregue'] += $qtd_entregue;
                     $resultados_por_servico_mes[$servico][$ref]['comentario'] = $item['comentario'];

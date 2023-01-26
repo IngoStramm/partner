@@ -721,6 +721,26 @@ function partner_add_chamado_edit_js()
 <?php
 }
 
+// Ref @link: https://stackoverflow.com/questions/16251625/how-to-create-and-download-a-csv-file-from-php-script
+function partner_array_to_csv_download($array, $filename = "export.csv", $delimiter = ";")
+{
+    header('Content-Type: application/csv');
+    header('Content-Disposition: attachment; filename="' . $filename . '";');
+
+    // open the "output" stream
+    // see http://www.php.net/manual/en/wrappers.php.php#refsect2-wrappers.php-unknown-unknown-unknown-descriptioq
+    $f = fopen('php://output', 'w');
+
+    foreach ($array as $line) {
+        fputcsv($f, $line, $delimiter);
+    }
+}
+
+add_action('wp_ajax_partner_array_to_csv_download', 'partner_array_to_csv_download');
+add_action('wp_ajax_nopriv_partner_array_to_csv_download', 'partner_array_to_csv_download');
+
+
+
 add_action('wp_head', 'partner_add_chamado_edit_js');
 
 // add_action('wp_head', function () {
