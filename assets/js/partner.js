@@ -1007,7 +1007,6 @@ const partner_dowload_csv = () => {
     }
     btn.addEventListener('click', (e) => {
         e.preventDefault();
-        console.log('clicked');
         const data = new FormData();
         data.append('action', 'partner_download_csv');
         let url = ajax_object.ajax_url;
