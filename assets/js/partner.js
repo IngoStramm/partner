@@ -1000,8 +1000,47 @@ function setAHrefToOpenInNewTab() {
     }
 }
 
+const partner_dowload_csv = () => {
+    const btn = document.getElementById('partner-download-csv');
+    if (typeof (btn) === 'undefined' || btn === null) {
+        return;
+    }
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('clicked');
+        const data = new FormData();
+        data.append('action', 'partner_download_csv');
+        let url = ajax_object.ajax_url;
+
+        const options = {
+            method: 'POST',
+            body: data
+        };
+        fetch(url, options)
+            .then(response => response.json())
+            .then(response => {
+                if (!response.success) {
+                    console.log('Erro');
+                    return;
+                }
+                console.log('Sucesso', response.file_url);
+                const downloadFile = response.file_url;
+                // abre em uma nova aba
+                window.open(downloadFile);
+                // abre na mesma aba
+                // window.location.href = downloadFile;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    });
+
+};
+
+
 document.addEventListener('DOMContentLoaded', function () {
     popupCronogramaInit();
     popupChamadosInit();
     togglePontoFocalDescription();
+    partner_dowload_csv();
 });

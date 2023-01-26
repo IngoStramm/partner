@@ -722,22 +722,41 @@ function partner_add_chamado_edit_js()
 }
 
 // Ref @link: https://stackoverflow.com/questions/16251625/how-to-create-and-download-a-csv-file-from-php-script
-function partner_array_to_csv_download($array, $filename = "export.csv", $delimiter = ";")
+function partner_array_to_csv_download($fields, $filename)
 {
-    header('Content-Type: application/csv');
-    header('Content-Disposition: attachment; filename="' . $filename . '";');
-
-    // open the "output" stream
-    // see http://www.php.net/manual/en/wrappers.php.php#refsect2-wrappers.php-unknown-unknown-unknown-descriptioq
-    $f = fopen('php://output', 'w');
-
-    foreach ($array as $line) {
-        fputcsv($f, $line, $delimiter);
+    $date = wp_date('d-m-Y-H\h-i\m-s\s');
+    $path = wp_upload_dir();
+    $files_folder = $path['basedir'] . '\\cronogramas\\';
+    $files_url = $path['baseurl'] . '/cronogramas/';
+    $file_dir = $files_folder . $filename . '_' . $date . '.csv';
+    $file_url = $files_url . $filename . '_' . $date . '.csv';
+    $outstream = fopen($file_dir, 'w');
+    foreach ($fields as $field) {
+        fputcsv($outstream, $field);
     }
+    fclose($outstream);
+    return $file_url;
 }
 
-add_action('wp_ajax_partner_array_to_csv_download', 'partner_array_to_csv_download');
-add_action('wp_ajax_nopriv_partner_array_to_csv_download', 'partner_array_to_csv_download');
+function partner_download_csv()
+{
+    $user_id = get_current_user_id();
+    $fields = get_user_meta($user_id, 'partner_cronograma_csv', true);
+    // $fields = array(
+    //     array('Col #1', 'Col #2', 'Col #3', 'Col #4'), // this array is going to be the first row
+    //     array(1, 2, 3, 4)
+    // );
+    $file_url = partner_array_to_csv_download($fields, 'cronograma');
+    $response = array(
+        'success' => true,
+        'file_url' => $file_url,
+    );
+
+    wp_send_json($response);
+}
+
+add_action('wp_ajax_partner_download_csv', 'partner_download_csv');
+add_action('wp_ajax_nopriv_partner_download_csv', 'partner_download_csv');
 
 
 

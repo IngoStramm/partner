@@ -720,6 +720,27 @@ $bg-poup-content: #ebebeb;
     }
 }
 
+.download-csv-button {
+    font-family: inherit;
+    font-size: .8em;
+    font-weight: 500;
+    color: $white;
+    background-color: $azul-escuro;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    transition: all .3s ease;
+    margin-bottom: 20px;
+    &:active,
+    &:hover,
+    &:focus,
+    &:hover:focus {
+        background-color: $azul;
+        cursor: pointer;
+        border: none;
+    }
+}
+
 @media (min-width: 768px) {
     .partner-popup-wrapper {
         .partner-popup {

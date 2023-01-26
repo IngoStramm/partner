@@ -171,12 +171,12 @@ function partner_cronograma_output_single($clientes_data)
 
                     if (!isset($resultados_por_servico_mes[$servico][$ref]))
                         $resultados_por_servico_mes[$servico][$ref] = array();
-                        
+
                     if (!isset($resultados_por_servico_mes[$servico][$ref]['contratado']))
                         $resultados_por_servico_mes[$servico][$ref]['contratado'] = 0;
-                        
+
                     if (!isset($resultados_por_servico_mes[$servico][$ref]['entregue']))
-                    $resultados_por_servico_mes[$servico][$ref]['entregue'] = 0;
+                        $resultados_por_servico_mes[$servico][$ref]['entregue'] = 0;
 
                     $resultados_por_servico_mes[$servico][$ref]['contratado'] += $qtd_contratada;
                     $resultados_por_servico_mes[$servico][$ref]['entregue'] += $qtd_entregue;
@@ -224,9 +224,10 @@ function partner_cronograma_output_single($clientes_data)
         }
     }
 
-
     $output = '';
     $output .= '<div class="table-wrap">';
+    $output .= '<button id="partner-download-csv" class="download-csv-button">' . __('Baixar CSV', 'partner') . '</button>';
+
     $output .= '<table class="table">';
     $output .= '<thead>';
 
@@ -238,6 +239,11 @@ function partner_cronograma_output_single($clientes_data)
 
     $output .= '</tr>';
     $output .= '<tr>';
+    $csv_row_count = 0;
+    $csv = array();
+    $csv[$csv_row_count] = array();
+
+    $csv[$csv_row_count][] = __('Contratados VS Realizados', 'partner');
 
     $output .= '<th class="row-title">';
     $output .= __('Contratados VS Realizados', 'partner');
@@ -272,11 +278,17 @@ function partner_cronograma_output_single($clientes_data)
         $output .= '</div><div>';
         $output .= $ref;
         $output .= '</div></th>';
+
+        $csv[$csv_row_count][] = $mes_ano['mes'] . '/' . $ref . ' ' . __('Contratado', 'partner');
+        $csv[$csv_row_count][] = $mes_ano['mes'] . '/' . $ref . ' ' . __('Entregue', 'partner');
     }
 
     $output .= '<th class="total-geral" colspan="2">';
     $output .= __('Geral', 'partner');
     $output .= '</th>';
+
+    $csv[$csv_row_count][] = __('Geral Contratado', 'partner');
+    $csv[$csv_row_count][] = __('Geral Entregue', 'partner');
 
     $output .= '</tr>';
 
@@ -285,8 +297,12 @@ function partner_cronograma_output_single($clientes_data)
     $output .= '<tbody>';
 
     $servico_slug = '';
+
+    $csv_row_count++;
     foreach ($servicos_unicos as $servico) {
         // criar um slug a partir do texto em $servico e salvar em servico_slug
+        $csv_comentarios = array();
+
         $servico_slug = sanitize_title($servico);
         $output .= '<tr>';
 
@@ -294,6 +310,8 @@ function partner_cronograma_output_single($clientes_data)
         $output .= '<span class="tooltip-text">' . $servico . '</span>';
         $output .= '<span class="crop-text">' . $servico . '</span>';
         $output .= '</div></td>';
+
+        $csv[$csv_row_count][] = $servico;
 
         foreach ($datas as $ref => $data) {
             $resultado_contratado = $resultados_por_servico_mes[$servico][$ref]['contratado'] ?? '';
@@ -320,8 +338,12 @@ function partner_cronograma_output_single($clientes_data)
             if ($resultado_comentario) {
                 $output .= '</a>';
                 $output .= '<div id="partner-popup-' . $servico_slug . '-' . $ref . '" class="partner-content-popup">' . $resultado_comentario . '</div>';
+                $csv_comentarios[] = $resultado_comentario;
             }
             $output .= '</div></td>';
+
+            $csv[$csv_row_count][] = $resultado_contratado !== 0 && (empty($resultado_contratado) || is_null($resultado_contratado)) ? '0' : $resultado_contratado;
+            $csv[$csv_row_count][] = $resultado_entregue !== 0 && (empty($resultado_entregue) || is_null($resultado_entregue)) ? '0' : $resultado_entregue;
         }
         //Total de contratados por Serviço
         $total_contratado = $resultados_por_servico_mes[$servico]['total_contratado'] ?? '';
@@ -330,17 +352,32 @@ function partner_cronograma_output_single($clientes_data)
         $output .= $total_contratado;
         $output .= '</div></td>';
 
+        $csv[$csv_row_count][] = $total_contratado;
+
         //Total de entregues por Serviço
         $output .= '<td class="total-entregue"><div>';
         $output .= $total_entregue;
         $output .= '</div></td>';
 
+        $csv[$csv_row_count][] = $total_entregue;
+        foreach($csv_comentarios as $comentario) {
+            // $csv[0][] = __('Comentário', 'partner');
+            // $csv[$csv_row_count][] = $comentario;
+        }
+
         $output .= '<tr>';
+        $csv_row_count++;
     }
 
     $output .= '</tbody>';
 
     $output .= '</table>';
     $output .= '</div>';
+    // partner_debug($csv);
+
+    $user_id = get_current_user_id();
+    update_user_meta($user_id, 'partner_cronograma_csv', $csv);
+    // $partner_cronograma_csv = get_user_meta($user_id, 'partner_cronograma_csv', true);
+    // partner_debug($partner_cronograma_csv);
     return $output;
 }
