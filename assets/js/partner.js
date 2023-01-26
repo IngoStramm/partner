@@ -1025,6 +1025,7 @@ const partner_dowload_csv = () => {
                 }
                 console.log('Sucesso', response.success);
                 console.log('file_dir', response.file_dir);
+                console.log('outstream', response.outstream);
                 const downloadFile = response.file_url;
                 // abre em uma nova aba
                 window.open(downloadFile);

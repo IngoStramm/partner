@@ -735,7 +735,7 @@ function partner_array_to_csv_download($fields, $filename)
         fputcsv($outstream, $field);
     }
     $success = fclose($outstream);
-    return array('success' => $success, 'file_url' => $file_url, 'file_dir' => $file_dir);
+    return array('success' => $success, 'file_url' => $file_url, 'file_dir' => $file_dir, 'outstream' => json_encode($outstream));
 }
 
 function partner_download_csv()
