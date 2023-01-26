@@ -742,11 +742,19 @@ function partner_download_csv()
 {
     $user_id = get_current_user_id();
     $fields = get_user_meta($user_id, 'partner_cronograma_csv', true);
-    // $fields = array(
-    //     array('Col #1', 'Col #2', 'Col #3', 'Col #4'), // this array is going to be the first row
-    //     array(1, 2, 3, 4)
-    // );
-    $response = partner_array_to_csv_download($fields, 'cronograma');
+
+    $user_id = get_current_user_id();
+    if (!$user_id)
+        return;
+
+    $post_id = get_user_meta($user_id, 'partner_user_cliente', true);
+    if (!$post_id)
+        return;
+
+    $post = get_post($post_id);
+    $filename = $post->post_name;
+
+    $response = partner_array_to_csv_download($fields, $filename);
     wp_send_json($response);
 }
 
@@ -773,15 +781,9 @@ add_action('partner_empty_cronogramas_folder', 'partner_remove_old_files');
 add_action('wp_head', 'partner_add_chamado_edit_js');
 
 // add_action('wp_head', function () {
-//     $args = array(
-//         'meta_key' => 'partner_user_cliente',
-//         'meta_value' => '42'
-//     );
-
-//     $users = get_users($args);
-//     foreach ($users as $user) {
-//         $user_id = $user->ID;
-//         $user_email = $user->user_email;
-//         partner_debug($user_email);
-//     }
+//     $user_id = get_current_user_id();
+//     $post_id = get_user_meta($user_id, 'partner_user_cliente', true);
+//     $post = get_post($post_id);
+//     $slug = $post->post_name;
+//     partner_debug($slug);
 // });
