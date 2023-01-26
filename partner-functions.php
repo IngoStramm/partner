@@ -726,8 +726,8 @@ function partner_array_to_csv_download($fields, $filename)
 {
     $date = wp_date('d-m-Y-H\h-i\m-s\s');
     $path = wp_upload_dir();
-    $files_folder = $path['basedir'] . '\\cronogramas\\';
-    $files_url = $path['baseurl'] . '/cronogramas/';
+    $files_folder = $path['basedir'] . '\/cronogramas\/';
+    $files_url = $path['baseurl'] . '\/cronogramas\/';
     $file_dir = $files_folder . $filename . '_' . $date . '.csv';
     $file_url = $files_url . $filename . '_' . $date . '.csv';
     $outstream = fopen($file_dir, 'w');
