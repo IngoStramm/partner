@@ -753,7 +753,22 @@ function partner_download_csv()
 add_action('wp_ajax_partner_download_csv', 'partner_download_csv');
 add_action('wp_ajax_nopriv_partner_download_csv', 'partner_download_csv');
 
+function partner_remove_old_files()
+{
+    $path = wp_upload_dir();
+    $files_folder = $path['basedir'] . '/cronogramas/';
+    $files = glob($files_folder . '*');
+    foreach ($files as $file) {
+        if (is_file($file)) {
+            // verifica se o arquivo existe a mais de 30 minutos
+            if (filemtime($file) < time() - 30 * 60) {
+                unlink($file);
+            }
+        }
+    }
+}
 
+add_action('partner_empty_cronogramas_folder', 'partner_remove_old_files');
 
 add_action('wp_head', 'partner_add_chamado_edit_js');
 
