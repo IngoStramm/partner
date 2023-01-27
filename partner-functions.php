@@ -673,11 +673,24 @@ function partner_save_chamado()
         $users = get_users($args);
         foreach ($users as $user) {
             $user_email = $user->user_email;
-            $subject = sprintf(__('Chamado atualizado (%s)', 'partner'), $chamado_marca);
-            $message = '<h3>' . sprintf(__('Olá, %s!', 'partner'), $user->display_name) . '</h3>';
-            $message .= '<p>' . sprintf(__('O chamado da marca "<strong>%s</strong>" com o assunto "<strong>%s</strong>" foi atualizado.', 'partner'), $chamado_marca, $chamado_assunto) . '</p>';
-            $message .= '<p>' . sprintf(__('Acesse a sua conta do <a href="%s" target="_blank">%s</a> para visualizá-lo.', 'partner'), get_site_url(), get_bloginfo('name')) . '</p>';
+            $subject = sprintf(__('Chamado #%s atualizado (%s)', 'partner'), $post_id, $chamado_marca);
+
+            $message = '';
+
+            $message .= '<img src="https://d335luupugsy2.cloudfront.net/cms/files/237895/1670860061/$j3ppg71qv1b"
+            width="564" border="0" />';
+
+            $message .= '<h3 style="max-width: 564px; color: #cb1ff9; font-family: verdana, sans-serif;">' . sprintf(__('Olá, %s!', 'partner'), $user->display_name) . '</h3>';
+
+            $message .= '<p style="max-width: 564px; font-weight: 400; font-family: verdana, sans-serif; color: #6552f6;">' . sprintf(__('O chamado <strong>#%s</strong> da marca "<strong>%s</strong>" com o assunto "<strong>%s</strong>" foi atualizado.', 'partner'), $post_id, $chamado_marca, $chamado_assunto) . '</p>';
+
+            $message .= '<p style="max-width: 564px; font-weight: 400; font-family: verdana, sans-serif; color: #6552f6;">' . sprintf(__('Acesse a sua conta do <a href="%s" target="_blank" style="font-family: tahoma,sans-serif; font-size: 20px; font-weight: 600; color: #6552f6;">%s</a> para visualizá-lo.', 'partner'), get_site_url(), get_bloginfo('name')) . '</p>';
+
+            $message .= '<img src="https://d335luupugsy2.cloudfront.net/cms/files/237895/1636562299/$luqzmdg9gg"
+            width="564" border="0" style="-ms-interpolation-mode:bicubic; border:0; line-height:100%; outline:none; display: block; max-width: 564px; height: auto;" />';
+
             $message .= '</body></html>';
+
             $headers = [];
             $headers[] = 'Content-Type: text/html; charset=UTF-8';
             // $domain = parse_url(get_site_url(), PHP_URL_HOST);
