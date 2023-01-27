@@ -719,23 +719,24 @@ $bg-poup-content: #ebebeb;
         opacity: 0.66;
     }
 }
-
+.elementor-kit-5 button.download-csv-button,
 .download-csv-button {
     font-family: inherit;
     font-size: .8em;
     font-weight: 500;
-    color: $white;
-    background-color: $azul-escuro;
-    padding: 10px 20px;
+    color: $black;
+    background-color: $cinza;
+    padding: 10px 40px;
     border: none;
     border-radius: 10px;
     transition: all .3s ease;
-    margin-bottom: 20px;
+    margin-top: 20px;
     &:active,
     &:hover,
     &:focus,
     &:hover:focus {
-        background-color: $azul;
+        background-color: $cinza-escuro;
+        color: $cinza-claro;
         cursor: pointer;
         border: none;
     }

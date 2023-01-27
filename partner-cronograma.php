@@ -226,7 +226,6 @@ function partner_cronograma_output_single($clientes_data)
 
     $output = '';
     $output .= '<div class="table-wrap">';
-    $output .= '<button id="partner-download-csv" class="download-csv-button">' . __('Baixar CSV', 'partner') . '</button>';
 
     $output .= '<table class="table">';
     $output .= '<thead>';
@@ -360,7 +359,7 @@ function partner_cronograma_output_single($clientes_data)
         $output .= '</div></td>';
 
         $csv[$csv_row_count][] = $total_entregue;
-        foreach($csv_comentarios as $comentario) {
+        foreach ($csv_comentarios as $comentario) {
             // $csv[0][] = __('Comentário', 'partner');
             // $csv[$csv_row_count][] = $comentario;
         }
@@ -372,6 +371,9 @@ function partner_cronograma_output_single($clientes_data)
     $output .= '</tbody>';
 
     $output .= '</table>';
+
+    $output .= '<button id="partner-download-csv" class="download-csv-button">' . __('Download Formato CSV', 'partner') . '</button>';
+
     $output .= '</div>';
     // partner_debug($csv);
 
