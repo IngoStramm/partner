@@ -196,12 +196,12 @@ const triggerPopupChamados = function (mode, postId = null) {
         changeSortSelect();
     });
 
-    popupBackground.addEventListener('click', (e) => {
-        if (e.target.classList.contains('partner-popup-wrapper')) {
-            closePopup();
-            changeSortSelect();
-        }
-    });
+    // popupBackground.addEventListener('click', (e) => {
+    //     if (e.target.classList.contains('partner-popup-wrapper')) {
+    //         closePopup();
+    //         changeSortSelect();
+    //     }
+    // });
 
     const chamado = partner_get_chamado(mode, postId, popup, popupContent);
 
