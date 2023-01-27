@@ -526,7 +526,7 @@ $bg-poup-content: #ebebeb;
         flex-direction: column;
         gap: 10px;
         &#chamado-notificacao-label {
-            border: solid $azul 2px;
+            border: solid $azul 1px;
             padding: 5px 20px;
             border-radius: 7px;
             font-size: 1.2em;
@@ -557,6 +557,7 @@ $bg-poup-content: #ebebeb;
         border: none;
         transition: all 0.3s ease;
         border-radius: 7px;
+        font-weight: 600;
         &:active,
         &:focus,
         &:hover,
