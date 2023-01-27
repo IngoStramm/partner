@@ -525,6 +525,25 @@ $bg-poup-content: #ebebeb;
         display: flex;
         flex-direction: column;
         gap: 10px;
+        &#chamado-notificacao-label {
+            border: solid $azul 2px;
+            padding: 5px 20px;
+            border-radius: 7px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.05s;
+            &:has(input[type="checkbox"]:checked) {
+                background-color: $azul;
+                color: $white;
+            }
+            input[type="checkbox"] {
+                cursor: pointer;
+                &:checked {
+                    outline: solid 1px $white;
+                }
+            }
+        }
         &:first-child {
             grid-column: 1 / 2;
         }
@@ -722,14 +741,14 @@ $bg-poup-content: #ebebeb;
 .elementor-kit-5 button.download-csv-button,
 .download-csv-button {
     font-family: inherit;
-    font-size: .8em;
+    font-size: 0.8em;
     font-weight: 500;
     color: $black;
     background-color: $cinza;
     padding: 10px 40px;
     border: none;
     border-radius: 10px;
-    transition: all .3s ease;
+    transition: all 0.3s ease;
     margin-top: 20px;
     &:active,
     &:hover,
