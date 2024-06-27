@@ -114,13 +114,12 @@ module.exports = function (grunt) {
                 cwd: '../../',
                 src: [
                     '../**',
-                    '!../src/**',
+                    '!../src/node_modules/**',
                     '!../dist/**',
                     '!../**.md',
                     '!../**.txt',
                     '!<%= dirs.sass %>/**',
                     '!../**.zip',
-                    '!../info.json',
                     '<%= dirs.js %>/partner.min.js'
                 ],
                 dest: '../dist/<%= pkg.name %>.zip'
