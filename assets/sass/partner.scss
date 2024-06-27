@@ -14,12 +14,14 @@ $amarelo: #fbbc04;
 $cinza: #e8e8e8;
 $cinza-claro: #e6e6e6;
 $cinza-escuro: #616161;
+$cinza-tabela: hsla(0,0%,50.2%,.0705882353);
 $prata: #f6f6f6;
 $borda: #808080;
 $borda-style: 4px solid $white;
 $wide-th-width: 200px;
 $bg-popup-wrapper: rgba(255, 255, 255, 0.85);
 $bg-poup-content: #ebebeb;
+$link-vermelho: #D26D82;
 @mixin bg-gradient {
     background: rgb(116, 53, 255);
     background: linear-gradient(90deg, rgba(116, 53, 255, 1) 0%, rgba(49, 107, 255, 1) 100%);
@@ -242,6 +244,27 @@ $bg-poup-content: #ebebeb;
                 background-color: $verde-claro;
                 color: $black;
                 padding-inline: 1ch;
+            }
+        }
+    }
+    &.table-aprovacao {
+        width: 100%;
+        thead {
+            tr {
+                th {
+                    font-size: 1em;
+                }
+            }
+        }
+        tbody {
+            tr {
+                td {
+                    background-color: $cinza-tabela;
+                    border: 4px solid white;
+                    a {
+                        color: $link-vermelho;
+                    }
+                }
             }
         }
     }

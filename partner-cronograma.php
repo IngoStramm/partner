@@ -383,3 +383,49 @@ function partner_cronograma_output_single($clientes_data)
     // partner_debug($partner_cronograma_csv);
     return $output;
 }
+
+function partner_aprovacao_output_all($rows)
+{
+    if (is_null($rows) || empty($rows))
+        return;
+
+    if (!is_array($rows))
+        return $rows;
+
+    $output = '';
+    $output .= '<div class="table-wrap">';
+    $output .= '<table class="table table-aprovacao">';
+    $output .= '<thead>';
+    $theaders = array_shift($rows);
+
+    foreach ($theaders as $k => $value) {
+        if (
+            $k === 4 ||
+            $k === 7 ||
+            $k === 8
+        ) {
+            $output .= '<th>' . $value . '</th>';
+        }
+    }
+    $output .= '</thead>';
+    $output .= '<tbody>';
+    asort($rows);
+    foreach ($rows as $row) {
+        $output .= '<tr>';
+        foreach ($row as $k => $value) {
+            if (
+                $k === 4 ||
+                $k === 7
+            ) {
+                $output .= '<td>' . $value . '</td>';
+            } else if ($k === 8) {
+                $output .= '<td>' . preg_replace('/((http|https|ftp):\/\/[\w?=&.\/-;#~%-]+(?![\w\s?&.\/;#~%"=-]*>))/', '<p><a href="$1" target="_blank">$1</a></p>', $value) . '</td>';
+            }
+        }
+        $output .= '</tr>';
+    }
+    $output .= '</tbody>';
+    $output .= '</table>';
+    $output .= '</div>';
+    return $output;
+}
