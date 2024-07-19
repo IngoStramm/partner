@@ -1038,10 +1038,33 @@ const partner_dowload_csv = () => {
 
 };
 
+function partner_aprovacao_notification() {
+    const rows = ajax_object.aprovacao_notificacao;
+    if (rows <= 0) {
+        return;
+    }
+    const menuItem = document.querySelector('.item-aprovacao');
+    if (typeof menuItem === undefined || !menuItem) {
+        return;
+    }
+    const jetNavLinkText = menuItem.querySelector('.jet-nav-link-text');
+    if (typeof jetNavLinkText === undefined || !jetNavLinkText) {
+        return;
+    }
+    const notificationSpan = document.createElement('span');
+    notificationSpan.classList.add('aprovacao-notificao');
+    notificationSpan.innerHTML = rows;
+    jetNavLinkText.appendChild(notificationSpan);
+}
+
 
 document.addEventListener('DOMContentLoaded', function () {
     popupCronogramaInit();
     popupChamadosInit();
     togglePontoFocalDescription();
     partner_dowload_csv();
+    partner_aprovacao_notification();
+});
+
+window.addEventListener('load', (event) => {
 });

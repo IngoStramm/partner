@@ -534,40 +534,13 @@ add_shortcode('partner_pf', 'partner_ponto_focal_shortcode');
 
 function partner_show_aprovacao_shortcode()
 {
-    // pegar o ID do usuário
-    $user_id = get_current_user_id();
-    // verifica se o usuário não existe
-    if (!$user_id)
-        return;
-
-    // pegar o meta dado 'partner_user_cliente' do usuário
-    $selected_cliente_id = get_user_meta($user_id, 'partner_user_cliente', true);
-
-    if (!$selected_cliente_id)
-        return;
-
-    $googlesheet_url = partner_get_option('googlesheet_url');
-    if (!$googlesheet_url || !is_string($googlesheet_url))
-        return;
-
-    $googlesheet_url = html_entity_decode($googlesheet_url);
-    $rows = partner_return_googlesheet_data($googlesheet_url);
-    $cliente_data = [];
-    $theaders = $rows[0];
-    $rows = array_slice($rows, 1);
-    $selected_cliente = get_post_meta($selected_cliente_id, 'cliente_planilha', true);
-    foreach ($rows as $row) {
-        if ($row[0] === $selected_cliente) {
-            if ($row[7] === 'Aprovação') {
-                $cliente_data[] = $row;
-            }
-        }
-    }
-    if(count($cliente_data) <= 0) {
+    $cliente_obj = partner_get_cliente_data();
+    $cliente_data = $cliente_obj->rows;
+    if (count($cliente_data) <= 0) {
         return sprintf('<h6>%s</h6>', __('Você não possui nenhum serviço em aprovação neste momento.', 'partner'));
     }
 
-    array_unshift($cliente_data, $theaders);
+    array_unshift($cliente_data, $cliente_obj->headers);
 
     return partner_aprovacao_output_all($cliente_data);
 }

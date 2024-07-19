@@ -14,21 +14,29 @@ $amarelo: #fbbc04;
 $cinza: #e8e8e8;
 $cinza-claro: #e6e6e6;
 $cinza-escuro: #616161;
-$cinza-tabela: hsla(0,0%,50.2%,.0705882353);
+$cinza-tabela: hsla(0, 0%, 50.2%, 0.0705882353);
 $prata: #f6f6f6;
 $borda: #808080;
 $borda-style: 4px solid $white;
 $wide-th-width: 200px;
 $bg-popup-wrapper: rgba(255, 255, 255, 0.85);
 $bg-poup-content: #ebebeb;
-$link-vermelho: #D26D82;
+$link-vermelho: #d26d82;
 @mixin bg-gradient {
     background: rgb(116, 53, 255);
-    background: linear-gradient(90deg, rgba(116, 53, 255, 1) 0%, rgba(49, 107, 255, 1) 100%);
+    background: linear-gradient(
+        90deg,
+        rgba(116, 53, 255, 1) 0%,
+        rgba(49, 107, 255, 1) 100%
+    );
 }
 @mixin bg-gradient-hover {
     background: rgb(116, 53, 255);
-    background: linear-gradient(100%, rgba(116, 53, 255, 1) 0%, rgba(49, 107, 255, 1) 90deg);
+    background: linear-gradient(
+        100%,
+        rgba(116, 53, 255, 1) 0%,
+        rgba(49, 107, 255, 1) 90deg
+    );
 }
 
 .table-wrap {
@@ -785,6 +793,32 @@ $link-vermelho: #D26D82;
     }
 }
 
+.menu-item {
+    .aprovacao-notificao {
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 0.8em;
+        width: 1.5em;
+        height: 1.5em;
+        line-height: 1.7em;
+        margin-left: 0.7em;
+        text-align: center;
+        border-radius: 50%;
+        background-color: var(--e-global-color-secondary);
+        color: var(--e-global-color-22d86b3);
+        &::before {
+            display: none !important;
+        }
+    }
+    &:hover,
+    &.current-menu-item {
+        .aprovacao-notificao {
+            background-color: var(--e-global-color-22d86b3);
+            color: var(--e-global-color-secondary);
+        }
+    }
+}
+
 @media (min-width: 768px) {
     .partner-popup-wrapper {
         .partner-popup {
@@ -860,7 +894,9 @@ $link-vermelho: #D26D82;
         #partner-chamado-cliente {
             grid-column: 1 / -1;
         }
-        #partner-chamado-cliente:has(+ #partner-chamado-marca + #chamado-button) {
+        #partner-chamado-cliente:has(
+                + #partner-chamado-marca + #chamado-button
+            ) {
             grid-area: titulo;
         }
         #chamado-notificacao-label {
