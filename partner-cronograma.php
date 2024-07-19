@@ -98,10 +98,11 @@ function partner_cronograma_output_single($clientes_data)
         $ref = $row[2];
         $ano = $row[3];
         $servico = $row[4];
-        $contratado = $row[5];
-        $entregue = $row[6];
-        $status = $row[7];
-        $comentario = $row[8];
+        $servico_full_name = $row[5] ? $row[4] . ' - ' . $row[5] : $row[4];
+        $contratado = $row[6];
+        $entregue = $row[7];
+        $status = $row[8];
+        $comentario = $row[9];
 
         // se o texto do $comentario possuir URLs, adicionar tag <a> nas URLs
         // incluir símbolos no preg_replace para que não sejam interpretados como regex
@@ -111,6 +112,9 @@ function partner_cronograma_output_single($clientes_data)
         // $row['servico']['ref'] = [$contratado, $entregue];
 
         $servicos[] = $servico;
+        $servicos_full_name[] = $servico_full_name;
+        // parei aqui
+
         $datas[$ref] = $data;
         $meses_anos[$ref] = ['mes' => $data, 'ano' => $ano];
         // $anos[] = array('id' => $index, $theaders[3] => $row[3]);
@@ -124,11 +128,13 @@ function partner_cronograma_output_single($clientes_data)
     }
 
     $servicos_unicos = [];
+    $servicos_unicos_full_name = [];
     $prev_serv = '';
     asort($servicos);
-    foreach ($servicos as $servico) {
+    foreach ($servicos as $k => $servico) {
         if ($prev_serv != $servico) {
             $servicos_unicos[] = $servico;
+            $servicos_unicos_full_name[] = $servicos_full_name[$k];
             $prev_serv = $servico;
         }
     }
@@ -298,16 +304,16 @@ function partner_cronograma_output_single($clientes_data)
     $servico_slug = '';
 
     $csv_row_count++;
-    foreach ($servicos_unicos as $servico) {
+    foreach ($servicos_unicos as $i => $servico) {
         // criar um slug a partir do texto em $servico e salvar em servico_slug
         $csv_comentarios = array();
 
         $servico_slug = sanitize_title($servico);
         $output .= '<tr>';
-
+        $nome_servico = $servico !== $servicos_unicos_full_name[$i] ? $servico . '...' : $servico;
         $output .= '<td><div class="tooltip">';
-        $output .= '<span class="tooltip-text">' . $servico . '</span>';
-        $output .= '<span class="crop-text">' . $servico . '</span>';
+        $output .= '<span class="tooltip-text">' . $servicos_unicos_full_name[$i] . '</span>';
+        $output .= '<span class="crop-text">' . $nome_servico . '</span>';
         $output .= '</div></td>';
 
         $csv[$csv_row_count][] = $servico;
@@ -401,8 +407,8 @@ function partner_aprovacao_output_all($rows)
     foreach ($theaders as $k => $value) {
         if (
             $k === 4 ||
-            $k === 7 ||
-            $k === 8
+            $k === 8 ||
+            $k === 9
         ) {
             $output .= '<th>' . $value . '</th>';
         }
@@ -413,12 +419,16 @@ function partner_aprovacao_output_all($rows)
     foreach ($rows as $row) {
         $output .= '<tr>';
         foreach ($row as $k => $value) {
-            if (
-                $k === 4 ||
-                $k === 7
-            ) {
-                $output .= '<td>' . $value . '</td>';
+            if ($k === 4) {
+                $service_name = $row[5] ? $value . ' - ' . $row[5] : $value;
+                $output .=
+                    '<td><div class="tooltip">' .
+                    '<span class="tooltip-text">' . $service_name . '</span>' .
+                    '<span class="crop-text">' . $value . '...</span>' .
+                    '</div></td>';
             } else if ($k === 8) {
+                $output .= '<td>' . $value . '</td>';
+            } else if ($k === 9) {
                 $output .= '<td>' . preg_replace('/((http|https|ftp):\/\/[\w?=&.\/-;#~%-]+(?![\w\s?&.\/;#~%"=-]*>))/', '<p><a href="$1" target="_blank">$1</a></p>', $value) . '</td>';
             }
         }

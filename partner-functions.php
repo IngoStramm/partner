@@ -830,7 +830,7 @@ function partner_get_cliente_data()
     $selected_cliente = get_post_meta($selected_cliente_id, 'cliente_planilha', true);
     foreach ($rows as $row) {
         if ($row[0] === $selected_cliente) {
-            if ($row[7] === 'Aprovação') {
+            if ($row[8] === 'Aprovação') {
                 $cliente_data[] = $row;
             }
         }
