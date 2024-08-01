@@ -796,7 +796,7 @@ function partner_ajax_object()
     return array(
         'partner_nonce' => wp_create_nonce('partner-nonce'),
         'ajax_url' => admin_url('admin-ajax.php'),
-        'aprovacao_notificacao' => count($rows)
+        'aprovacao_notificacao' => is_countable($rows) ? count($rows) : 0
     );
 }
 

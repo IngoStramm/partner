@@ -437,7 +437,5 @@ function partner_aprovacao_output_all($rows)
     $output .= '</tbody>';
     $output .= '</table>';
     $output .= '</div>';
-    // Parei aqui
-    // Chamar esta função em todas as páginas, não apenas na página aprovação
     return $output;
 }
